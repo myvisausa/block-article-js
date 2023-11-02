@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
 import { json2cleanjson } from "md-json-converter";
-const edjsHTML = require("editorjs-renderer");
+import edjsHTML from "editorjs-renderer";
 
 export default function Renderer({ data, title='Table of Contents' }) {
   if (!data) {
