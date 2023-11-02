@@ -20,4 +20,4 @@ export default function Editor({ onDataChange, data, setData, uploadEndPoint, is
 			</div>
 		</div>
 	);
-}
+};

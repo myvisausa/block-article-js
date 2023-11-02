@@ -1,0 +1,39 @@
+{
+  "name": "block-article-js",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A block style editor and renderer with a custom JSON schema made for creating blog/news articles.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "rollup --config",
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austinibele/block-article-js.git"
+  },
+  "keywords": [
+    "react",
+    "block",
+    "editor",
+    "renderer",
+    "article"
+  ],
+  "author": "Austin Ibele <austin.ibele@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/austinibele/block-article-js/issues"
+  },
+  "homepage": "https://github.com/austinibele/block-article-js#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
+    "editorjs-renderer": "^1.0.1",
+    "md-json-converter": "^1.0.1",
+    "rollup": "^4.2.0"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.22.15",
+    "@rollup/plugin-babel": "^6.0.4"
+  }
+}
