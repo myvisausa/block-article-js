@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import HeaderEditor from "../header-editor/HeaderEditor";
 
 // import tools for editor config
-import { EDITOR_JS_TOOLS } from "./tools/tools";
+import { createEditorTools } from "./tools/tools";
 
 // create editor instance
 import { createReactEditorJS } from "react-editor-js";
@@ -65,7 +65,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 			<HeaderEditor uploadEndPoint={uploadEndPoint} title={title} setTitle={setTitle} imageUrl={imageUrl} setImageUrl={setImageUrl} caption={caption} setCaption={setCaption} altDescription={altDescription} setAltDescription={setAltDescription}/>
 			<ReactEditorJS
 				onInitialize={handleInitialize}
-				tools={EDITOR_JS_TOOLS}
+				tools={createEditorTools(uploadEndPoint)}
 				onChange={handleSave}
 				defaultValue={initialData}
 			/>

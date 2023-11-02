@@ -20,6 +20,7 @@ var reactEditorJs = require('react-editor-js');
 var mdJsonConverter = require('md-json-converter');
 var parse = require('html-react-parser');
 var cloneDeep = require('lodash/cloneDeep');
+var edjsHTML = require('editorjs-renderer');
 
 const EditableTitle = ({
   title,
@@ -231,7 +232,7 @@ const HeaderEditor = ({
 };
 
 // tools.js
-const EDITOR_JS_TOOLS = {
+const createEditorTools = uploadEndPoint => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
   embed: Embed,
@@ -244,7 +245,7 @@ const EDITOR_JS_TOOLS = {
     class: ImageTool,
     config: {
       endpoints: {
-        byFile: 'http://localhost:5252/api/uploadImage'
+        byFile: uploadEndPoint || 'http://localhost:5252/api/uploadImage'
       }
     }
   },
@@ -256,7 +257,7 @@ const EDITOR_JS_TOOLS = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage
-};
+});
 
 function EditorEditor({
   data,
@@ -321,7 +322,7 @@ function EditorEditor({
     setAltDescription: setAltDescription
   }), /*#__PURE__*/React$1.createElement(ReactEditorJS, {
     onInitialize: handleInitialize,
-    tools: EDITOR_JS_TOOLS,
+    tools: createEditorTools(uploadEndPoint),
     onChange: handleSave,
     defaultValue: initialData
   }));
@@ -386,7 +387,6 @@ function blocksSplitter(data) {
   };
 }
 
-const edjsHTML = require("editorjs-renderer");
 function Renderer({
   data,
   title = 'Table of Contents'
@@ -412,9 +412,20 @@ function Renderer({
     tocData = data;
   }
   const edjsParser = edjsHTML();
+  console.log('/////');
+  console.log('/////');
+  console.log('/////');
+  console.log('/////');
+  console.log('/////');
+  console.log('bodyBlocks', JSON.stringify(bodyBlocks, null, 2));
   const title_html = edjsParser.parse(titleBlocks);
   const body_html = edjsParser.parse(bodyBlocks);
+  console.log(body_html);
+  console.log('******');
+  console.log('******');
+  console.log('******');
   // array of html elements
+  const html = "";
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "text-container"
   }, parse(title_html.join(""))), /*#__PURE__*/React.createElement("div", {
@@ -424,7 +435,7 @@ function Renderer({
     title: title
   })), /*#__PURE__*/React.createElement("div", {
     className: "text-container"
-  }, parse(body_html.join(""))));
+  }, parse(html)));
 }
 
 function Editor({

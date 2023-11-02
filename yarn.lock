@@ -649,6 +649,16 @@ make-dir@^2.1.0:
     pify "^4.0.1"
     semver "^5.6.0"
 
+md-json-converter@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/md-json-converter/-/md-json-converter-1.0.2.tgz#23f83d7e93c7b7be60a328765e35683443245e8b"
+  integrity sha512-h+Hip9XdMWzuPH5eqifVLGi+ZLuIv9DuSOs+V7zZXl9wGSAkhhkwTWTzdWFONLGW140B3hsrwjPlLpQY/PuXNw==
+  dependencies:
+    "@babel/preset-react" "^7.22.15"
+    "@rollup/plugin-babel" "^6.0.4"
+    rollup "^4.2.0"
+    uuid "^9.0.1"
+
 minimatch@^3.1.1:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
@@ -765,6 +775,11 @@ update-browserslist-db@^1.0.13:
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
+
+uuid@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
+  integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
 
 wrappy@1:
   version "1.0.2"

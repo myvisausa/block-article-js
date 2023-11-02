@@ -15,7 +15,7 @@ import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import ImageTool from '@editorjs/image'
 
-export const EDITOR_JS_TOOLS = {
+export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
   embed: Embed,
@@ -28,7 +28,7 @@ export const EDITOR_JS_TOOLS = {
     class: ImageTool,
     config: {
       endpoints: {
-        byFile: 'http://localhost:5252/api/uploadImage',
+        byFile: uploadEndPoint || 'http://localhost:5252/api/uploadImage',
       },
     },
   },
@@ -40,4 +40,4 @@ export const EDITOR_JS_TOOLS = {
   delimiter: Delimiter,
   inlineCode: InlineCode,
   simpleImage: SimpleImage
-};
+});
