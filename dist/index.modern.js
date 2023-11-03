@@ -1,26 +1,23 @@
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var React$1 = require('react');
-var React$1__default = _interopDefault(React$1);
-var Embed = _interopDefault(require('@editorjs/embed'));
-var Table = _interopDefault(require('@editorjs/table'));
-var List = _interopDefault(require('@editorjs/list'));
-var Warning = _interopDefault(require('@editorjs/warning'));
-var Code = _interopDefault(require('@editorjs/code'));
-var LinkTool = _interopDefault(require('@editorjs/link'));
-var Raw = _interopDefault(require('@editorjs/raw'));
-var Header = _interopDefault(require('@editorjs/header'));
-var Quote = _interopDefault(require('@editorjs/quote'));
-var Marker = _interopDefault(require('@editorjs/marker'));
-var CheckList = _interopDefault(require('@editorjs/checklist'));
-var Delimiter = _interopDefault(require('@editorjs/delimiter'));
-var InlineCode = _interopDefault(require('@editorjs/inline-code'));
-var SimpleImage = _interopDefault(require('@editorjs/simple-image'));
-var ImageTool = _interopDefault(require('@editorjs/image'));
-var reactEditorJs = require('react-editor-js');
-var mdJsonConverter = require('md-json-converter');
-var parse = _interopDefault(require('html-react-parser'));
-var edjsHTML = _interopDefault(require('editorjs-renderer'));
+import React$1, { useRef, useEffect, useState, useCallback } from 'react';
+import Embed from '@editorjs/embed';
+import Table from '@editorjs/table';
+import List from '@editorjs/list';
+import Warning from '@editorjs/warning';
+import Code from '@editorjs/code';
+import LinkTool from '@editorjs/link';
+import Raw from '@editorjs/raw';
+import Header from '@editorjs/header';
+import Quote from '@editorjs/quote';
+import Marker from '@editorjs/marker';
+import CheckList from '@editorjs/checklist';
+import Delimiter from '@editorjs/delimiter';
+import InlineCode from '@editorjs/inline-code';
+import SimpleImage from '@editorjs/simple-image';
+import ImageTool from '@editorjs/image';
+import { createReactEditorJS } from 'react-editor-js';
+import { json2cleanjson, cleanjson2md, md2json } from 'md-json-converter';
+import parse from 'html-react-parser';
+import edjsHTML from 'editorjs-renderer';
 
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
@@ -40,11 +37,11 @@ function _extends() {
 var EditableTitle = function EditableTitle(_ref) {
   var title = _ref.title,
     setTitle = _ref.setTitle;
-  var titleRef = React$1.useRef(null);
+  var titleRef = useRef(null);
   var handleBlur = function handleBlur() {
     setTitle(titleRef.current.innerText);
   };
-  React$1.useEffect(function () {
+  useEffect(function () {
     var el = titleRef.current;
     if (el) {
       var range = document.createRange();
@@ -55,7 +52,7 @@ var EditableTitle = function EditableTitle(_ref) {
       sel.addRange(range);
     }
   }, [title]);
-  return /*#__PURE__*/React$1__default.createElement("h1", {
+  return /*#__PURE__*/React$1.createElement("h1", {
     ref: titleRef,
     contentEditable: true,
     onBlur: handleBlur,
@@ -95,11 +92,11 @@ var EditableDiv = function EditableDiv(_ref) {
   var label = _ref.label,
     content = _ref.content,
     setContent = _ref.setContent;
-  return /*#__PURE__*/React$1__default.createElement("label", {
+  return /*#__PURE__*/React$1.createElement("label", {
     className: "d-flex align-items-center"
-  }, /*#__PURE__*/React$1__default.createElement("p", {
+  }, /*#__PURE__*/React$1.createElement("p", {
     className: "pt-3"
-  }, label), /*#__PURE__*/React$1__default.createElement("div", {
+  }, label), /*#__PURE__*/React$1.createElement("div", {
     contentEditable: true,
     onBlur: function onBlur(e) {
       return setContent(e.target.innerText);
@@ -133,7 +130,7 @@ var EditableImage = function EditableImage(_ref) {
     setCaption = _ref.setCaption,
     altDescription = _ref.altDescription,
     setAltDescription = _ref.setAltDescription;
-  var fileInputRef = React$1.useRef(null);
+  var fileInputRef = useRef(null);
   var uploadImage = function uploadImage(file) {
     try {
       var formData = new FormData();
@@ -175,12 +172,12 @@ var EditableImage = function EditableImage(_ref) {
   var handleClick = function handleClick() {
     fileInputRef.current.click();
   };
-  return /*#__PURE__*/React$1__default.createElement("div", {
+  return /*#__PURE__*/React$1.createElement("div", {
     className: "container",
     style: {
       maxWidth: '800px'
     }
-  }, url ? /*#__PURE__*/React$1__default.createElement("div", null, /*#__PURE__*/React$1__default.createElement("div", {
+  }, url ? /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement("div", {
     className: "d-flex justify-content-center",
     onClick: handleClick,
     onDrop: handleDrop,
@@ -193,21 +190,21 @@ var EditableImage = function EditableImage(_ref) {
       border: '1px dashed #ccc',
       padding: '0px'
     }
-  }, /*#__PURE__*/React$1__default.createElement("input", {
+  }, /*#__PURE__*/React$1.createElement("input", {
     type: "file",
     ref: fileInputRef,
     style: {
       display: 'none'
     },
     onChange: handleFileChange
-  }), /*#__PURE__*/React$1__default.createElement("img", {
+  }), /*#__PURE__*/React$1.createElement("img", {
     src: url,
     alt: altDescription,
     style: {
       maxWidth: '100%',
       maxHeight: '300px'
     }
-  }))) : /*#__PURE__*/React$1__default.createElement("div", null, /*#__PURE__*/React$1__default.createElement("div", {
+  }))) : /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement("div", {
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
@@ -219,27 +216,27 @@ var EditableImage = function EditableImage(_ref) {
       border: '1px dashed #ccc',
       padding: '10px'
     }
-  }, /*#__PURE__*/React$1__default.createElement("input", {
+  }, /*#__PURE__*/React$1.createElement("input", {
     type: "file",
     ref: fileInputRef,
     style: {
       display: 'none'
     },
     onChange: handleFileChange
-  }), /*#__PURE__*/React$1__default.createElement("div", {
+  }), /*#__PURE__*/React$1.createElement("div", {
     style: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       height: 'auto'
     }
-  }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1__default.createElement("div", {
+  }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1.createElement("div", {
     className: "d-flex align-items-center justify-content-center flex-column"
-  }, /*#__PURE__*/React$1__default.createElement(EditableDiv, {
+  }, /*#__PURE__*/React$1.createElement(EditableDiv, {
     label: "Caption:",
     content: caption,
     setContent: setCaption
-  }), /*#__PURE__*/React$1__default.createElement(EditableDiv, {
+  }), /*#__PURE__*/React$1.createElement(EditableDiv, {
     label: "Alt description:",
     content: altDescription,
     setContent: setAltDescription
@@ -256,12 +253,12 @@ var HeaderEditor = function HeaderEditor(_ref) {
     setCaption = _ref.setCaption,
     altDescription = _ref.altDescription,
     setAltDescription = _ref.setAltDescription;
-  return /*#__PURE__*/React$1__default.createElement("div", {
+  return /*#__PURE__*/React$1.createElement("div", {
     className: "d-flex justify-content-center align-items-center flex-column"
-  }, /*#__PURE__*/React$1__default.createElement(EditableTitle, {
+  }, /*#__PURE__*/React$1.createElement(EditableTitle, {
     title: title,
     setTitle: setTitle
-  }), /*#__PURE__*/React$1__default.createElement(EditableImage, {
+  }), /*#__PURE__*/React$1.createElement(EditableImage, {
     url: imageUrl,
     uploadEndPoint: uploadEndPoint,
     onImageChange: function onImageChange(newUrl) {
@@ -305,33 +302,33 @@ function EditorEditor(_ref) {
   var data = _ref.data,
     setData = _ref.setData,
     uploadEndPoint = _ref.uploadEndPoint;
-  var _useState = React$1.useState(data.metadata.title),
+  var _useState = useState(data.metadata.title),
     title = _useState[0],
     setTitle = _useState[1];
-  var _useState2 = React$1.useState(data.metadata.ogImage),
+  var _useState2 = useState(data.metadata.ogImage),
     imageUrl = _useState2[0],
     setImageUrl = _useState2[1];
-  var _useState3 = React$1.useState(data.metadata.ogImageCaption),
+  var _useState3 = useState(data.metadata.ogImageCaption),
     caption = _useState3[0],
     setCaption = _useState3[1];
-  var _useState4 = React$1.useState(data.metadata.ogImageAlt),
+  var _useState4 = useState(data.metadata.ogImageAlt),
     altDescription = _useState4[0],
     setAltDescription = _useState4[1];
-  var initialData = mdJsonConverter.json2cleanjson(data).bodyBlocks;
-  var editorCore = React$1.useRef(null);
-  var ReactEditorJS = reactEditorJs.createReactEditorJS();
-  var handleInitialize = React$1.useCallback(function (instance) {
+  var initialData = json2cleanjson(data).bodyBlocks;
+  var editorCore = useRef(null);
+  var ReactEditorJS = createReactEditorJS();
+  var handleInitialize = useCallback(function (instance) {
     instance._editorJS.isReady.then(function () {
       editorCore.current = instance;
     })["catch"](function (err) {
       return console.log("An error occured", err);
     });
   }, []);
-  var handleSave = React$1.useCallback(function () {
+  var handleSave = useCallback(function () {
     try {
       return Promise.resolve(editorCore.current.save()).then(function (savedData) {
-        var markdown = mdJsonConverter.cleanjson2md(savedData);
-        var content = mdJsonConverter.md2json(markdown);
+        var markdown = cleanjson2md(savedData);
+        var content = md2json(markdown);
         var newData = _extends({}, data, {
           content: content
         });
@@ -341,7 +338,7 @@ function EditorEditor(_ref) {
       return Promise.reject(e);
     }
   }, [setData]);
-  React$1.useEffect(function () {
+  useEffect(function () {
     var updateData = _extends({}, data, {
       metadata: _extends({}, data.metadata, {
         title: title,
@@ -354,11 +351,11 @@ function EditorEditor(_ref) {
       setData(updateData);
     }
   }, [title, imageUrl, caption, altDescription]);
-  return /*#__PURE__*/React$1__default.createElement("div", {
+  return /*#__PURE__*/React$1.createElement("div", {
     className: "editor-container"
-  }, /*#__PURE__*/React$1__default.createElement("h4", {
+  }, /*#__PURE__*/React$1.createElement("h4", {
     className: "edit-mode-alert"
-  }, "! Edit Mode Enabled"), /*#__PURE__*/React$1__default.createElement(HeaderEditor, {
+  }, "! Edit Mode Enabled"), /*#__PURE__*/React$1.createElement(HeaderEditor, {
     uploadEndPoint: uploadEndPoint,
     title: title,
     setTitle: setTitle,
@@ -368,7 +365,7 @@ function EditorEditor(_ref) {
     setCaption: setCaption,
     altDescription: altDescription,
     setAltDescription: setAltDescription
-  }), /*#__PURE__*/React$1__default.createElement(ReactEditorJS, {
+  }), /*#__PURE__*/React$1.createElement(ReactEditorJS, {
     onInitialize: handleInitialize,
     tools: createEditorTools(uploadEndPoint),
     onChange: handleSave,
@@ -2942,7 +2939,7 @@ function Renderer(_ref) {
   var res;
   var tocData;
   if (!("time" in data)) {
-    res = mdJsonConverter.json2cleanjson(data);
+    res = json2cleanjson(data);
     titleBlocks = res.titleBlocks;
     bodyBlocks = res.bodyBlocks;
     tocData = bodyBlocks;
@@ -3005,6 +3002,5 @@ function Editor(_ref) {
   })));
 }
 
-exports.Editor = Editor;
-exports.Renderer = Renderer;
-//# sourceMappingURL=index.js.map
+export { Editor, Renderer };
+//# sourceMappingURL=index.modern.js.map
