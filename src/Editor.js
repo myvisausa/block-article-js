@@ -20,7 +20,7 @@ export default function Editor({ onDataChange, data, setData, uploadEndPoint, is
     };
 
     const innerStyle = {
-        marginTop: '1.5rem',
+        marginTop: '0rem',
         maxWidth: '1000px',
         width: '100%', 
     };

@@ -1,36 +1,27 @@
-// EditableDiv.js
-
 import React from 'react';
+import { Grid, TextField } from '@material-ui/core';
 
 const EditableDiv = ({ label, content, setContent }) => {
+    const handleChange = (event) => {
+        setContent(event.target.value);
+    };
+
     return (
-        <label className='d-flex align-items-center'>
-            <p className='pt-3'>{label}</p>
-            <div 
-                contentEditable 
-                onBlur={(e) => setContent(e.target.innerText)}
-                onFocus={() => {
-                    if (!content) {
-                        setContent(''); 
-                    }
-                }}
-                suppressContentEditableWarning={true}
-                style={{ 
-                    marginLeft: '5px', 
-                    paddingRight: '5px', 
-                    border: '1px solid #ccc', 
-                    minWidth: '150px',
-                    maxWidth: '100%',
-                    display: 'inline-block', 
-                    outline: 'none',
-                    wordWrap: 'break-word',
-                    maxHeight: '100px',
-                    overflowY: 'auto'
-                }}
-            >
-                {content}
-            </div>
-        </label>
+        <Grid container alignItems="center" spacing={1}>
+            <Grid item xs={3}>
+                <label>{label}</label>
+            </Grid>
+            <Grid item xs={9}>
+                <TextField
+                    fullWidth
+                    multiline
+                    variant="outlined"
+                    value={content}
+                    onChange={handleChange}
+                    onBlur={() => setContent(content.trim())} // Trim content on blur if needed
+                />
+            </Grid>
+        </Grid>
     );
 };
 

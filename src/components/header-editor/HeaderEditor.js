@@ -4,7 +4,7 @@ import EditableImage from './EditableImage';  // import the new component
 
 const HeaderEditor = ({ uploadEndPoint, title, setTitle, imageUrl, setImageUrl, caption, setCaption, altDescription, setAltDescription }) => {
     return (
-        <div className="d-flex justify-content-center align-items-center flex-column">
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}} >
             <EditableTitle title={title} setTitle={setTitle} />
             <EditableImage 
                 url={imageUrl}

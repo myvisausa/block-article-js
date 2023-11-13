@@ -1,4 +1,6 @@
 import React$1, { useRef, useEffect, useState, useCallback } from 'react';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 import Embed from '@editorjs/embed';
 import Table from '@editorjs/table';
 import List from '@editorjs/list';
@@ -92,34 +94,29 @@ var EditableDiv = function EditableDiv(_ref) {
   var label = _ref.label,
     content = _ref.content,
     setContent = _ref.setContent;
-  return /*#__PURE__*/React$1.createElement("label", {
-    className: "d-flex align-items-center"
-  }, /*#__PURE__*/React$1.createElement("p", {
-    className: "pt-3"
-  }, label), /*#__PURE__*/React$1.createElement("div", {
-    contentEditable: true,
-    onBlur: function onBlur(e) {
-      return setContent(e.target.innerText);
-    },
-    onFocus: function onFocus() {
-      if (!content) {
-        setContent('');
-      }
-    },
-    suppressContentEditableWarning: true,
-    style: {
-      marginLeft: '5px',
-      paddingRight: '5px',
-      border: '1px solid #ccc',
-      minWidth: '150px',
-      maxWidth: '100%',
-      display: 'inline-block',
-      outline: 'none',
-      wordWrap: 'break-word',
-      maxHeight: '100px',
-      overflowY: 'auto'
+  var handleChange = function handleChange(event) {
+    setContent(event.target.value);
+  };
+  return /*#__PURE__*/React$1.createElement(Grid, {
+    container: true,
+    alignItems: "center",
+    spacing: 1
+  }, /*#__PURE__*/React$1.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React$1.createElement("label", null, label)), /*#__PURE__*/React$1.createElement(Grid, {
+    item: true,
+    xs: 9
+  }, /*#__PURE__*/React$1.createElement(TextField, {
+    fullWidth: true,
+    multiline: true,
+    variant: "outlined",
+    value: content,
+    onChange: handleChange,
+    onBlur: function onBlur() {
+      return setContent(content.trim());
     }
-  }, content));
+  })));
 };
 
 var EditableImage = function EditableImage(_ref) {
@@ -178,13 +175,14 @@ var EditableImage = function EditableImage(_ref) {
       maxWidth: '800px'
     }
   }, url ? /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement("div", {
-    className: "d-flex justify-content-center",
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
       return e.preventDefault();
     },
     style: {
+      display: 'flex',
+      justifyContent: 'center',
       maxWidth: '100%',
       height: 'auto',
       border: '1px dashed #ccc',
@@ -211,6 +209,8 @@ var EditableImage = function EditableImage(_ref) {
       return e.preventDefault();
     },
     style: {
+      display: 'flex',
+      justifyContent: 'center',
       maxWidth: '100%',
       height: 'auto',
       border: '1px dashed #ccc',
@@ -231,7 +231,13 @@ var EditableImage = function EditableImage(_ref) {
       height: 'auto'
     }
   }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1.createElement("div", {
-    className: "d-flex align-items-center justify-content-center flex-column"
+    className: "d-flex align-items-center justify-content-center flex-column",
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
   }, /*#__PURE__*/React$1.createElement(EditableDiv, {
     label: "Caption:",
     content: caption,
@@ -254,7 +260,12 @@ var HeaderEditor = function HeaderEditor(_ref) {
     altDescription = _ref.altDescription,
     setAltDescription = _ref.setAltDescription;
   return /*#__PURE__*/React$1.createElement("div", {
-    className: "d-flex justify-content-center align-items-center flex-column"
+    style: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column'
+    }
   }, /*#__PURE__*/React$1.createElement(EditableTitle, {
     title: title,
     setTitle: setTitle

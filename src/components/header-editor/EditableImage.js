@@ -1,5 +1,9 @@
 import React, { useRef } from 'react';
 import ContentEditableDiv from './ContentEditableDiv';
+// Import Material-UI components
+import Box from '@material-ui/core/Box';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Typography from '@material-ui/core/Typography';
 
 const EditableImage = ({ url, uploadEndPoint, onImageChange, caption, setCaption, altDescription, setAltDescription }) => {
     const fileInputRef = useRef(null);
@@ -44,42 +48,43 @@ const EditableImage = ({ url, uploadEndPoint, onImageChange, caption, setCaption
     };
 
     return (
-        <div className='container' style={{maxWidth: '800px'}}>
+        <Box className='container' style={{maxWidth: '650px'}}>
             {url ? (
-                <div>
-                    <div
-                            className='d-flex justify-content-center'
-                            onClick={handleClick} 
-                            onDrop={handleDrop} 
-                            onDragOver={(e) => e.preventDefault()} 
-                            style={{ maxWidth: '100%', height: 'auto', border: '1px dashed #ccc', padding: '0px' }}
-                        >
-                            <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
-                            <img src={url} alt={altDescription} style={{ maxWidth: '100%', maxHeight: '300px' }} />
-                    </div>
-                </div>
-                ) : (
-                <div>
-                    <div 
-                            onClick={handleClick} 
-                            onDrop={handleDrop} 
-                            onDragOver={(e) => e.preventDefault()} 
-                            style={{ maxWidth: '100%', height: 'auto', border: '1px dashed #ccc', padding: '10px' }}
-                        >
-                            <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                <Box display="flex" justifyContent="center">
+                    <ButtonBase
+                        onClick={handleClick}
+                        onDrop={handleDrop}
+                        onDragOver={(e) => e.preventDefault()}
+                        style={{ display: 'flex', justifyContent: 'center', maxWidth: '100%', height: 'auto', border: '1px dashed #ccc', padding: '0px' }}
+                    >
+                        <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
+                        <img src={url} alt={altDescription} style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                    </ButtonBase>
+                </Box>
+            ) : (
+                <Box>
+                    <ButtonBase
+                        onClick={handleClick}
+                        onDrop={handleDrop}
+                        onDragOver={(e) => e.preventDefault()}
+                        style={{ display: 'flex', justifyContent: 'center', maxWidth: '100%', height: 'auto', border: '1px dashed #ccc', padding: '10px' }}
+                    >
+                        <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
+                        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 'auto' }}>
+                            <Typography variant="body1">
                                 Click or Drag & Drop Image
-                            </div>
-                    </div>
-                </div>
-                )}
-            <div className='d-flex align-items-center justify-content-center flex-column'>
+                            </Typography>
+                        </Box>
+                    </ButtonBase>
+                </Box>
+            )}
+            <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, margin: 5}}
+            >
                 <ContentEditableDiv label="Caption:" content={caption} setContent={setCaption} />
                 <ContentEditableDiv label="Alt description:" content={altDescription} setContent={setAltDescription} />
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
-
 
 export default EditableImage;

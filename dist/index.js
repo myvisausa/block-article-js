@@ -2,6 +2,8 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React$1 = require('react');
 var React$1__default = _interopDefault(React$1);
+var Grid = _interopDefault(require('@mui/material/Grid'));
+var TextField = _interopDefault(require('@mui/material/TextField'));
 var Embed = _interopDefault(require('@editorjs/embed'));
 var Table = _interopDefault(require('@editorjs/table'));
 var List = _interopDefault(require('@editorjs/list'));
@@ -95,34 +97,29 @@ var EditableDiv = function EditableDiv(_ref) {
   var label = _ref.label,
     content = _ref.content,
     setContent = _ref.setContent;
-  return /*#__PURE__*/React$1__default.createElement("label", {
-    className: "d-flex align-items-center"
-  }, /*#__PURE__*/React$1__default.createElement("p", {
-    className: "pt-3"
-  }, label), /*#__PURE__*/React$1__default.createElement("div", {
-    contentEditable: true,
-    onBlur: function onBlur(e) {
-      return setContent(e.target.innerText);
-    },
-    onFocus: function onFocus() {
-      if (!content) {
-        setContent('');
-      }
-    },
-    suppressContentEditableWarning: true,
-    style: {
-      marginLeft: '5px',
-      paddingRight: '5px',
-      border: '1px solid #ccc',
-      minWidth: '150px',
-      maxWidth: '100%',
-      display: 'inline-block',
-      outline: 'none',
-      wordWrap: 'break-word',
-      maxHeight: '100px',
-      overflowY: 'auto'
+  var handleChange = function handleChange(event) {
+    setContent(event.target.value);
+  };
+  return /*#__PURE__*/React$1__default.createElement(Grid, {
+    container: true,
+    alignItems: "center",
+    spacing: 1
+  }, /*#__PURE__*/React$1__default.createElement(Grid, {
+    item: true,
+    xs: 3
+  }, /*#__PURE__*/React$1__default.createElement("label", null, label)), /*#__PURE__*/React$1__default.createElement(Grid, {
+    item: true,
+    xs: 9
+  }, /*#__PURE__*/React$1__default.createElement(TextField, {
+    fullWidth: true,
+    multiline: true,
+    variant: "outlined",
+    value: content,
+    onChange: handleChange,
+    onBlur: function onBlur() {
+      return setContent(content.trim());
     }
-  }, content));
+  })));
 };
 
 var EditableImage = function EditableImage(_ref) {
@@ -181,13 +178,14 @@ var EditableImage = function EditableImage(_ref) {
       maxWidth: '800px'
     }
   }, url ? /*#__PURE__*/React$1__default.createElement("div", null, /*#__PURE__*/React$1__default.createElement("div", {
-    className: "d-flex justify-content-center",
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
       return e.preventDefault();
     },
     style: {
+      display: 'flex',
+      justifyContent: 'center',
       maxWidth: '100%',
       height: 'auto',
       border: '1px dashed #ccc',
@@ -214,6 +212,8 @@ var EditableImage = function EditableImage(_ref) {
       return e.preventDefault();
     },
     style: {
+      display: 'flex',
+      justifyContent: 'center',
       maxWidth: '100%',
       height: 'auto',
       border: '1px dashed #ccc',
@@ -234,7 +234,13 @@ var EditableImage = function EditableImage(_ref) {
       height: 'auto'
     }
   }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1__default.createElement("div", {
-    className: "d-flex align-items-center justify-content-center flex-column"
+    className: "d-flex align-items-center justify-content-center flex-column",
+    style: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
   }, /*#__PURE__*/React$1__default.createElement(EditableDiv, {
     label: "Caption:",
     content: caption,
@@ -257,7 +263,12 @@ var HeaderEditor = function HeaderEditor(_ref) {
     altDescription = _ref.altDescription,
     setAltDescription = _ref.setAltDescription;
   return /*#__PURE__*/React$1__default.createElement("div", {
-    className: "d-flex justify-content-center align-items-center flex-column"
+    style: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column'
+    }
   }, /*#__PURE__*/React$1__default.createElement(EditableTitle, {
     title: title,
     setTitle: setTitle
