@@ -1234,6 +1234,11 @@
   dependencies:
     "@codexteam/icons" "^0.0.5"
 
+"@editorjs/editorjs@^2.28.2":
+  version "2.28.2"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.28.2.tgz#a265c7d10e83adef81813e4dc0f01fe3464dff50"
+  integrity sha512-g6V0Nd3W9IIWMpvxDNTssQ6e4kxBp1Y0W4GIf8cXRlmcBp3TUjrgCYJQmNy3l2a6ZzhyBAoVSe8krJEq4g7PQw==
+
 "@editorjs/embed@^2.6.0":
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@editorjs/embed/-/embed-2.6.0.tgz#6aa5ee2d1953a767b5df0afbff13a25bbdc7d9be"
