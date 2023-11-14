@@ -2,8 +2,10 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var React$1 = require('react');
 var React$1__default = _interopDefault(React$1);
-var Grid = _interopDefault(require('@mui/material/Grid'));
-var TextField = _interopDefault(require('@mui/material/TextField'));
+var material = require('@mui/material');
+var Box = _interopDefault(require('@mui/material/Box'));
+var ButtonBase = _interopDefault(require('@mui/material/ButtonBase'));
+var Typography = _interopDefault(require('@mui/material/Typography'));
 var Embed = _interopDefault(require('@editorjs/embed'));
 var Table = _interopDefault(require('@editorjs/table'));
 var List = _interopDefault(require('@editorjs/list'));
@@ -100,17 +102,17 @@ var EditableDiv = function EditableDiv(_ref) {
   var handleChange = function handleChange(event) {
     setContent(event.target.value);
   };
-  return /*#__PURE__*/React$1__default.createElement(Grid, {
+  return /*#__PURE__*/React$1__default.createElement(material.Grid, {
     container: true,
     alignItems: "center",
     spacing: 1
-  }, /*#__PURE__*/React$1__default.createElement(Grid, {
+  }, /*#__PURE__*/React$1__default.createElement(material.Grid, {
     item: true,
     xs: 3
-  }, /*#__PURE__*/React$1__default.createElement("label", null, label)), /*#__PURE__*/React$1__default.createElement(Grid, {
+  }, /*#__PURE__*/React$1__default.createElement("label", null, label)), /*#__PURE__*/React$1__default.createElement(material.Grid, {
     item: true,
     xs: 9
-  }, /*#__PURE__*/React$1__default.createElement(TextField, {
+  }, /*#__PURE__*/React$1__default.createElement(material.TextField, {
     fullWidth: true,
     multiline: true,
     variant: "outlined",
@@ -172,12 +174,15 @@ var EditableImage = function EditableImage(_ref) {
   var handleClick = function handleClick() {
     fileInputRef.current.click();
   };
-  return /*#__PURE__*/React$1__default.createElement("div", {
+  return /*#__PURE__*/React$1__default.createElement(Box, {
     className: "container",
     style: {
-      maxWidth: '800px'
+      maxWidth: '650px'
     }
-  }, url ? /*#__PURE__*/React$1__default.createElement("div", null, /*#__PURE__*/React$1__default.createElement("div", {
+  }, url ? /*#__PURE__*/React$1__default.createElement(Box, {
+    display: "flex",
+    justifyContent: "center"
+  }, /*#__PURE__*/React$1__default.createElement(ButtonBase, {
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
@@ -205,7 +210,7 @@ var EditableImage = function EditableImage(_ref) {
       maxWidth: '100%',
       maxHeight: '300px'
     }
-  }))) : /*#__PURE__*/React$1__default.createElement("div", null, /*#__PURE__*/React$1__default.createElement("div", {
+  }))) : /*#__PURE__*/React$1__default.createElement(Box, null, /*#__PURE__*/React$1__default.createElement(ButtonBase, {
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
@@ -226,20 +231,23 @@ var EditableImage = function EditableImage(_ref) {
       display: 'none'
     },
     onChange: handleFileChange
-  }), /*#__PURE__*/React$1__default.createElement("div", {
+  }), /*#__PURE__*/React$1__default.createElement(Box, {
     style: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       height: 'auto'
     }
-  }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1__default.createElement("div", {
-    className: "d-flex align-items-center justify-content-center flex-column",
-    style: {
+  }, /*#__PURE__*/React$1__default.createElement(Typography, {
+    variant: "body1"
+  }, "Click or Drag & Drop Image")))), /*#__PURE__*/React$1__default.createElement(Box, {
+    sx: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      gap: 5,
+      margin: 5
     }
   }, /*#__PURE__*/React$1__default.createElement(EditableDiv, {
     label: "Caption:",
@@ -2999,7 +3007,7 @@ function Editor(_ref) {
     margin: '1.5rem'
   };
   var innerStyle = {
-    marginTop: '1.5rem',
+    marginTop: '0rem',
     maxWidth: '1000px',
     width: '100%'
   };

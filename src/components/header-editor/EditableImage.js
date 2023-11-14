@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 import ContentEditableDiv from './ContentEditableDiv';
 // Import Material-UI components
-import Box from '@material-ui/core/Box';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
 
 const EditableImage = ({ url, uploadEndPoint, onImageChange, caption, setCaption, altDescription, setAltDescription }) => {
     const fileInputRef = useRef(null);

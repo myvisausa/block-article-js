@@ -1,6 +1,8 @@
 import React$1, { useRef, useEffect, useState, useCallback } from 'react';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
+import { Grid, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
 import Embed from '@editorjs/embed';
 import Table from '@editorjs/table';
 import List from '@editorjs/list';
@@ -169,12 +171,15 @@ var EditableImage = function EditableImage(_ref) {
   var handleClick = function handleClick() {
     fileInputRef.current.click();
   };
-  return /*#__PURE__*/React$1.createElement("div", {
+  return /*#__PURE__*/React$1.createElement(Box, {
     className: "container",
     style: {
-      maxWidth: '800px'
+      maxWidth: '650px'
     }
-  }, url ? /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement("div", {
+  }, url ? /*#__PURE__*/React$1.createElement(Box, {
+    display: "flex",
+    justifyContent: "center"
+  }, /*#__PURE__*/React$1.createElement(ButtonBase, {
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
@@ -202,7 +207,7 @@ var EditableImage = function EditableImage(_ref) {
       maxWidth: '100%',
       maxHeight: '300px'
     }
-  }))) : /*#__PURE__*/React$1.createElement("div", null, /*#__PURE__*/React$1.createElement("div", {
+  }))) : /*#__PURE__*/React$1.createElement(Box, null, /*#__PURE__*/React$1.createElement(ButtonBase, {
     onClick: handleClick,
     onDrop: handleDrop,
     onDragOver: function onDragOver(e) {
@@ -223,20 +228,23 @@ var EditableImage = function EditableImage(_ref) {
       display: 'none'
     },
     onChange: handleFileChange
-  }), /*#__PURE__*/React$1.createElement("div", {
+  }), /*#__PURE__*/React$1.createElement(Box, {
     style: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       height: 'auto'
     }
-  }, "Click or Drag & Drop Image"))), /*#__PURE__*/React$1.createElement("div", {
-    className: "d-flex align-items-center justify-content-center flex-column",
-    style: {
+  }, /*#__PURE__*/React$1.createElement(Typography, {
+    variant: "body1"
+  }, "Click or Drag & Drop Image")))), /*#__PURE__*/React$1.createElement(Box, {
+    sx: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      gap: 5,
+      margin: 5
     }
   }, /*#__PURE__*/React$1.createElement(EditableDiv, {
     label: "Caption:",
@@ -2996,7 +3004,7 @@ function Editor(_ref) {
     margin: '1.5rem'
   };
   var innerStyle = {
-    marginTop: '1.5rem',
+    marginTop: '0rem',
     maxWidth: '1000px',
     width: '100%'
   };
