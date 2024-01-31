@@ -1,8 +1,15 @@
 import parse from "html-react-parser";
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
-import { json2cleanjson } from "md-json-converter";
 import edjsHTML from "editorjs-renderer";
+
+// use submodule if md-json-converter not installed
+let json2cleanjson;
+try {
+  json2cleanjson = require("md-json-converter").json2cleanjson;
+} catch (e) {
+  json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
+}
 
 export default function Renderer({ data, title='Table of Contents' }) {
   if (!data) {
