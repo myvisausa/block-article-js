@@ -1,3 +1,4 @@
+import React from 'react';
 
 function extractHeaders(blocks) {
     return blocks
@@ -5,7 +6,19 @@ function extractHeaders(blocks) {
         .map(block => ({ text: block.data.text, id: block.id }));
 }
 
-export default function TableOfContents({ data, title, bulletPoints=true }) {
+const handleClick = (e, id, scrollOffset) => {
+    e.preventDefault();
+    const headerElement = document.getElementById(id);
+    if (headerElement) {
+        const offsetPosition = headerElement.offsetTop - scrollOffset;
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+};
+
+export default function TableOfContents({ data, title, scrollOffset, bulletPoints=true }) {
     const headers = extractHeaders(data.blocks);
     if (headers.length === 0) {
         return (<></>)
@@ -17,7 +30,11 @@ export default function TableOfContents({ data, title, bulletPoints=true }) {
                 <ul>
                     {headers.map(header => (
                         <li key={header.id}>
-                            <a href={`#${header.id}`} className="toc-item">
+                            <a 
+                                href={`#${header.id}`} 
+                                className="toc-item"
+                                onClick={(e) => handleClick(e, header.id, scrollOffset)}
+                            >
                                 {header.text}
                             </a>
                         </li>
@@ -35,6 +52,7 @@ export default function TableOfContents({ data, title, bulletPoints=true }) {
                         href={`#${header.id}`} 
                         className="toc-item"
                         style={{ display: 'block', marginBottom: '10px' }}
+                        onClick={(e) => handleClick(e, header.id)}
                     >
                         {header.text}
                     </a>
@@ -43,5 +61,3 @@ export default function TableOfContents({ data, title, bulletPoints=true }) {
         );
     }
 }
-
-

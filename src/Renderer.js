@@ -11,7 +11,7 @@ try {
   json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
 }
 
-export default function Renderer({ data, title='Table of Contents' }) {
+export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Contents' }) {
   if (!data) {
     return (
     <>
@@ -46,7 +46,7 @@ export default function Renderer({ data, title='Table of Contents' }) {
     <>
       <div className="text-container">{parse(title_html.join(""))}</div>
       <div className="pt-3 pb-3">
-        <TableOfContents data={tocData} title={title}/>
+        <TableOfContents data={tocData} title={tocTitle} scrollOffset={scrollOffset}/>
       </div>
       <div className="text-container">{parse(body_html.join(""))}</div>
     </>
