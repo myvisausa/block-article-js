@@ -405,37 +405,55 @@ function extractHeaders(blocks) {
     };
   });
 }
+var handleClick = function handleClick(e, id, scrollOffset) {
+  e.preventDefault();
+  var headerElement = document.getElementById(id);
+  if (headerElement) {
+    var offsetPosition = headerElement.offsetTop - scrollOffset;
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+};
 function TableOfContents(_ref) {
   var data = _ref.data,
     title = _ref.title,
+    scrollOffset = _ref.scrollOffset,
     _ref$bulletPoints = _ref.bulletPoints,
     bulletPoints = _ref$bulletPoints === void 0 ? true : _ref$bulletPoints;
   var headers = extractHeaders(data.blocks);
   if (headers.length === 0) {
-    return /*#__PURE__*/React.createElement(Fragment, null);
+    return /*#__PURE__*/React$1__default.createElement(Fragment, null);
   }
   if (bulletPoints) {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React$1__default.createElement("div", {
       className: "table-of-contents"
-    }, /*#__PURE__*/React.createElement("h2", null, title), /*#__PURE__*/React.createElement("ul", null, headers.map(function (header) {
-      return /*#__PURE__*/React.createElement("li", {
+    }, /*#__PURE__*/React$1__default.createElement("h2", null, title), /*#__PURE__*/React$1__default.createElement("ul", null, headers.map(function (header) {
+      return /*#__PURE__*/React$1__default.createElement("li", {
         key: header.id
-      }, /*#__PURE__*/React.createElement("a", {
+      }, /*#__PURE__*/React$1__default.createElement("a", {
         href: "#" + header.id,
-        className: "toc-item"
+        className: "toc-item",
+        onClick: function onClick(e) {
+          return handleClick(e, header.id, scrollOffset);
+        }
       }, header.text));
     })));
   } else {
-    return /*#__PURE__*/React.createElement("div", {
+    return /*#__PURE__*/React$1__default.createElement("div", {
       className: "table-of-contents"
-    }, /*#__PURE__*/React.createElement("h2", null, title), headers.map(function (header) {
-      return /*#__PURE__*/React.createElement("a", {
+    }, /*#__PURE__*/React$1__default.createElement("h2", null, title), headers.map(function (header) {
+      return /*#__PURE__*/React$1__default.createElement("a", {
         key: header.id,
         href: "#" + header.id,
         className: "toc-item",
         style: {
           display: 'block',
           marginBottom: '10px'
+        },
+        onClick: function onClick(e) {
+          return handleClick(e, header.id);
         }
       }, header.text);
     }));
@@ -2947,10 +2965,18 @@ function blocksSplitter(data) {
   };
 }
 
+var json2cleanjson;
+try {
+  json2cleanjson = require("md-json-converter").json2cleanjson;
+} catch (e) {
+  json2cleanjson = require("../../md-json-converter/src/json2cleanjson")["default"];
+}
 function Renderer(_ref) {
   var data = _ref.data,
-    _ref$title = _ref.title,
-    title = _ref$title === void 0 ? 'Table of Contents' : _ref$title;
+    _ref$scrollOffset = _ref.scrollOffset,
+    scrollOffset = _ref$scrollOffset === void 0 ? 50 : _ref$scrollOffset,
+    _ref$tocTitle = _ref.tocTitle,
+    tocTitle = _ref$tocTitle === void 0 ? 'Table of Contents' : _ref$tocTitle;
   if (!data) {
     return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("div", {
       className: "text-center"
@@ -2961,7 +2987,7 @@ function Renderer(_ref) {
   var res;
   var tocData;
   if (!("time" in data)) {
-    res = mdJsonConverter.json2cleanjson(data);
+    res = json2cleanjson(data);
     titleBlocks = res.titleBlocks;
     bodyBlocks = res.bodyBlocks;
     tocData = bodyBlocks;
@@ -2980,7 +3006,8 @@ function Renderer(_ref) {
     className: "pt-3 pb-3"
   }, /*#__PURE__*/React.createElement(TableOfContents, {
     data: tocData,
-    title: title
+    title: tocTitle,
+    scrollOffset: scrollOffset
   })), /*#__PURE__*/React.createElement("div", {
     className: "text-container"
   }, parse(body_html.join(""))));
