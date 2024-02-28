@@ -1,7 +1,7 @@
 import EditorEditor from "./components/editor-editor/Editor";
 import Renderer from "./Renderer";
 
-export default function Editor({ onDataChange, data, setData, uploadEndPoint, isEditMode }) {
+export default function Editor({ onDataChange, data, setData, uploadEndPoint, isEditMode, tocTitle='Table of Contents'}) {
     const handleDataChange = (updatedData) => {
         setData(updatedData);
         if (onDataChange) {
@@ -31,7 +31,7 @@ export default function Editor({ onDataChange, data, setData, uploadEndPoint, is
                 {isEditMode ? (
                     <EditorEditor data={data} setData={handleDataChange} uploadEndPoint={uploadEndPoint} />
                 ) : (
-                    <Renderer data={data} />
+                    <Renderer data={data} tocTitle={tocTitle} />
                 )}
             </div>
         </div>
