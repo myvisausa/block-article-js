@@ -5328,10 +5328,10 @@ maxmin@^2.1.0:
     gzip-size "^3.0.0"
     pretty-bytes "^3.0.0"
 
-md-json-converter@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/md-json-converter/-/md-json-converter-1.0.2.tgz#23f83d7e93c7b7be60a328765e35683443245e8b"
-  integrity sha512-h+Hip9XdMWzuPH5eqifVLGi+ZLuIv9DuSOs+V7zZXl9wGSAkhhkwTWTzdWFONLGW140B3hsrwjPlLpQY/PuXNw==
+md-json-converter@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/md-json-converter/-/md-json-converter-1.0.3.tgz#b272e8a5cb38d80423f60d3811e022453da652c5"
+  integrity sha512-2f4ex+guA9w7mEWKpBIUBuH/zAuEHBywIzMp2ramVUyZbaaGsOnFfeK9JZKLWe8ctIaIfcOM2LG+C4Acc5DmYA==
   dependencies:
     "@babel/preset-react" "^7.22.15"
     "@rollup/plugin-babel" "^6.0.4"

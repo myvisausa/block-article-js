@@ -6,7 +6,6 @@ var material = require('@mui/material');
 var Box = _interopDefault(require('@mui/material/Box'));
 var ButtonBase = _interopDefault(require('@mui/material/ButtonBase'));
 var Typography = _interopDefault(require('@mui/material/Typography'));
-var axios = _interopDefault(require('axios'));
 var Embed = _interopDefault(require('@editorjs/embed'));
 var Table = _interopDefault(require('@editorjs/table'));
 var List = _interopDefault(require('@editorjs/list'));
@@ -137,99 +136,7 @@ function _settle(pact, state, value) {
 	}
 }
 
-function _isSettledPact(thenable) {
-	return thenable instanceof _Pact && thenable.s & 1;
-}
-
-// Asynchronously iterate through an object that has a length property, passing the index as the first argument to the callback (even as the length property changes)
-function _forTo(array, body, check) {
-	var i = -1, pact, reject;
-	function _cycle(result) {
-		try {
-			while (++i < array.length && (!check || !check())) {
-				result = body(i);
-				if (result && result.then) {
-					if (_isSettledPact(result)) {
-						result = result.v;
-					} else {
-						result.then(_cycle, reject || (reject = _settle.bind(null, pact = new _Pact(), 2)));
-						return;
-					}
-				}
-			}
-			if (pact) {
-				_settle(pact, 1, result);
-			} else {
-				pact = result;
-			}
-		} catch (e) {
-			_settle(pact || (pact = new _Pact()), 2, e);
-		}
-	}
-	_cycle();
-	return pact;
-}
-
 const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
-
-// Asynchronously iterate through an object's values
-// Uses for...of if the runtime supports it, otherwise iterates until length on a copy
-function _forOf(target, body, check) {
-	if (typeof target[_iteratorSymbol] === "function") {
-		var iterator = target[_iteratorSymbol](), step, pact, reject;
-		function _cycle(result) {
-			try {
-				while (!(step = iterator.next()).done && (!check || !check())) {
-					result = body(step.value);
-					if (result && result.then) {
-						if (_isSettledPact(result)) {
-							result = result.v;
-						} else {
-							result.then(_cycle, reject || (reject = _settle.bind(null, pact = new _Pact(), 2)));
-							return;
-						}
-					}
-				}
-				if (pact) {
-					_settle(pact, 1, result);
-				} else {
-					pact = result;
-				}
-			} catch (e) {
-				_settle(pact || (pact = new _Pact()), 2, e);
-			}
-		}
-		_cycle();
-		if (iterator.return) {
-			var _fixup = function(value) {
-				try {
-					if (!step.done) {
-						iterator.return();
-					}
-				} catch(e) {
-				}
-				return value;
-			};
-			if (pact && pact.then) {
-				return pact.then(_fixup, function(e) {
-					throw _fixup(e);
-				});
-			}
-			_fixup();
-		}
-		return pact;
-	}
-	// No support for Symbol.iterator
-	if (!("length" in target)) {
-		throw new TypeError("Object is not iterable");
-	}
-	// Handle live collections properly
-	var values = [];
-	for (var i = 0; i < target.length; i++) {
-		values.push(target[i]);
-	}
-	return _forTo(values, function(i) { return body(values[i]); }, check);
-}
 
 const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
 
@@ -1768,8 +1675,7 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
 function EditorEditor(_ref) {
   var data = _ref.data,
     setData = _ref.setData,
-    uploadEndPoint = _ref.uploadEndPoint,
-    lastUploadedEndPoint = _ref.lastUploadedEndPoint;
+    uploadEndPoint = _ref.uploadEndPoint;
   var _useState = React$1.useState(data.metadata.title),
     title = _useState[0],
     setTitle = _useState[1];
@@ -1783,9 +1689,6 @@ function EditorEditor(_ref) {
     altDescription = _useState4[0],
     setAltDescription = _useState4[1];
   var initialData = mdJsonConverter.json2cleanjson(data).bodyBlocks;
-  var _useState5 = React$1.useState(data),
-    lastData = _useState5[0],
-    setLastData = _useState5[1];
   var editorCore = React$1.useRef(null);
   var ReactEditorJS = reactEditorJs.createReactEditorJS();
   var handleInitialize = React$1.useCallback(function (instance) {
@@ -1802,50 +1705,6 @@ function EditorEditor(_ref) {
       return Promise.reject(e);
     }
   }, []);
-  React$1.useEffect(function () {
-    if (lastData === data) {
-      return;
-    }
-    var fetchDataAndUpdate = function fetchDataAndUpdate() {
-      try {
-        var _temp3 = function _temp3(_result3) {
-          if (_exit) return _result3;
-          setData(dataCopy);
-          setLastData(dataCopy);
-          console.log('dataCopy', dataCopy);
-        };
-        var _exit = false;
-        var dataCopy = JSON.parse(JSON.stringify(data));
-        var _temp2 = _forOf(dataCopy.content, function (block) {
-          return function () {
-            if (block.text && block.text.includes('(undefined)')) {
-              return _catch(function () {
-                return Promise.resolve(axios.get(lastUploadedEndPoint)).then(function (response) {
-                  console.log('response body', response);
-                  console.log('response content', response.content);
-                  if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                  }
-                  return Promise.resolve(response.json()).then(function (data) {
-                    var imageUrl = data.imageUrl;
-                    block.text = block.text.replace('(undefined)', "(" + imageUrl + ")");
-                  });
-                });
-              }, function (error) {
-                console.error('Error fetching image URL:', error);
-              });
-            }
-          }();
-        }, function () {
-          return _exit;
-        });
-        return Promise.resolve(_temp2 && _temp2.then ? _temp2.then(_temp3) : _temp3(_temp2));
-      } catch (e) {
-        return Promise.reject(e);
-      }
-    };
-    fetchDataAndUpdate();
-  }, [data]);
   var handleSave = React$1.useCallback(function () {
     try {
       return Promise.resolve(editorCore.current.save()).then(function (savedData) {
