@@ -6,6 +6,7 @@ var material = require('@mui/material');
 var Box = _interopDefault(require('@mui/material/Box'));
 var ButtonBase = _interopDefault(require('@mui/material/ButtonBase'));
 var Typography = _interopDefault(require('@mui/material/Typography'));
+var axios = _interopDefault(require('axios'));
 var Embed = _interopDefault(require('@editorjs/embed'));
 var Table = _interopDefault(require('@editorjs/table'));
 var List = _interopDefault(require('@editorjs/list'));
@@ -20,12 +21,28 @@ var CheckList = _interopDefault(require('@editorjs/checklist'));
 var Delimiter = _interopDefault(require('@editorjs/delimiter'));
 var InlineCode = _interopDefault(require('@editorjs/inline-code'));
 var SimpleImage = _interopDefault(require('@editorjs/simple-image'));
-var ImageTool = _interopDefault(require('@editorjs/image'));
 var reactEditorJs = require('react-editor-js');
 var mdJsonConverter = require('md-json-converter');
 var parse = _interopDefault(require('html-react-parser'));
 var edjsHTML = _interopDefault(require('editorjs-renderer'));
 
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -39,6 +56,300 @@ function _extends() {
     return target;
   };
   return _extends.apply(this, arguments);
+}
+function _toPrimitive(input, hint) {
+  if (typeof input !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (typeof res !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+function _toPropertyKey(arg) {
+  var key = _toPrimitive(arg, "string");
+  return typeof key === "symbol" ? key : String(key);
+}
+
+// A type of promise-like that resolves synchronously and supports only one observer
+const _Pact = /*#__PURE__*/(function() {
+	function _Pact() {}
+	_Pact.prototype.then = function(onFulfilled, onRejected) {
+		const result = new _Pact();
+		const state = this.s;
+		if (state) {
+			const callback = state & 1 ? onFulfilled : onRejected;
+			if (callback) {
+				try {
+					_settle(result, 1, callback(this.v));
+				} catch (e) {
+					_settle(result, 2, e);
+				}
+				return result;
+			} else {
+				return this;
+			}
+		}
+		this.o = function(_this) {
+			try {
+				const value = _this.v;
+				if (_this.s & 1) {
+					_settle(result, 1, onFulfilled ? onFulfilled(value) : value);
+				} else if (onRejected) {
+					_settle(result, 1, onRejected(value));
+				} else {
+					_settle(result, 2, value);
+				}
+			} catch (e) {
+				_settle(result, 2, e);
+			}
+		};
+		return result;
+	};
+	return _Pact;
+})();
+
+// Settles a pact synchronously
+function _settle(pact, state, value) {
+	if (!pact.s) {
+		if (value instanceof _Pact) {
+			if (value.s) {
+				if (state & 1) {
+					state = value.s;
+				}
+				value = value.v;
+			} else {
+				value.o = _settle.bind(null, pact, state);
+				return;
+			}
+		}
+		if (value && value.then) {
+			value.then(_settle.bind(null, pact, state), _settle.bind(null, pact, 2));
+			return;
+		}
+		pact.s = state;
+		pact.v = value;
+		const observer = pact.o;
+		if (observer) {
+			observer(pact);
+		}
+	}
+}
+
+function _isSettledPact(thenable) {
+	return thenable instanceof _Pact && thenable.s & 1;
+}
+
+// Asynchronously iterate through an object that has a length property, passing the index as the first argument to the callback (even as the length property changes)
+function _forTo(array, body, check) {
+	var i = -1, pact, reject;
+	function _cycle(result) {
+		try {
+			while (++i < array.length && (!check || !check())) {
+				result = body(i);
+				if (result && result.then) {
+					if (_isSettledPact(result)) {
+						result = result.v;
+					} else {
+						result.then(_cycle, reject || (reject = _settle.bind(null, pact = new _Pact(), 2)));
+						return;
+					}
+				}
+			}
+			if (pact) {
+				_settle(pact, 1, result);
+			} else {
+				pact = result;
+			}
+		} catch (e) {
+			_settle(pact || (pact = new _Pact()), 2, e);
+		}
+	}
+	_cycle();
+	return pact;
+}
+
+const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
+
+// Asynchronously iterate through an object's values
+// Uses for...of if the runtime supports it, otherwise iterates until length on a copy
+function _forOf(target, body, check) {
+	if (typeof target[_iteratorSymbol] === "function") {
+		var iterator = target[_iteratorSymbol](), step, pact, reject;
+		function _cycle(result) {
+			try {
+				while (!(step = iterator.next()).done && (!check || !check())) {
+					result = body(step.value);
+					if (result && result.then) {
+						if (_isSettledPact(result)) {
+							result = result.v;
+						} else {
+							result.then(_cycle, reject || (reject = _settle.bind(null, pact = new _Pact(), 2)));
+							return;
+						}
+					}
+				}
+				if (pact) {
+					_settle(pact, 1, result);
+				} else {
+					pact = result;
+				}
+			} catch (e) {
+				_settle(pact || (pact = new _Pact()), 2, e);
+			}
+		}
+		_cycle();
+		if (iterator.return) {
+			var _fixup = function(value) {
+				try {
+					if (!step.done) {
+						iterator.return();
+					}
+				} catch(e) {
+				}
+				return value;
+			};
+			if (pact && pact.then) {
+				return pact.then(_fixup, function(e) {
+					throw _fixup(e);
+				});
+			}
+			_fixup();
+		}
+		return pact;
+	}
+	// No support for Symbol.iterator
+	if (!("length" in target)) {
+		throw new TypeError("Object is not iterable");
+	}
+	// Handle live collections properly
+	var values = [];
+	for (var i = 0; i < target.length; i++) {
+		values.push(target[i]);
+	}
+	return _forTo(values, function(i) { return body(values[i]); }, check);
+}
+
+const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
+
+// Asynchronously implement a switch statement
+function _switch(discriminant, cases) {
+	var dispatchIndex = -1;
+	var awaitBody;
+	outer: {
+		for (var i = 0; i < cases.length; i++) {
+			var test = cases[i][0];
+			if (test) {
+				var testValue = test();
+				if (testValue && testValue.then) {
+					break outer;
+				}
+				if (testValue === discriminant) {
+					dispatchIndex = i;
+					break;
+				}
+			} else {
+				// Found the default case, set it as the pending dispatch case
+				dispatchIndex = i;
+			}
+		}
+		if (dispatchIndex !== -1) {
+			do {
+				var body = cases[dispatchIndex][1];
+				while (!body) {
+					dispatchIndex++;
+					body = cases[dispatchIndex][1];
+				}
+				var result = body();
+				if (result && result.then) {
+					awaitBody = true;
+					break outer;
+				}
+				var fallthroughCheck = cases[dispatchIndex][2];
+				dispatchIndex++;
+			} while (fallthroughCheck && !fallthroughCheck());
+			return result;
+		}
+	}
+	const pact = new _Pact();
+	const reject = _settle.bind(null, pact, 2);
+	(awaitBody ? result.then(_resumeAfterBody) : testValue.then(_resumeAfterTest)).then(void 0, reject);
+	return pact;
+	function _resumeAfterTest(value) {
+		for (;;) {
+			if (value === discriminant) {
+				dispatchIndex = i;
+				break;
+			}
+			if (++i === cases.length) {
+				if (dispatchIndex !== -1) {
+					break;
+				} else {
+					_settle(pact, 1, result);
+					return;
+				}
+			}
+			test = cases[i][0];
+			if (test) {
+				value = test();
+				if (value && value.then) {
+					value.then(_resumeAfterTest).then(void 0, reject);
+					return;
+				}
+			} else {
+				dispatchIndex = i;
+			}
+		}
+		do {
+			var body = cases[dispatchIndex][1];
+			while (!body) {
+				dispatchIndex++;
+				body = cases[dispatchIndex][1];
+			}
+			var result = body();
+			if (result && result.then) {
+				result.then(_resumeAfterBody).then(void 0, reject);
+				return;
+			}
+			var fallthroughCheck = cases[dispatchIndex][2];
+			dispatchIndex++;
+		} while (fallthroughCheck && !fallthroughCheck());
+		_settle(pact, 1, result);
+	}
+	function _resumeAfterBody(result) {
+		for (;;) {
+			var fallthroughCheck = cases[dispatchIndex][2];
+			if (!fallthroughCheck || fallthroughCheck()) {
+				break;
+			}
+			dispatchIndex++;
+			var body = cases[dispatchIndex][1];
+			while (!body) {
+				dispatchIndex++;
+				body = cases[dispatchIndex][1];
+			}
+			result = body();
+			if (result && result.then) {
+				result.then(_resumeAfterBody).then(void 0, reject);
+				return;
+			}
+		}
+		_settle(pact, 1, result);
+	}
+}
+
+// Asynchronously call a function and send errors to recovery continuation
+function _catch(body, recover) {
+	try {
+		var result = body();
+	} catch(e) {
+		return recover(e);
+	}
+	if (result && result.then) {
+		return result.then(void 0, recover);
+	}
+	return result;
 }
 
 var EditableTitle = function EditableTitle(_ref) {
@@ -75,25 +386,6 @@ var EditableTitle = function EditableTitle(_ref) {
     }
   }, title);
 };
-
-// A type of promise-like that resolves synchronously and supports only one observer
-
-const _iteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.iterator || (Symbol.iterator = Symbol("Symbol.iterator"))) : "@@iterator";
-
-const _asyncIteratorSymbol = /*#__PURE__*/ typeof Symbol !== "undefined" ? (Symbol.asyncIterator || (Symbol.asyncIterator = Symbol("Symbol.asyncIterator"))) : "@@asyncIterator";
-
-// Asynchronously call a function and send errors to recovery continuation
-function _catch(body, recover) {
-	try {
-		var result = body();
-	} catch(e) {
-		return recover(e);
-	}
-	if (result && result.then) {
-		return result.then(void 0, recover);
-	}
-	return result;
-}
 
 var EditableDiv = function EditableDiv(_ref) {
   var label = _ref.label,
@@ -293,6 +585,1159 @@ var HeaderEditor = function HeaderEditor(_ref) {
   }));
 };
 
+var i = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19V19C9.13623 19 8.20435 19 7.46927 18.6955C6.48915 18.2895 5.71046 17.5108 5.30448 16.5307C5 15.7956 5 14.8638 5 13V12C5 9.19108 5 7.78661 5.67412 6.77772C5.96596 6.34096 6.34096 5.96596 6.77772 5.67412C7.78661 5 9.19108 5 12 5H13.5C14.8956 5 15.5933 5 16.1611 5.17224C17.4395 5.56004 18.44 6.56046 18.8278 7.83886C19 8.40666 19 9.10444 19 10.5V10.5"/><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M16 13V16M16 19V16M19 16H16M16 16H13"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 17.5L17.5 6.5"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.9919 10.5H19.0015"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.9919 19H11.0015"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13L13 5"/></svg>',
+  h = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.9919 9.5H19.0015"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 5H14.5096"/><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M14.625 5H15C17.2091 5 19 6.79086 19 9V9.375"/><path stroke="currentColor" stroke-width="2" d="M9.375 5L9 5C6.79086 5 5 6.79086 5 9V9.375"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.3725 5H9.38207"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 9.5H5.00957"/><path stroke="currentColor" stroke-width="2" d="M9.375 19H9C6.79086 19 5 17.2091 5 15V14.625"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.3725 19H9.38207"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14.55H5.00957"/><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M16 13V16M16 19V16M19 16H16M16 16H13"/></svg>',
+  z = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="14" height="14" x="5" y="5" stroke="currentColor" stroke-width="2" rx="4"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.13968 15.32L8.69058 11.5661C9.02934 11.2036 9.48873 11 9.96774 11C10.4467 11 10.9061 11.2036 11.2449 11.5661L15.3871 16M13.5806 14.0664L15.0132 12.533C15.3519 12.1705 15.8113 11.9668 16.2903 11.9668C16.7693 11.9668 17.2287 12.1705 17.5675 12.533L18.841 13.9634"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.7778 9.33331H13.7867"/></svg>',
+  e1 = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9L20 12L17 15"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 12H20"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 9L4 12L7 15"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12H10"/></svg>';
+
+function make(tagName, classNames, attributes) {
+  if (classNames === void 0) {
+    classNames = null;
+  }
+  if (attributes === void 0) {
+    attributes = {};
+  }
+  var el = document.createElement(tagName);
+  if (Array.isArray(classNames)) {
+    var _el$classList;
+    (_el$classList = el.classList).add.apply(_el$classList, classNames);
+  } else if (classNames) {
+    el.classList.add(classNames);
+  }
+  for (var attrName in attributes) {
+    el[attrName] = attributes[attrName];
+  }
+  return el;
+}
+
+var Ui = /*#__PURE__*/function () {
+  function Ui(_ref) {
+    var api = _ref.api,
+      config = _ref.config,
+      onSelectFile = _ref.onSelectFile,
+      readOnly = _ref.readOnly;
+    this.api = api;
+    this.config = config;
+    this.onSelectFile = onSelectFile;
+    this.readOnly = readOnly;
+    this.nodes = {
+      wrapper: make('div', [this.CSS.baseClass, this.CSS.wrapper]),
+      imageContainer: make('div', [this.CSS.imageContainer]),
+      fileButton: this.createFileButton(),
+      imageEl: undefined,
+      imagePreloader: make('div', this.CSS.imagePreloader),
+      caption: make('div', [this.CSS.input, this.CSS.caption], {
+        contentEditable: !this.readOnly
+      })
+    };
+    this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
+    this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
+    this.nodes.wrapper.appendChild(this.nodes.imageContainer);
+    this.nodes.wrapper.appendChild(this.nodes.caption);
+    this.nodes.wrapper.appendChild(this.nodes.fileButton);
+  }
+  var _proto = Ui.prototype;
+  _proto.render = function render(toolData) {
+    if (!toolData.file || Object.keys(toolData.file).length === 0) {
+      this.toggleStatus(Ui.status.EMPTY);
+    } else {
+      this.toggleStatus(Ui.status.UPLOADING);
+    }
+    return this.nodes.wrapper;
+  };
+  _proto.createFileButton = function createFileButton() {
+    var _this = this;
+    var button = make('div', [this.CSS.button]);
+    button.innerHTML = this.config.buttonContent || z + " " + this.api.i18n.t('Select an Image');
+    button.addEventListener('click', function () {
+      _this.onSelectFile();
+    });
+    return button;
+  };
+  _proto.showPreloader = function showPreloader(src) {
+    this.nodes.imagePreloader.style.backgroundImage = "url(" + src + ")";
+    this.toggleStatus(Ui.status.UPLOADING);
+  };
+  _proto.hidePreloader = function hidePreloader() {
+    this.nodes.imagePreloader.style.backgroundImage = '';
+    this.toggleStatus(Ui.status.EMPTY);
+  };
+  _proto.fillImage = function fillImage(url) {
+    var _this2 = this;
+    var tag = /\.mp4$/.test(url) ? 'VIDEO' : 'IMG';
+    var attributes = {
+      src: url
+    };
+    var eventName = 'load';
+    if (tag === 'VIDEO') {
+      attributes.autoplay = true;
+      attributes.loop = true;
+      attributes.muted = true;
+      attributes.playsinline = true;
+      eventName = 'loadeddata';
+    }
+    this.nodes.imageEl = make(tag, this.CSS.imageEl, attributes);
+    this.nodes.imageEl.addEventListener(eventName, function () {
+      _this2.toggleStatus(Ui.status.FILLED);
+      if (_this2.nodes.imagePreloader) {
+        _this2.nodes.imagePreloader.style.backgroundImage = '';
+      }
+    });
+    this.nodes.imageContainer.appendChild(this.nodes.imageEl);
+  };
+  _proto.fillCaption = function fillCaption(text) {
+    if (this.nodes.caption) {
+      this.nodes.caption.innerHTML = text;
+    }
+  };
+  _proto.toggleStatus = function toggleStatus(status) {
+    for (var statusType in Ui.status) {
+      if (Object.prototype.hasOwnProperty.call(Ui.status, statusType)) {
+        this.nodes.wrapper.classList.toggle(this.CSS.wrapper + "--" + Ui.status[statusType], status === Ui.status[statusType]);
+      }
+    }
+  };
+  _proto.applyTune = function applyTune(tuneName, status) {
+    this.nodes.wrapper.classList.toggle(this.CSS.wrapper + "--" + tuneName, status);
+  };
+  _createClass(Ui, [{
+    key: "CSS",
+    get: function get() {
+      return {
+        baseClass: this.api.styles.block,
+        loading: this.api.styles.loader,
+        input: this.api.styles.input,
+        button: this.api.styles.button,
+        wrapper: 'image-tool',
+        imageContainer: 'image-tool__image',
+        imagePreloader: 'image-tool__image-preloader',
+        imageEl: 'image-tool__image-picture',
+        caption: 'image-tool__caption'
+      };
+    }
+  }], [{
+    key: "status",
+    get: function get() {
+      return {
+        EMPTY: 'empty',
+        UPLOADING: 'loading',
+        FILLED: 'filled'
+      };
+    }
+  }]);
+  return Ui;
+}();
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function unwrapExports (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var main = createCommonjsModule(function (module, exports) {
+  !function (e, t) {
+     module.exports = t() ;
+  }(window, function () {
+    return function (e) {
+      var t = {};
+      function n(r) {
+        if (t[r]) return t[r].exports;
+        var o = t[r] = {
+          i: r,
+          l: !1,
+          exports: {}
+        };
+        return e[r].call(o.exports, o, o.exports, n), o.l = !0, o.exports;
+      }
+      return n.m = e, n.c = t, n.d = function (e, t, r) {
+        n.o(e, t) || Object.defineProperty(e, t, {
+          enumerable: !0,
+          get: r
+        });
+      }, n.r = function (e) {
+        "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(e, Symbol.toStringTag, {
+          value: "Module"
+        }), Object.defineProperty(e, "__esModule", {
+          value: !0
+        });
+      }, n.t = function (e, t) {
+        if (1 & t && (e = n(e)), 8 & t) return e;
+        if (4 & t && "object" == typeof e && e && e.__esModule) return e;
+        var r = Object.create(null);
+        if (n.r(r), Object.defineProperty(r, "default", {
+          enumerable: !0,
+          value: e
+        }), 2 & t && "string" != typeof e) for (var o in e) n.d(r, o, function (t) {
+          return e[t];
+        }.bind(null, o));
+        return r;
+      }, n.n = function (e) {
+        var t = e && e.__esModule ? function () {
+          return e["default"];
+        } : function () {
+          return e;
+        };
+        return n.d(t, "a", t), t;
+      }, n.o = function (e, t) {
+        return Object.prototype.hasOwnProperty.call(e, t);
+      }, n.p = "", n(n.s = 3);
+    }([function (e, t) {
+      var n;
+      n = function () {
+        return this;
+      }();
+      try {
+        n = n || new Function("return this")();
+      } catch (e) {
+        "object" == typeof window && (n = window);
+      }
+      e.exports = n;
+    }, function (e, t, n) {
+
+      (function (e) {
+        var r = n(2),
+          o = setTimeout;
+        function i() {}
+        function a(e) {
+          if (!(this instanceof a)) throw new TypeError("Promises must be constructed via new");
+          if ("function" != typeof e) throw new TypeError("not a function");
+          this._state = 0, this._handled = !1, this._value = void 0, this._deferreds = [], d(e, this);
+        }
+        function u(e, t) {
+          for (; 3 === e._state;) e = e._value;
+          0 !== e._state ? (e._handled = !0, a._immediateFn(function () {
+            var n = 1 === e._state ? t.onFulfilled : t.onRejected;
+            if (null !== n) {
+              var r;
+              try {
+                r = n(e._value);
+              } catch (e) {
+                return void s(t.promise, e);
+              }
+              c(t.promise, r);
+            } else (1 === e._state ? c : s)(t.promise, e._value);
+          })) : e._deferreds.push(t);
+        }
+        function c(e, t) {
+          try {
+            if (t === e) throw new TypeError("A promise cannot be resolved with itself.");
+            if (t && ("object" == typeof t || "function" == typeof t)) {
+              var n = t.then;
+              if (t instanceof a) return e._state = 3, e._value = t, void f(e);
+              if ("function" == typeof n) return void d((r = n, o = t, function () {
+                r.apply(o, arguments);
+              }), e);
+            }
+            e._state = 1, e._value = t, f(e);
+          } catch (t) {
+            s(e, t);
+          }
+          var r, o;
+        }
+        function s(e, t) {
+          e._state = 2, e._value = t, f(e);
+        }
+        function f(e) {
+          2 === e._state && 0 === e._deferreds.length && a._immediateFn(function () {
+            e._handled || a._unhandledRejectionFn(e._value);
+          });
+          for (var t = 0, n = e._deferreds.length; t < n; t++) u(e, e._deferreds[t]);
+          e._deferreds = null;
+        }
+        function l(e, t, n) {
+          this.onFulfilled = "function" == typeof e ? e : null, this.onRejected = "function" == typeof t ? t : null, this.promise = n;
+        }
+        function d(e, t) {
+          var n = !1;
+          try {
+            e(function (e) {
+              n || (n = !0, c(t, e));
+            }, function (e) {
+              n || (n = !0, s(t, e));
+            });
+          } catch (e) {
+            if (n) return;
+            n = !0, s(t, e);
+          }
+        }
+        a.prototype["catch"] = function (e) {
+          return this.then(null, e);
+        }, a.prototype.then = function (e, t) {
+          var n = new this.constructor(i);
+          return u(this, new l(e, t, n)), n;
+        }, a.prototype["finally"] = r.a, a.all = function (e) {
+          return new a(function (t, n) {
+            if (!e || void 0 === e.length) throw new TypeError("Promise.all accepts an array");
+            var r = Array.prototype.slice.call(e);
+            if (0 === r.length) return t([]);
+            var o = r.length;
+            function i(e, a) {
+              try {
+                if (a && ("object" == typeof a || "function" == typeof a)) {
+                  var u = a.then;
+                  if ("function" == typeof u) return void u.call(a, function (t) {
+                    i(e, t);
+                  }, n);
+                }
+                r[e] = a, 0 == --o && t(r);
+              } catch (e) {
+                n(e);
+              }
+            }
+            for (var a = 0; a < r.length; a++) i(a, r[a]);
+          });
+        }, a.resolve = function (e) {
+          return e && "object" == typeof e && e.constructor === a ? e : new a(function (t) {
+            t(e);
+          });
+        }, a.reject = function (e) {
+          return new a(function (t, n) {
+            n(e);
+          });
+        }, a.race = function (e) {
+          return new a(function (t, n) {
+            for (var r = 0, o = e.length; r < o; r++) e[r].then(t, n);
+          });
+        }, a._immediateFn = "function" == typeof e && function (t) {
+          e(t);
+        } || function (e) {
+          o(e, 0);
+        }, a._unhandledRejectionFn = function (e) {
+          "undefined" != typeof console && console && console.warn("Possible Unhandled Promise Rejection:", e);
+        }, t.a = a;
+      }).call(this, n(5).setImmediate);
+    }, function (e, t, n) {
+
+      t.a = function (e) {
+        var t = this.constructor;
+        return this.then(function (n) {
+          return t.resolve(e()).then(function () {
+            return n;
+          });
+        }, function (n) {
+          return t.resolve(e()).then(function () {
+            return t.reject(n);
+          });
+        });
+      };
+    }, function (e, t, n) {
+
+      function r(e) {
+        return (r = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (e) {
+          return typeof e;
+        } : function (e) {
+          return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e;
+        })(e);
+      }
+      n(4);
+      var o,
+        i,
+        a,
+        u,
+        c,
+        s,
+        f,
+        l = n(8),
+        d = (i = function i(e) {
+          return new Promise(function (t, n) {
+            e = u(e), (e = c(e)).beforeSend && e.beforeSend();
+            var r = window.XMLHttpRequest ? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP");
+            r.open(e.method, e.url), r.setRequestHeader("X-Requested-With", "XMLHttpRequest"), Object.keys(e.headers).forEach(function (t) {
+              var n = e.headers[t];
+              r.setRequestHeader(t, n);
+            });
+            var o = e.ratio;
+            r.upload.addEventListener("progress", function (t) {
+              var n = Math.round(t.loaded / t.total * 100),
+                r = Math.ceil(n * o / 100);
+              e.progress(Math.min(r, 100));
+            }, !1), r.addEventListener("progress", function (t) {
+              var n = Math.round(t.loaded / t.total * 100),
+                r = Math.ceil(n * (100 - o) / 100) + o;
+              e.progress(Math.min(r, 100));
+            }, !1), r.onreadystatechange = function () {
+              if (4 === r.readyState) {
+                var e = r.response;
+                try {
+                  e = JSON.parse(e);
+                } catch (e) {}
+                var o = l.parseHeaders(r.getAllResponseHeaders()),
+                  i = {
+                    body: e,
+                    code: r.status,
+                    headers: o
+                  };
+                f(r.status) ? t(i) : n(i);
+              }
+            }, r.send(e.data);
+          });
+        }, a = function a(e) {
+          return e.method = "POST", i(e);
+        }, u = function u() {
+          var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+          if (e.url && "string" != typeof e.url) throw new Error("Url must be a string");
+          if (e.url = e.url || "", e.method && "string" != typeof e.method) throw new Error("`method` must be a string or null");
+          if (e.method = e.method ? e.method.toUpperCase() : "GET", e.headers && "object" !== r(e.headers)) throw new Error("`headers` must be an object or null");
+          if (e.headers = e.headers || {}, e.type && ("string" != typeof e.type || !Object.values(o).includes(e.type))) throw new Error("`type` must be taken from module's «contentType» library");
+          if (e.progress && "function" != typeof e.progress) throw new Error("`progress` must be a function or null");
+          if (e.progress = e.progress || function (e) {}, e.beforeSend = e.beforeSend || function (e) {}, e.ratio && "number" != typeof e.ratio) throw new Error("`ratio` must be a number");
+          if (e.ratio < 0 || e.ratio > 100) throw new Error("`ratio` must be in a 0-100 interval");
+          if (e.ratio = e.ratio || 90, e.accept && "string" != typeof e.accept) throw new Error("`accept` must be a string with a list of allowed mime-types");
+          if (e.accept = e.accept || "*/*", e.multiple && "boolean" != typeof e.multiple) throw new Error("`multiple` must be a true or false");
+          if (e.multiple = e.multiple || !1, e.fieldName && "string" != typeof e.fieldName) throw new Error("`fieldName` must be a string");
+          return e.fieldName = e.fieldName || "files", e;
+        }, c = function c(e) {
+          switch (e.method) {
+            case "GET":
+              var t = s(e.data, o.URLENCODED);
+              delete e.data, e.url = /\?/.test(e.url) ? e.url + "&" + t : e.url + "?" + t;
+              break;
+            case "POST":
+            case "PUT":
+            case "DELETE":
+            case "UPDATE":
+              var n = function () {
+                return (arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {}).type || o.JSON;
+              }(e);
+              (l.isFormData(e.data) || l.isFormElement(e.data)) && (n = o.FORM), e.data = s(e.data, n), n !== d.contentType.FORM && (e.headers["content-type"] = n);
+          }
+          return e;
+        }, s = function s() {
+          var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+          switch (arguments.length > 1 ? arguments[1] : void 0) {
+            case o.URLENCODED:
+              return l.urlEncode(e);
+            case o.JSON:
+              return l.jsonEncode(e);
+            case o.FORM:
+              return l.formEncode(e);
+            default:
+              return e;
+          }
+        }, f = function f(e) {
+          return e >= 200 && e < 300;
+        }, {
+          contentType: o = {
+            URLENCODED: "application/x-www-form-urlencoded; charset=utf-8",
+            FORM: "multipart/form-data",
+            JSON: "application/json; charset=utf-8"
+          },
+          request: i,
+          get: function get(e) {
+            return e.method = "GET", i(e);
+          },
+          post: a,
+          transport: function transport(e) {
+            return e = u(e), l.selectFiles(e).then(function (t) {
+              for (var n = new FormData(), r = 0; r < t.length; r++) n.append(e.fieldName, t[r], t[r].name);
+              l.isObject(e.data) && Object.keys(e.data).forEach(function (t) {
+                var r = e.data[t];
+                n.append(t, r);
+              });
+              var o = e.beforeSend;
+              return e.beforeSend = function () {
+                return o(t);
+              }, e.data = n, a(e);
+            });
+          },
+          selectFiles: function selectFiles(e) {
+            return delete (e = u(e)).beforeSend, l.selectFiles(e);
+          }
+        });
+      e.exports = d;
+    }, function (e, t, n) {
+
+      n.r(t);
+      var r = n(1);
+      window.Promise = window.Promise || r.a;
+    }, function (e, t, n) {
+      (function (e) {
+        var r = void 0 !== e && e || "undefined" != typeof self && self || window,
+          o = Function.prototype.apply;
+        function i(e, t) {
+          this._id = e, this._clearFn = t;
+        }
+        t.setTimeout = function () {
+          return new i(o.call(setTimeout, r, arguments), clearTimeout);
+        }, t.setInterval = function () {
+          return new i(o.call(setInterval, r, arguments), clearInterval);
+        }, t.clearTimeout = t.clearInterval = function (e) {
+          e && e.close();
+        }, i.prototype.unref = i.prototype.ref = function () {}, i.prototype.close = function () {
+          this._clearFn.call(r, this._id);
+        }, t.enroll = function (e, t) {
+          clearTimeout(e._idleTimeoutId), e._idleTimeout = t;
+        }, t.unenroll = function (e) {
+          clearTimeout(e._idleTimeoutId), e._idleTimeout = -1;
+        }, t._unrefActive = t.active = function (e) {
+          clearTimeout(e._idleTimeoutId);
+          var t = e._idleTimeout;
+          t >= 0 && (e._idleTimeoutId = setTimeout(function () {
+            e._onTimeout && e._onTimeout();
+          }, t));
+        }, n(6), t.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== e && e.setImmediate || this && this.setImmediate, t.clearImmediate = "undefined" != typeof self && self.clearImmediate || void 0 !== e && e.clearImmediate || this && this.clearImmediate;
+      }).call(this, n(0));
+    }, function (e, t, n) {
+      (function (e, t) {
+        !function (e, n) {
+
+          if (!e.setImmediate) {
+            var r,
+              o,
+              i,
+              a,
+              u,
+              c = 1,
+              s = {},
+              f = !1,
+              l = e.document,
+              d = Object.getPrototypeOf && Object.getPrototypeOf(e);
+            d = d && d.setTimeout ? d : e, "[object process]" === {}.toString.call(e.process) ? r = function r(e) {
+              t.nextTick(function () {
+                m(e);
+              });
+            } : !function () {
+              if (e.postMessage && !e.importScripts) {
+                var t = !0,
+                  n = e.onmessage;
+                return e.onmessage = function () {
+                  t = !1;
+                }, e.postMessage("", "*"), e.onmessage = n, t;
+              }
+            }() ? e.MessageChannel ? ((i = new MessageChannel()).port1.onmessage = function (e) {
+              m(e.data);
+            }, r = function r(e) {
+              i.port2.postMessage(e);
+            }) : l && "onreadystatechange" in l.createElement("script") ? (o = l.documentElement, r = function r(e) {
+              var t = l.createElement("script");
+              t.onreadystatechange = function () {
+                m(e), t.onreadystatechange = null, o.removeChild(t), t = null;
+              }, o.appendChild(t);
+            }) : r = function r(e) {
+              setTimeout(m, 0, e);
+            } : (a = "setImmediate$" + Math.random() + "$", u = function u(t) {
+              t.source === e && "string" == typeof t.data && 0 === t.data.indexOf(a) && m(+t.data.slice(a.length));
+            }, e.addEventListener ? e.addEventListener("message", u, !1) : e.attachEvent("onmessage", u), r = function r(t) {
+              e.postMessage(a + t, "*");
+            }), d.setImmediate = function (e) {
+              "function" != typeof e && (e = new Function("" + e));
+              for (var t = new Array(arguments.length - 1), n = 0; n < t.length; n++) t[n] = arguments[n + 1];
+              var o = {
+                callback: e,
+                args: t
+              };
+              return s[c] = o, r(c), c++;
+            }, d.clearImmediate = p;
+          }
+          function p(e) {
+            delete s[e];
+          }
+          function m(e) {
+            if (f) setTimeout(m, 0, e);else {
+              var t = s[e];
+              if (t) {
+                f = !0;
+                try {
+                  !function (e) {
+                    var t = e.callback,
+                      r = e.args;
+                    switch (r.length) {
+                      case 0:
+                        t();
+                        break;
+                      case 1:
+                        t(r[0]);
+                        break;
+                      case 2:
+                        t(r[0], r[1]);
+                        break;
+                      case 3:
+                        t(r[0], r[1], r[2]);
+                        break;
+                      default:
+                        t.apply(n, r);
+                    }
+                  }(t);
+                } finally {
+                  p(e), f = !1;
+                }
+              }
+            }
+          }
+        }("undefined" == typeof self ? void 0 === e ? this : e : self);
+      }).call(this, n(0), n(7));
+    }, function (e, t) {
+      var n,
+        r,
+        o = e.exports = {};
+      function i() {
+        throw new Error("setTimeout has not been defined");
+      }
+      function a() {
+        throw new Error("clearTimeout has not been defined");
+      }
+      function u(e) {
+        if (n === setTimeout) return setTimeout(e, 0);
+        if ((n === i || !n) && setTimeout) return n = setTimeout, setTimeout(e, 0);
+        try {
+          return n(e, 0);
+        } catch (t) {
+          try {
+            return n.call(null, e, 0);
+          } catch (t) {
+            return n.call(this, e, 0);
+          }
+        }
+      }
+      !function () {
+        try {
+          n = "function" == typeof setTimeout ? setTimeout : i;
+        } catch (e) {
+          n = i;
+        }
+        try {
+          r = "function" == typeof clearTimeout ? clearTimeout : a;
+        } catch (e) {
+          r = a;
+        }
+      }();
+      var c,
+        s = [],
+        f = !1,
+        l = -1;
+      function d() {
+        f && c && (f = !1, c.length ? s = c.concat(s) : l = -1, s.length && p());
+      }
+      function p() {
+        if (!f) {
+          var e = u(d);
+          f = !0;
+          for (var t = s.length; t;) {
+            for (c = s, s = []; ++l < t;) c && c[l].run();
+            l = -1, t = s.length;
+          }
+          c = null, f = !1, function (e) {
+            if (r === clearTimeout) return clearTimeout(e);
+            if ((r === a || !r) && clearTimeout) return r = clearTimeout, clearTimeout(e);
+            try {
+              r(e);
+            } catch (t) {
+              try {
+                return r.call(null, e);
+              } catch (t) {
+                return r.call(this, e);
+              }
+            }
+          }(e);
+        }
+      }
+      function m(e, t) {
+        this.fun = e, this.array = t;
+      }
+      function h() {}
+      o.nextTick = function (e) {
+        var t = new Array(arguments.length - 1);
+        if (arguments.length > 1) for (var n = 1; n < arguments.length; n++) t[n - 1] = arguments[n];
+        s.push(new m(e, t)), 1 !== s.length || f || u(p);
+      }, m.prototype.run = function () {
+        this.fun.apply(null, this.array);
+      }, o.title = "browser", o.browser = !0, o.env = {}, o.argv = [], o.version = "", o.versions = {}, o.on = h, o.addListener = h, o.once = h, o.off = h, o.removeListener = h, o.removeAllListeners = h, o.emit = h, o.prependListener = h, o.prependOnceListener = h, o.listeners = function (e) {
+        return [];
+      }, o.binding = function (e) {
+        throw new Error("process.binding is not supported");
+      }, o.cwd = function () {
+        return "/";
+      }, o.chdir = function (e) {
+        throw new Error("process.chdir is not supported");
+      }, o.umask = function () {
+        return 0;
+      };
+    }, function (e, t, n) {
+      function r(e, t) {
+        for (var n = 0; n < t.length; n++) {
+          var r = t[n];
+          r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r);
+        }
+      }
+      var o = n(9);
+      e.exports = function () {
+        function e() {
+          !function (e, t) {
+            if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function");
+          }(this, e);
+        }
+        var t, n, i;
+        return t = e, i = [{
+          key: "urlEncode",
+          value: function value(e) {
+            return o(e);
+          }
+        }, {
+          key: "jsonEncode",
+          value: function value(e) {
+            return JSON.stringify(e);
+          }
+        }, {
+          key: "formEncode",
+          value: function value(e) {
+            if (this.isFormData(e)) return e;
+            if (this.isFormElement(e)) return new FormData(e);
+            if (this.isObject(e)) {
+              var t = new FormData();
+              return Object.keys(e).forEach(function (n) {
+                var r = e[n];
+                t.append(n, r);
+              }), t;
+            }
+            throw new Error("`data` must be an instance of Object, FormData or <FORM> HTMLElement");
+          }
+        }, {
+          key: "isObject",
+          value: function value(e) {
+            return "[object Object]" === Object.prototype.toString.call(e);
+          }
+        }, {
+          key: "isFormData",
+          value: function value(e) {
+            return e instanceof FormData;
+          }
+        }, {
+          key: "isFormElement",
+          value: function value(e) {
+            return e instanceof HTMLFormElement;
+          }
+        }, {
+          key: "selectFiles",
+          value: function value() {
+            var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
+            return new Promise(function (t, n) {
+              var r = document.createElement("INPUT");
+              r.type = "file", e.multiple && r.setAttribute("multiple", "multiple"), e.accept && r.setAttribute("accept", e.accept), r.style.display = "none", document.body.appendChild(r), r.addEventListener("change", function (e) {
+                var n = e.target.files;
+                t(n), document.body.removeChild(r);
+              }, !1), r.click();
+            });
+          }
+        }, {
+          key: "parseHeaders",
+          value: function value(e) {
+            var t = e.trim().split(/[\r\n]+/),
+              n = {};
+            return t.forEach(function (e) {
+              var t = e.split(": "),
+                r = t.shift(),
+                o = t.join(": ");
+              r && (n[r] = o);
+            }), n;
+          }
+        }], (n = null) && r(t.prototype, n), i && r(t, i), e;
+      }();
+    }, function (e, t) {
+      var n = function n(e) {
+          return encodeURIComponent(e).replace(/[!'()*]/g, escape).replace(/%20/g, "+");
+        },
+        r = function r(e, t, o, i) {
+          return t = t || null, o = o || "&", i = i || null, e ? function (e) {
+            for (var t = new Array(), n = 0; n < e.length; n++) e[n] && t.push(e[n]);
+            return t;
+          }(Object.keys(e).map(function (a) {
+            var u,
+              c,
+              s = a;
+            if (i && (s = i + "[" + s + "]"), "object" == typeof e[a] && null !== e[a]) u = r(e[a], null, o, s);else {
+              t && (c = s, s = !isNaN(parseFloat(c)) && isFinite(c) ? t + Number(s) : s);
+              var f = e[a];
+              f = (f = 0 === (f = !1 === (f = !0 === f ? "1" : f) ? "0" : f) ? "0" : f) || "", u = n(s) + "=" + n(f);
+            }
+            return u;
+          })).join(o).replace(/[!'()*]/g, "") : "";
+        };
+      e.exports = r;
+    }]);
+  });
+});
+var ajax = unwrapExports(main);
+
+function isPromise(object) {
+  return object && typeof object.then === 'function';
+}
+
+var Uploader = /*#__PURE__*/function () {
+  function Uploader(_ref) {
+    var config = _ref.config,
+      onUpload = _ref.onUpload,
+      onError = _ref.onError;
+    this.config = config;
+    this.onUpload = onUpload;
+    this.onError = onError;
+  }
+  var _proto = Uploader.prototype;
+  _proto.uploadSelectedFile = function uploadSelectedFile(_ref2) {
+    var _this = this;
+    var onPreview = _ref2.onPreview;
+    var preparePreview = function preparePreview(file) {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (e) {
+        onPreview(e.target.result);
+      };
+    };
+    var upload;
+    if (this.config.uploader && typeof this.config.uploader.uploadByFile === 'function') {
+      upload = ajax.selectFiles({
+        accept: this.config.types
+      }).then(function (files) {
+        preparePreview(files[0]);
+        var customUpload = _this.config.uploader.uploadByFile(files[0]);
+        if (!isPromise(customUpload)) {
+          console.warn('Custom uploader method uploadByFile should return a Promise');
+        }
+        return customUpload;
+      });
+    } else {
+      upload = ajax.transport({
+        url: this.config.endpoints.byFile,
+        data: this.config.additionalRequestData,
+        accept: this.config.types,
+        headers: this.config.additionalRequestHeaders,
+        beforeSend: function beforeSend(files) {
+          preparePreview(files[0]);
+        },
+        fieldName: this.config.field
+      }).then(function (response) {
+        return response.body;
+      });
+    }
+    upload.then(function (response) {
+      _this.onUpload(response);
+    })["catch"](function (error) {
+      _this.onError(error);
+    });
+  };
+  _proto.uploadByUrl = function uploadByUrl(url) {
+    var _this2 = this;
+    var upload;
+    if (this.config.uploader && typeof this.config.uploader.uploadByUrl === 'function') {
+      upload = this.config.uploader.uploadByUrl(url);
+      if (!isPromise(upload)) {
+        console.warn('Custom uploader method uploadByUrl should return a Promise');
+      }
+    } else {
+      upload = ajax.post({
+        url: this.config.endpoints.byUrl,
+        data: Object.assign({
+          url: url
+        }, this.config.additionalRequestData),
+        type: ajax.contentType.JSON,
+        headers: this.config.additionalRequestHeaders
+      }).then(function (response) {
+        return response.body;
+      });
+    }
+    upload.then(function (response) {
+      _this2.onUpload(response);
+    })["catch"](function (error) {
+      _this2.onError(error);
+    });
+  };
+  _proto.uploadByFile = function uploadByFile(file, _ref3) {
+    var _this3 = this;
+    var onPreview = _ref3.onPreview;
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function (e) {
+      onPreview(e.target.result);
+    };
+    var upload;
+    if (this.config.uploader && typeof this.config.uploader.uploadByFile === 'function') {
+      upload = this.config.uploader.uploadByFile(file);
+      if (!isPromise(upload)) {
+        console.warn('Custom uploader method uploadByFile should return a Promise');
+      }
+    } else {
+      var formData = new FormData();
+      formData.append(this.config.field, file);
+      if (this.config.additionalRequestData && Object.keys(this.config.additionalRequestData).length) {
+        Object.entries(this.config.additionalRequestData).forEach(function (_ref4) {
+          var name = _ref4[0],
+            value = _ref4[1];
+          formData.append(name, value);
+        });
+      }
+      upload = ajax.post({
+        url: this.config.endpoints.byFile,
+        data: formData,
+        type: ajax.contentType.JSON,
+        headers: this.config.additionalRequestHeaders
+      }).then(function (response) {
+        return response.body;
+      });
+    }
+    upload.then(function (response) {
+      _this3.onUpload(response);
+    })["catch"](function (error) {
+      _this3.onError(error);
+    });
+  };
+  return Uploader;
+}();
+
+var ImageTool = /*#__PURE__*/function () {
+  function ImageTool(_ref) {
+    var _this = this;
+    var data = _ref.data,
+      config = _ref.config,
+      api = _ref.api,
+      readOnly = _ref.readOnly,
+      block = _ref.block;
+    this.api = api;
+    this.readOnly = readOnly;
+    this.block = block;
+    this.config = {
+      endpoints: config.endpoints || '',
+      additionalRequestData: config.additionalRequestData || {},
+      additionalRequestHeaders: config.additionalRequestHeaders || {},
+      field: config.field || 'image',
+      types: config.types || 'image/*',
+      captionPlaceholder: this.api.i18n.t(config.captionPlaceholder || 'Caption'),
+      buttonContent: config.buttonContent || '',
+      uploader: config.uploader || undefined,
+      actions: config.actions || []
+    };
+    this.uploader = new Uploader({
+      config: this.config,
+      onUpload: function onUpload(response) {
+        return _this.onUpload(response);
+      },
+      onError: function onError(error) {
+        return _this.uploadingFailed(error);
+      }
+    });
+    this.ui = new Ui({
+      api: api,
+      config: this.config,
+      onSelectFile: function onSelectFile() {
+        _this.uploader.uploadSelectedFile({
+          onPreview: function onPreview(src) {
+            _this.ui.showPreloader(src);
+          }
+        });
+      },
+      readOnly: readOnly
+    });
+    this._data = {};
+    this.data = data;
+  }
+  var _proto = ImageTool.prototype;
+  _proto.render = function render() {
+    return this.ui.render(this.data);
+  };
+  _proto.validate = function validate(savedData) {
+    return savedData.file && savedData.file.url;
+  };
+  _proto.save = function save() {
+    var caption = this.ui.nodes.caption;
+    this._data.caption = caption.innerHTML;
+    return this.data;
+  };
+  _proto.renderSettings = function renderSettings() {
+    var _this2 = this;
+    var tunes = ImageTool.tunes.concat(this.config.actions);
+    return tunes.map(function (tune) {
+      return {
+        icon: tune.icon,
+        label: _this2.api.i18n.t(tune.title),
+        name: tune.name,
+        toggle: tune.toggle,
+        isActive: _this2.data[tune.name],
+        onActivate: function onActivate() {
+          if (typeof tune.action === 'function') {
+            tune.action(tune.name);
+            return;
+          }
+          _this2.tuneToggled(tune.name);
+        }
+      };
+    });
+  };
+  _proto.appendCallback = function appendCallback() {
+    this.ui.nodes.fileButton.click();
+  };
+  _proto.onPaste = function onPaste(event) {
+    try {
+      var _interrupt = false;
+      var _this3 = this;
+      var _temp3 = _switch(event.type, [[function () {
+        return 'tag';
+      }, function () {
+        {
+          var _temp2 = function _temp2() {
+            _this3.uploadUrl(image.src);
+            _interrupt = true;
+          };
+          var image = event.detail.data;
+          var _temp = function () {
+            if (/^blob:/.test(image.src)) {
+              return Promise.resolve(fetch(image.src)).then(function (response) {
+                return Promise.resolve(response.blob()).then(function (file) {
+                  _this3.uploadFile(file);
+                  _interrupt = true;
+                });
+              });
+            }
+          }();
+          return _temp && _temp.then ? _temp.then(_temp2) : _temp2(_temp);
+        }
+      }, function () {
+        return _interrupt || _interrupt;
+      }], [function () {
+        return 'pattern';
+      }, function () {
+        {
+          var url = event.detail.data;
+          _this3.uploadUrl(url);
+          _interrupt = true;
+          return;
+        }
+      }], [function () {
+        return 'file';
+      }, function () {
+        {
+          var file = event.detail.file;
+          _this3.uploadFile(file);
+          _interrupt = true;
+          return;
+        }
+      }]]);
+      return Promise.resolve(_temp3 && _temp3.then ? _temp3.then(function () {}) : void 0);
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  };
+  _proto.onUpload = function onUpload(response) {
+    if (response.success && response.file) {
+      this.image = response.file;
+    } else {
+      this.uploadingFailed('incorrect response: ' + JSON.stringify(response));
+    }
+  };
+  _proto.uploadingFailed = function uploadingFailed(errorText) {
+    console.log('Image Tool: uploading failed because of', errorText);
+    this.api.notifier.show({
+      message: this.api.i18n.t('Couldn’t upload image. Please try another.'),
+      style: 'error'
+    });
+    this.ui.hidePreloader();
+  };
+  _proto.tuneToggled = function tuneToggled(tuneName) {
+    this.setTune(tuneName, !this._data[tuneName]);
+  };
+  _proto.setTune = function setTune(tuneName, value) {
+    var _this4 = this;
+    this._data[tuneName] = value;
+    this.ui.applyTune(tuneName, value);
+    if (tuneName === 'stretched') {
+      Promise.resolve().then(function () {
+        _this4.block.stretched = value;
+      })["catch"](function (err) {
+        console.error(err);
+      });
+    }
+  };
+  _proto.uploadFile = function uploadFile(file) {
+    var _this5 = this;
+    this.uploader.uploadByFile(file, {
+      onPreview: function onPreview(src) {
+        _this5.ui.showPreloader(src);
+      }
+    });
+  };
+  _proto.uploadUrl = function uploadUrl(url) {
+    this.ui.showPreloader(url);
+    this.uploader.uploadByUrl(url);
+  };
+  _createClass(ImageTool, [{
+    key: "data",
+    get: function get() {
+      return this._data;
+    },
+    set: function set(data) {
+      var _this6 = this;
+      this.image = data.file;
+      this._data.caption = data.caption || '';
+      this.ui.fillCaption(this._data.caption);
+      ImageTool.tunes.forEach(function (_ref2) {
+        var tune = _ref2.name;
+        var value = typeof data[tune] !== 'undefined' ? data[tune] === true || data[tune] === 'true' : false;
+        _this6.setTune(tune, value);
+      });
+    }
+  }, {
+    key: "image",
+    set: function set(file) {
+      this._data.file = file || {};
+      if (file && file.url) {
+        this.ui.fillImage(file.url);
+      }
+    }
+  }], [{
+    key: "isReadOnlySupported",
+    get: function get() {
+      return true;
+    }
+  }, {
+    key: "toolbox",
+    get: function get() {
+      return {
+        icon: z,
+        title: 'Image'
+      };
+    }
+  }, {
+    key: "tunes",
+    get: function get() {
+      return [{
+        name: 'withBorder',
+        icon: h,
+        title: 'With border',
+        toggle: true
+      }, {
+        name: 'stretched',
+        icon: e1,
+        title: 'Stretch image',
+        toggle: true
+      }, {
+        name: 'withBackground',
+        icon: i,
+        title: 'With background',
+        toggle: true
+      }];
+    }
+  }, {
+    key: "pasteConfig",
+    get: function get() {
+      return {
+        tags: [{
+          img: {
+            src: true
+          }
+        }],
+        patterns: {
+          image: /https?:\/\/\S+\.(gif|jpe?g|tiff|png|svg|webp)(\?[a-z0-9=]*)?$/i
+        },
+        files: {
+          mimeTypes: ['image/*']
+        }
+      };
+    }
+  }]);
+  return ImageTool;
+}();
+
 var createEditorTools = function createEditorTools(uploadEndPoint) {
   return {
     embed: Embed,
@@ -323,7 +1768,8 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
 function EditorEditor(_ref) {
   var data = _ref.data,
     setData = _ref.setData,
-    uploadEndPoint = _ref.uploadEndPoint;
+    uploadEndPoint = _ref.uploadEndPoint,
+    lastUploadedEndPoint = _ref.lastUploadedEndPoint;
   var _useState = React$1.useState(data.metadata.title),
     title = _useState[0],
     setTitle = _useState[1];
@@ -337,15 +1783,69 @@ function EditorEditor(_ref) {
     altDescription = _useState4[0],
     setAltDescription = _useState4[1];
   var initialData = mdJsonConverter.json2cleanjson(data).bodyBlocks;
+  var _useState5 = React$1.useState(data),
+    lastData = _useState5[0],
+    setLastData = _useState5[1];
   var editorCore = React$1.useRef(null);
   var ReactEditorJS = reactEditorJs.createReactEditorJS();
   var handleInitialize = React$1.useCallback(function (instance) {
-    instance._editorJS.isReady.then(function () {
-      editorCore.current = instance;
-    })["catch"](function (err) {
-      return console.log("An error occured", err);
-    });
+    try {
+      var _temp = _catch(function () {
+        return Promise.resolve(instance._editorJS.isReady).then(function () {
+          editorCore.current = instance;
+        });
+      }, function (err) {
+        console.log("An error occurred", err);
+      });
+      return Promise.resolve(_temp && _temp.then ? _temp.then(function () {}) : void 0);
+    } catch (e) {
+      return Promise.reject(e);
+    }
   }, []);
+  React$1.useEffect(function () {
+    if (lastData === data) {
+      return;
+    }
+    var fetchDataAndUpdate = function fetchDataAndUpdate() {
+      try {
+        var _temp3 = function _temp3(_result3) {
+          if (_exit) return _result3;
+          setData(dataCopy);
+          setLastData(dataCopy);
+          console.log('dataCopy', dataCopy);
+        };
+        var _exit = false;
+        var dataCopy = JSON.parse(JSON.stringify(data));
+        var _temp2 = _forOf(dataCopy.content, function (block) {
+          return function () {
+            if (block.text && block.text.includes('(undefined)')) {
+              return _catch(function () {
+                return Promise.resolve(axios.get(lastUploadedEndPoint)).then(function (response) {
+                  console.log('response body', response);
+                  console.log('response content', response.content);
+                  if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                  }
+                  return Promise.resolve(response.json()).then(function (data) {
+                    var imageUrl = data.imageUrl;
+                    block.text = block.text.replace('(undefined)', "(" + imageUrl + ")");
+                  });
+                });
+              }, function (error) {
+                console.error('Error fetching image URL:', error);
+              });
+            }
+          }();
+        }, function () {
+          return _exit;
+        });
+        return Promise.resolve(_temp2 && _temp2.then ? _temp2.then(_temp3) : _temp3(_temp2));
+      } catch (e) {
+        return Promise.reject(e);
+      }
+    };
+    fetchDataAndUpdate();
+  }, [data]);
   var handleSave = React$1.useCallback(function () {
     try {
       return Promise.resolve(editorCore.current.save()).then(function (savedData) {
@@ -713,12 +2213,6 @@ function stackHas(key) {
 }
 
 var _stackHas = stackHas;
-
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
 
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof commonjsGlobal == 'object' && commonjsGlobal && commonjsGlobal.Object === Object && commonjsGlobal;
@@ -3018,6 +4512,7 @@ function Editor(_ref) {
     data = _ref.data,
     setData = _ref.setData,
     uploadEndPoint = _ref.uploadEndPoint,
+    lastUploadedEndPoint = _ref.lastUploadedEndPoint,
     isEditMode = _ref.isEditMode;
   var handleDataChange = function handleDataChange(updatedData) {
     setData(updatedData);
@@ -3045,7 +4540,8 @@ function Editor(_ref) {
   }, isEditMode ? /*#__PURE__*/React.createElement(EditorEditor, {
     data: data,
     setData: handleDataChange,
-    uploadEndPoint: uploadEndPoint
+    uploadEndPoint: uploadEndPoint,
+    lastUploadedEndPoint: lastUploadedEndPoint
   }) : /*#__PURE__*/React.createElement(Renderer, {
     data: data
   })));
