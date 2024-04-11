@@ -17,6 +17,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	let initialData = json2cleanjson(data).bodyBlocks;
 
 	const editorCore = useRef(null);
+	
 	const ReactEditorJS = createReactEditorJS();
 
 	const handleInitialize = useCallback((instance) => {

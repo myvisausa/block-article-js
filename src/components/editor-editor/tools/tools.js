@@ -36,7 +36,6 @@ export const createEditorTools = (uploadEndPoint) => ({
       endpoints: {
         byFile: uploadEndPoint || 'http://localhost:5252/api/media/images/upload',
       },
-      field: "image"
     },
   },
   raw: Raw,
