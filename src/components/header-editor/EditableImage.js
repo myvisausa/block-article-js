@@ -11,7 +11,6 @@ const EditableImage = ({ url, uploadEndPoint, onImageChange, caption, setCaption
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append('image', file);
-        
         try {
             const response = await fetch(uploadEndPoint, {
                 method: 'POST',

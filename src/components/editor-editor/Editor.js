@@ -58,7 +58,6 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		  setData(updateData);
 		}
 	  }, [title, imageUrl, caption, altDescription]); 
-
 	return (
 		<div className="editor-container">
 			<h4 className="edit-mode-alert">! Edit Mode Enabled</h4>
