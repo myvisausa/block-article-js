@@ -2,6 +2,7 @@ import parse from "html-react-parser";
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
 import edjsHTML from "editorjs-renderer";
+import { useEffect } from "react";
 
 // use submodule if md-json-converter not installed
 let json2cleanjson;
@@ -11,7 +12,10 @@ try {
   json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
 }
 
-export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Contents' }) {
+export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Contents', onArticleLoaded }) {
+  if (onArticleLoaded === undefined) {
+    onArticleLoaded = () => {};
+  }
   if (!data) {
     return (
     <>
@@ -21,6 +25,11 @@ export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Con
     </>
     )
   }
+
+  useEffect(() => {
+    onArticleLoaded();
+  }, []);
+
   let titleBlocks;
   let bodyBlocks;
   let res;
