@@ -19,7 +19,6 @@ var Marker = _interopDefault(require('@editorjs/marker'));
 var CheckList = _interopDefault(require('@editorjs/checklist'));
 var Delimiter = _interopDefault(require('@editorjs/delimiter'));
 var InlineCode = _interopDefault(require('@editorjs/inline-code'));
-var SimpleImage = _interopDefault(require('@editorjs/simple-image'));
 var ImageTool = _interopDefault(require('@editorjs/image'));
 var reactEditorJs = require('react-editor-js');
 var mdJsonConverter = require('md-json-converter');
@@ -297,7 +296,13 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
   return {
     embed: Embed,
     table: Table,
-    list: List,
+    list: {
+      "class": List,
+      inlineToolbar: true,
+      config: {
+        defaultStyle: 'unordered'
+      }
+    },
     warning: Warning,
     code: Code,
     linkTool: LinkTool,
@@ -305,8 +310,9 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
       "class": ImageTool,
       config: {
         endpoints: {
-          byFile: uploadEndPoint || 'http://localhost:5252/api/uploadImage'
-        }
+          byFile: uploadEndPoint || 'http://localhost:5252/api/media/images/upload'
+        },
+        field: "image"
       }
     },
     raw: Raw,
@@ -315,8 +321,7 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
     marker: Marker,
     checklist: CheckList,
     delimiter: Delimiter,
-    inlineCode: InlineCode,
-    simpleImage: SimpleImage
+    inlineCode: InlineCode
   };
 };
 
@@ -3018,7 +3023,9 @@ function Editor(_ref) {
     data = _ref.data,
     setData = _ref.setData,
     uploadEndPoint = _ref.uploadEndPoint,
-    isEditMode = _ref.isEditMode;
+    isEditMode = _ref.isEditMode,
+    _ref$tocTitle = _ref.tocTitle,
+    tocTitle = _ref$tocTitle === void 0 ? 'Table of Contents' : _ref$tocTitle;
   var handleDataChange = function handleDataChange(updatedData) {
     setData(updatedData);
     if (onDataChange) {
@@ -3047,7 +3054,8 @@ function Editor(_ref) {
     setData: handleDataChange,
     uploadEndPoint: uploadEndPoint
   }) : /*#__PURE__*/React.createElement(Renderer, {
-    data: data
+    data: data,
+    tocTitle: tocTitle
   })));
 }
 

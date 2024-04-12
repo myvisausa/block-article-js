@@ -17,6 +17,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	let initialData = json2cleanjson(data).bodyBlocks;
 
 	const editorCore = useRef(null);
+	
 	const ReactEditorJS = createReactEditorJS();
 
 	const handleInitialize = useCallback((instance) => {
@@ -58,7 +59,6 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		  setData(updateData);
 		}
 	  }, [title, imageUrl, caption, altDescription]); 
-
 	return (
 		<div className="editor-container">
 			<h4 className="edit-mode-alert">! Edit Mode Enabled</h4>

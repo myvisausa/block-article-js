@@ -16,7 +16,6 @@ import Marker from '@editorjs/marker';
 import CheckList from '@editorjs/checklist';
 import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
-import SimpleImage from '@editorjs/simple-image';
 import ImageTool from '@editorjs/image';
 import { createReactEditorJS } from 'react-editor-js';
 import { json2cleanjson as json2cleanjson$1, cleanjson2md, md2json } from 'md-json-converter';
@@ -294,7 +293,13 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
   return {
     embed: Embed,
     table: Table,
-    list: List,
+    list: {
+      "class": List,
+      inlineToolbar: true,
+      config: {
+        defaultStyle: 'unordered'
+      }
+    },
     warning: Warning,
     code: Code,
     linkTool: LinkTool,
@@ -302,8 +307,9 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
       "class": ImageTool,
       config: {
         endpoints: {
-          byFile: uploadEndPoint || 'http://localhost:5252/api/uploadImage'
-        }
+          byFile: uploadEndPoint || 'http://localhost:5252/api/media/images/upload'
+        },
+        field: "image"
       }
     },
     raw: Raw,
@@ -312,8 +318,7 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
     marker: Marker,
     checklist: CheckList,
     delimiter: Delimiter,
-    inlineCode: InlineCode,
-    simpleImage: SimpleImage
+    inlineCode: InlineCode
   };
 };
 
@@ -3015,7 +3020,9 @@ function Editor(_ref) {
     data = _ref.data,
     setData = _ref.setData,
     uploadEndPoint = _ref.uploadEndPoint,
-    isEditMode = _ref.isEditMode;
+    isEditMode = _ref.isEditMode,
+    _ref$tocTitle = _ref.tocTitle,
+    tocTitle = _ref$tocTitle === void 0 ? 'Table of Contents' : _ref$tocTitle;
   var handleDataChange = function handleDataChange(updatedData) {
     setData(updatedData);
     if (onDataChange) {
@@ -3044,7 +3051,8 @@ function Editor(_ref) {
     setData: handleDataChange,
     uploadEndPoint: uploadEndPoint
   }) : /*#__PURE__*/React.createElement(Renderer, {
-    data: data
+    data: data,
+    tocTitle: tocTitle
   })));
 }
 
