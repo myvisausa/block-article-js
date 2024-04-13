@@ -89,6 +89,7 @@
     "html-react-parser": "=5.0.6",
     "jest": "=29.7.0",
     "md-json-converter": "=1.0.2",
-    "react-editor-js": "=2.1.0"
+    "react-editor-js": "=2.1.0",
+    "uuid": "^9.0.1"
   }
 }

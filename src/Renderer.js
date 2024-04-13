@@ -3,7 +3,7 @@ import parse from "html-react-parser" ;
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
 import { useEffect } from "react";
-import parser from "../editorjs-renderer/src/app";
+import parser from "../editorjs-renderer/src/app.ts";
 
 import styles from './styles.module.css';
 let json2cleanjson;
