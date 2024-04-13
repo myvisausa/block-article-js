@@ -1,18 +1,14 @@
 // Renderer.js
-import parse from "html-react-parser";
+import parse from "html-react-parser" ;
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
-import edjsHTML from "editorjs-renderer";
 import { useEffect } from "react";
-import styles from './styles.module.css'; // Import the CSS module
+import parser from "../editorjs-renderer/src/app";
 
-// use submodule if md-json-converter not installed
+import styles from './styles.module.css';
 let json2cleanjson;
-try {
-  json2cleanjson = require("md-json-converter").json2cleanjson;
-} catch (e) {
-  json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
-}
+
+json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
 
 export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Contents', onArticleLoaded }) {
   if (onArticleLoaded === undefined) {
@@ -45,16 +41,16 @@ export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Co
     tocData = data;
   }
 
-  const edjsParser =  edjsHTML();
-
   // Separate image from title
   let imageBlock = JSON.parse(JSON.stringify(titleBlocks));
   imageBlock.blocks = imageBlock.blocks.slice(-1);
   titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
   
-  const title_html = edjsParser.parse(titleBlocks)
-  const image_html = edjsParser.parse(imageBlock)
-  const body_html = edjsParser.parse(bodyBlocks)
+  const myParser = parser();
+
+  const title_html = myParser.parse(titleBlocks)
+  const image_html = myParser.parse(imageBlock)
+  const body_html = myParser.parse(bodyBlocks)
   
   return ( 
     <>
