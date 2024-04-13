@@ -6,7 +6,7 @@ import { createEditorTools } from "./tools/tools";
 
 // create editor instance
 import { createReactEditorJS } from "react-editor-js";
-import { json2cleanjson, cleanjson2md, md2json} from "md-json-converter";
+import { json2cleanjson, cleanjson2md, md2json} from "../../../../md-json-converter/src/index";
 
 export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	const [title, setTitle]  = useState(data.metadata.title);
@@ -15,6 +15,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	const [altDescription, setAltDescription] = useState(data.metadata.ogImageAlt)
 
 	let initialData = json2cleanjson(data).bodyBlocks;
+	console.log("INITIAL DATA = ", initialData);
 
 	const editorCore = useRef(null);
 	
@@ -35,6 +36,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		const savedData = await editorCore.current.save();
 		const markdown = cleanjson2md(savedData);
 		const content = md2json(markdown);
+		console.log("CONTENT = ", content);
 		const newData = {
 			...data,
 			content: content,
@@ -58,7 +60,8 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		if (JSON.stringify(data) !== JSON.stringify(updateData)) {
 		  setData(updateData);
 		}
-	  }, [title, imageUrl, caption, altDescription]); 
+	  }, [title, imageUrl, caption, altDescription]);
+
 	return (
 		<div className="editor-container">
 			<h4 className="edit-mode-alert">! Edit Mode Enabled</h4>

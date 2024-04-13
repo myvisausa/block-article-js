@@ -12,7 +12,7 @@ import Marker from "@editorjs/marker";
 import CheckList from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
-// import SimpleImage from "@editorjs/simple-image";
+import SimpleImage from "@editorjs/simple-image";
 import ImageTool from '@editorjs/image'
 
 export const createEditorTools = (uploadEndPoint) => ({
@@ -27,7 +27,14 @@ export const createEditorTools = (uploadEndPoint) => ({
       defaultStyle: 'unordered'
     }
   },
-  warning: Warning,
+  warning: {
+    class: Warning,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+      messagePlaceholder: 'Message',
+    },
+  },
   code: Code,
   linkTool: LinkTool,
   image: {
@@ -45,5 +52,5 @@ export const createEditorTools = (uploadEndPoint) => ({
   checklist: CheckList,
   delimiter: Delimiter,
   inlineCode: InlineCode,
-  // simpleImage: SimpleImage
+  simpleImage: SimpleImage
 });

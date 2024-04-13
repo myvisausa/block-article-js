@@ -16,11 +16,12 @@ import Marker from '@editorjs/marker';
 import CheckList from '@editorjs/checklist';
 import Delimiter from '@editorjs/delimiter';
 import InlineCode from '@editorjs/inline-code';
+import SimpleImage from '@editorjs/simple-image';
 import ImageTool from '@editorjs/image';
 import { createReactEditorJS } from 'react-editor-js';
-import { json2cleanjson as json2cleanjson$1, cleanjson2md, md2json } from 'md-json-converter';
 import parse from 'html-react-parser';
 import edjsHTML from 'editorjs-renderer';
+import 'editorjs-react-renderer';
 
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
@@ -35,6 +36,37 @@ function _extends() {
     return target;
   };
   return _extends.apply(this, arguments);
+}
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+  return arr2;
+}
+function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
+  if (it) return (it = it.call(o)).next.bind(it);
+  if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+    if (it) o = it;
+    var i = 0;
+    return function () {
+      if (i >= o.length) return {
+        done: true
+      };
+      return {
+        done: false,
+        value: o[i++]
+      };
+    };
+  }
+  throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 var EditableTitle = function EditableTitle(_ref) {
@@ -300,7 +332,14 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
         defaultStyle: 'unordered'
       }
     },
-    warning: Warning,
+    warning: {
+      "class": Warning,
+      inlineToolbar: true,
+      config: {
+        titlePlaceholder: 'Title',
+        messagePlaceholder: 'Message'
+      }
+    },
     code: Code,
     linkTool: LinkTool,
     image: {
@@ -308,8 +347,7 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
       config: {
         endpoints: {
           byFile: uploadEndPoint || 'http://localhost:5252/api/media/images/upload'
-        },
-        field: "image"
+        }
       }
     },
     raw: Raw,
@@ -318,9 +356,547 @@ var createEditorTools = function createEditorTools(uploadEndPoint) {
     marker: Marker,
     checklist: CheckList,
     delimiter: Delimiter,
-    inlineCode: InlineCode
+    inlineCode: InlineCode,
+    simpleImage: SimpleImage
   };
 };
+
+var blocksToMarkdown = function blocksToMarkdown(blocks) {
+  var mdContent = '';
+  for (var _iterator = _createForOfIteratorHelperLoose(blocks), _step; !(_step = _iterator()).done;) {
+    var block = _step.value;
+    if (block.type === "simpleImage") {
+      mdContent += "![" + block.caption + "](" + block.url + ")\n<" + block.caption + "\n\n";
+    }
+    if (block.type === "header") {
+      mdContent += '#'.repeat(block.level) + " " + block.text + "\n\n";
+    } else if (block.type === "image") {
+      mdContent += "![" + block.caption + "](" + block.url + ")\n<" + block.caption + "\n\n";
+    } else if (block.type === "paragraph") {
+      var text = block.text;
+      text = text.replace(/<a href="([^"]+)">([^<]+)<\/a>/g, '[$2]($1)');
+      text = text.replace(/<b>([^<]+)<\/b>/g, '**$1**');
+      text = text.replace(/<i>([^<]+)<\/i>/g, '*$1*');
+      mdContent += text + "\n\n";
+    } else if (block.type === "list") {
+      for (var _iterator2 = _createForOfIteratorHelperLoose(block.items), _step2; !(_step2 = _iterator2()).done;) {
+        var item = _step2.value;
+        if (item.match(/^\d\.\s/)) {
+          mdContent += item + "\n";
+        } else {
+          mdContent += "- " + item + "\n";
+        }
+      }
+      mdContent += '\n';
+    } else if (block.type === "code") {
+      mdContent += "```\n" + block.code + "\n```\n\n";
+    } else if (block.type === "warning") {
+      mdContent += "|WARNING title=" + block.title + " message=" + block.message + " WARNING|\n\n";
+    }
+  }
+  return mdContent.trim();
+};
+
+var convertFromJSON = function convertFromJSON(jsonData) {
+  var blocks = [];
+  for (var _iterator = _createForOfIteratorHelperLoose(jsonData.blocks), _step; !(_step = _iterator()).done;) {
+    var block = _step.value;
+    if (block.type === "header") {
+      blocks.push({
+        type: "header",
+        text: block.data.text,
+        level: block.data.level
+      });
+    } else if (block.type === "image") {
+      var url = block.data.url ? block.data.url : block.data.file.url;
+      blocks.push({
+        type: "image",
+        url: url,
+        caption: block.data.caption
+      });
+    } else if (block.type === "simpleImage") {
+      blocks.push({
+        type: "simpleImage",
+        url: block.data.url,
+        caption: block.data.caption
+      });
+    } else if (block.type === "paragraph") {
+      blocks.push({
+        type: "paragraph",
+        text: block.data.text
+      });
+    } else if (block.type === "list") {
+      blocks.push({
+        type: "list",
+        items: block.data.items
+      });
+    } else if (block.type === "code") {
+      blocks.push({
+        type: "code",
+        code: block.data.code
+      });
+    } else if (block.type === "warning") {
+      blocks.push({
+        type: "warning",
+        title: block.data.title,
+        message: block.data.message
+      });
+    }
+  }
+  return blocks;
+};
+
+function cleanjson2md(data) {
+  var blocks = convertFromJSON(data);
+  var markdown = blocksToMarkdown(blocks);
+  return markdown;
+}
+
+function json2md(data) {
+  var markdown = "";
+  for (var _iterator = _createForOfIteratorHelperLoose(data.content), _step; !(_step = _iterator()).done;) {
+    var section = _step.value;
+    if (section.type === "default") {
+      markdown += "## " + section.header + "\n" + section.text + "\n";
+    } else if (section.type === "faq") {
+      markdown += "## " + section.header + "\n";
+      for (var i = 0; i < section.questions.length; i++) {
+        markdown += "<question>\n" + section.questions[i] + "\n</question>\n";
+        markdown += "<answer>\n" + section.answers[i] + "\n</answer>\n";
+      }
+    }
+  }
+  return markdown;
+}
+
+var parseHeader = function parseHeader(line) {
+  var headerMatch = line.match(/^(#{1,6})\s(.+)$/);
+  if (headerMatch) {
+    return {
+      type: "header",
+      level: headerMatch[1].length,
+      text: headerMatch[2]
+    };
+  }
+};
+var parseImage = function parseImage(line) {
+  var imageMatch = line.match(/!\[([^\]]+)\]\(([^)]+)\)/);
+  if (imageMatch) {
+    return {
+      type: "image",
+      url: imageMatch[2],
+      caption: imageMatch[1]
+    };
+  }
+};
+var parseListItem = function parseListItem(line) {
+  var listItemMatch = line.match(/-\s(.+)|\d\\s(.+)/);
+  if (listItemMatch) {
+    return listItemMatch[1] || listItemMatch[2];
+  }
+};
+var parseWarning = function parseWarning(line) {
+  var warningMatch = line.match(/\|WARNING title=(.+)\s+message=(.+)\s+WARNING\|/);
+  if (warningMatch) {
+    return {
+      type: "warning",
+      title: warningMatch[1],
+      message: warningMatch[2]
+    };
+  }
+};
+function containsInvalidTag(str) {
+  var invalidTagRegex = /<[^ >]+[^>]*$/;
+  return invalidTagRegex.test(str);
+}
+var convertMdtoHtml = function convertMdtoHtml(line) {
+  line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+  line = line.replace(/__(.*?)__/g, '<b>$1</b>');
+  var italicRegex = /(?<!\w)(?<!\\)_([^\s_](?:.*?[^\s_])?)(?<!\\)_(?!\w)/g;
+  line = line.replace(italicRegex, function (match, content) {
+    return "<i>" + content + "</i>";
+  });
+  line = line.replace(/\[([^\]]+)]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+  return line;
+};
+var parseParagraph = function parseParagraph(line) {
+  if (containsInvalidTag(line)) {
+    return null;
+  }
+  line = line.trim();
+  if (line.length > 0) {
+    line = convertMdtoHtml(line);
+    return {
+      type: "paragraph",
+      text: line
+    };
+  }
+  return null;
+};
+var processListItems = function processListItems(listItems) {
+  if (listItems.length) {
+    return {
+      type: "list",
+      items: listItems.slice()
+    };
+  }
+};
+var parseCodeBlock = function parseCodeBlock(lines, currentIndex) {
+  if (lines[currentIndex].trim() === "```") {
+    var codeLines = [];
+    currentIndex++;
+    while (currentIndex < lines.length && lines[currentIndex].trim() !== "```") {
+      codeLines.push(lines[currentIndex]);
+      currentIndex++;
+    }
+    if (currentIndex < lines.length) {
+      currentIndex++;
+    }
+    return {
+      block: {
+        type: "code",
+        code: codeLines.join("\n")
+      },
+      newIndex: currentIndex
+    };
+  }
+  return null;
+};
+var parseNotFaq = function parseNotFaq(mdContent) {
+  console.log('parseNotFaq content', mdContent);
+  var blocks = [];
+  var listItems = [];
+  var lines = mdContent.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    var block = void 0;
+    var codeBlockResult = parseCodeBlock(lines, i);
+    if (codeBlockResult) {
+      blocks.push(codeBlockResult.block);
+      i = codeBlockResult.newIndex - 1;
+      continue;
+    }
+    var listItem = parseListItem(line);
+    if (listItem) {
+      listItems.push(convertMdtoHtml(listItem));
+      continue;
+    }
+    var _listBlock = processListItems(listItems);
+    if (_listBlock) {
+      blocks.push(_listBlock);
+      listItems = [];
+    }
+    if (block = parseHeader(line)) {
+      blocks.push(block);
+      continue;
+    }
+    if (block = parseImage(line)) {
+      blocks.push(block);
+      continue;
+    }
+    if (block = parseWarning(line)) {
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      console.log("*******");
+      blocks.push(block);
+      continue;
+    }
+    if (line[0] === ">") {
+      continue;
+    }
+    if (block = parseParagraph(line)) {
+      blocks.push(block);
+    }
+  }
+  var listBlock = processListItems(listItems);
+  if (listBlock) {
+    blocks.push(listBlock);
+  }
+  return blocks;
+};
+
+var parseQuestion = function parseQuestion(mdContent) {
+  var blocks = [];
+  blocks.push({
+    type: "header",
+    level: 5,
+    text: mdContent
+  });
+  return blocks;
+};
+
+function extractQuestionsAndAnswers(str) {
+  var startTag = "<question>";
+  var endTag = "</answer>";
+  var startIndex = str.indexOf(startTag);
+  var endIndex = str.lastIndexOf(endTag);
+  var questionsAndAnswers;
+  if (startIndex === -1 || endIndex === -1) {
+    questionsAndAnswers = "";
+    return {
+      before: str,
+      after: "",
+      questionsAndAnswers: questionsAndAnswers
+    };
+  } else {
+    questionsAndAnswers = str.slice(startIndex, endIndex + endTag.length);
+    var before = str.slice(0, startIndex);
+    var after = str.slice(endIndex + endTag.length);
+    return {
+      before: before,
+      after: after,
+      questionsAndAnswers: questionsAndAnswers
+    };
+  }
+}
+function extractQAList(str) {
+  var questionPattern = /<question>([\s\S]*?)<\/question>/g;
+  var answerPattern = /<answer>([\s\S]*?)<\/answer>/g;
+  var questions = [];
+  var answers = [];
+  var match;
+  while (match = questionPattern.exec(str)) {
+    questions.push(match[1].trim());
+  }
+  while (match = answerPattern.exec(str)) {
+    answers.push(match[1].trim());
+  }
+  return questions.map(function (question, index) {
+    return {
+      question: question,
+      answer: answers[index]
+    };
+  });
+}
+var parseMarkdown = function parseMarkdown(mdContent) {
+  var _extractQuestionsAndA = extractQuestionsAndAnswers(mdContent),
+    before = _extractQuestionsAndA.before,
+    after = _extractQuestionsAndA.after,
+    questionsAndAnswers = _extractQuestionsAndA.questionsAndAnswers;
+  var blocks = [];
+  blocks.push.apply(blocks, parseNotFaq(before));
+  if (questionsAndAnswers !== "") {
+    var QAList = extractQAList(questionsAndAnswers);
+    for (var i = 0; i < QAList.length; i++) {
+      blocks.push.apply(blocks, parseQuestion(QAList[i].question));
+      blocks.push.apply(blocks, parseNotFaq(QAList[i].answer));
+    }
+  }
+  if (after !== "") {
+    blocks.push.apply(blocks, parseNotFaq(after));
+  }
+  return blocks;
+};
+
+var generateBlockId = function generateBlockId() {
+  return Math.random().toString(36).substr(2, 10);
+};
+var convertToJSON = function convertToJSON(blocks) {
+  var data = {
+    time: Date.now(),
+    blocks: [],
+    version: "2.28.2"
+  };
+  for (var _iterator = _createForOfIteratorHelperLoose(blocks), _step; !(_step = _iterator()).done;) {
+    var block = _step.value;
+    if (block.type === "header") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "header",
+        data: {
+          text: block.text,
+          level: block.level
+        }
+      });
+    } else if (block.type === "image") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "image",
+        data: {
+          file: {
+            url: block.url
+          },
+          caption: block.caption,
+          withBorder: false,
+          stretched: false,
+          withBackground: false
+        }
+      });
+    } else if (block.type === "paragraph") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "paragraph",
+        data: {
+          text: block.text
+        }
+      });
+    } else if (block.type === "list") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "list",
+        data: {
+          style: "ordered",
+          items: block.items
+        }
+      });
+    } else if (block.type === "code") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "code",
+        data: {
+          code: block.code
+        }
+      });
+    } else if (block.type === "warning") {
+      data.blocks.push({
+        id: generateBlockId(),
+        type: "warning",
+        data: {
+          title: block.title,
+          message: block.message
+        }
+      });
+    }
+  }
+  return data;
+};
+
+function md2cleanjson(markdownContent) {
+  var blocks = parseMarkdown(markdownContent);
+  var output = convertToJSON(blocks);
+  return JSON.stringify(output, null, 2);
+}
+
+var generateBlockId$1 = function generateBlockId() {
+  return Math.random().toString(36).substr(2, 10);
+};
+function parseMetadata(metadata) {
+  var blocks = [];
+  var titleBlock = {
+    id: generateBlockId$1(),
+    type: "header",
+    data: {
+      text: metadata.title,
+      level: 1
+    }
+  };
+  blocks.push(titleBlock);
+  if (metadata.ogImage !== "") {
+    var ogImageBLock = {
+      type: "simpleImage",
+      data: {
+        url: metadata.ogImage,
+        alt: metadata.ogImageAlt,
+        caption: metadata.ogImageCaption,
+        withBorder: false,
+        withBackground: false,
+        stretched: false
+      }
+    };
+    blocks.push(ogImageBLock);
+  }
+  return blocks;
+}
+function json2cleanjson(data) {
+  var titleBlocks = {
+    "time": Date.now(),
+    "blocks": parseMetadata(data.metadata),
+    "version": "2.28.2"
+  };
+  var markdown = json2md(data);
+  var bodyBlocks = JSON.parse(md2cleanjson(markdown));
+  return {
+    titleBlocks: titleBlocks,
+    bodyBlocks: bodyBlocks
+  };
+}
+
+var getRandomValues;
+var rnds8 = new Uint8Array(16);
+function rng() {
+  if (!getRandomValues) {
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
+  }
+  return getRandomValues(rnds8);
+}
+
+var byteToHex = [];
+for (var i = 0; i < 256; ++i) {
+  byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset) {
+  if (offset === void 0) {
+    offset = 0;
+  }
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+var randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+var _native = {
+  randomUUID: randomUUID
+};
+
+function v4(options, buf, offset) {
+  if (_native.randomUUID && !buf && !options) {
+    return _native.randomUUID();
+  }
+  options = options || {};
+  var rnds = options.random || (options.rng || rng)();
+  rnds[6] = rnds[6] & 0x0f | 0x40;
+  rnds[8] = rnds[8] & 0x3f | 0x80;
+  if (buf) {
+    offset = offset || 0;
+    for (var i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+    return buf;
+  }
+  return unsafeStringify(rnds);
+}
+
+function md2json(md_text) {
+  var createTime = new Date().toISOString();
+  var content = [];
+  if (!md_text.startsWith("\n")) {
+    md_text = "\n" + md_text;
+  }
+  var sections = md_text.split('\n## ').slice(1);
+  sections.forEach(function (sec) {
+    var headerEndIndex = sec.indexOf('\n');
+    var header = sec.substring(0, headerEndIndex);
+    var text = sec.substring(headerEndIndex + 1);
+    var contentDict = {
+      "sectionId": v4(),
+      "type": "default",
+      "header": header,
+      "text": text,
+      "summary": "",
+      "lastEdited": createTime
+    };
+    if (header.includes("<faq>")) {
+      contentDict["header"] = contentDict["header"].replace("<faq>", "").replace("</faq>", "");
+      contentDict["type"] = "faq";
+      var questionRegex = /<question>\n?([\s\S]*?)\n?<\/question>/g;
+      var answerRegex = /<answer>\n?([\s\S]*?)\n?<\/answer>/g;
+      contentDict["questions"] = [].concat(text.matchAll(questionRegex)).map(function (match) {
+        return match[1].trim();
+      });
+      contentDict["answers"] = [].concat(text.matchAll(answerRegex)).map(function (match) {
+        return match[1].trim();
+      });
+    }
+    content.push(contentDict);
+  });
+  return content;
+}
 
 function EditorEditor(_ref) {
   var data = _ref.data,
@@ -338,7 +914,8 @@ function EditorEditor(_ref) {
   var _useState4 = useState(data.metadata.ogImageAlt),
     altDescription = _useState4[0],
     setAltDescription = _useState4[1];
-  var initialData = json2cleanjson$1(data).bodyBlocks;
+  var initialData = json2cleanjson(data).bodyBlocks;
+  console.log("INITIAL DATA = ", initialData);
   var editorCore = useRef(null);
   var ReactEditorJS = createReactEditorJS();
   var handleInitialize = useCallback(function (instance) {
@@ -353,6 +930,7 @@ function EditorEditor(_ref) {
       return Promise.resolve(editorCore.current.save()).then(function (savedData) {
         var markdown = cleanjson2md(savedData);
         var content = md2json(markdown);
+        console.log("CONTENT = ", content);
         var newData = _extends({}, data, {
           content: content
         });
@@ -397,6 +975,8 @@ function EditorEditor(_ref) {
   }));
 }
 
+var styles = {"tableOfContents":"_UIau5","header":"_V4pKO","list":"_2kud7","expanded":"_3NyCf","listItem":"_-1Z1a"};
+
 function extractHeaders(blocks) {
   return blocks.filter(function (block) {
     return block.type === 'header' && block.data.level === 2;
@@ -407,8 +987,7 @@ function extractHeaders(blocks) {
     };
   });
 }
-var handleClick = function handleClick(e, id, scrollOffset) {
-  e.preventDefault();
+var handleClick = function handleClick(id, scrollOffset) {
   var headerElement = document.getElementById(id);
   if (headerElement) {
     var offsetPosition = headerElement.offsetTop - scrollOffset;
@@ -421,45 +1000,36 @@ var handleClick = function handleClick(e, id, scrollOffset) {
 function TableOfContents(_ref) {
   var data = _ref.data,
     title = _ref.title,
-    scrollOffset = _ref.scrollOffset,
-    _ref$bulletPoints = _ref.bulletPoints,
-    bulletPoints = _ref$bulletPoints === void 0 ? true : _ref$bulletPoints;
+    scrollOffset = _ref.scrollOffset;
+  var _useState = useState(false),
+    isExpanded = _useState[0],
+    setIsExpanded = _useState[1];
   var headers = extractHeaders(data.blocks);
   if (headers.length === 0) {
-    return /*#__PURE__*/React$1.createElement(Fragment, null);
+    return null;
   }
-  if (bulletPoints) {
-    return /*#__PURE__*/React$1.createElement("div", {
-      className: "table-of-contents"
-    }, /*#__PURE__*/React$1.createElement("h2", null, title), /*#__PURE__*/React$1.createElement("ul", null, headers.map(function (header) {
-      return /*#__PURE__*/React$1.createElement("li", {
-        key: header.id
-      }, /*#__PURE__*/React$1.createElement("a", {
-        href: "#" + header.id,
-        className: "toc-item",
-        onClick: function onClick(e) {
-          return handleClick(e, header.id, scrollOffset);
-        }
-      }, header.text));
-    })));
-  } else {
-    return /*#__PURE__*/React$1.createElement("div", {
-      className: "table-of-contents"
-    }, /*#__PURE__*/React$1.createElement("h2", null, title), headers.map(function (header) {
-      return /*#__PURE__*/React$1.createElement("a", {
-        key: header.id,
-        href: "#" + header.id,
-        className: "toc-item",
-        style: {
-          display: 'block',
-          marginBottom: '10px'
-        },
-        onClick: function onClick(e) {
-          return handleClick(e, header.id);
-        }
-      }, header.text);
-    }));
-  }
+  return /*#__PURE__*/React$1.createElement("div", {
+    className: styles.tableOfContents
+  }, /*#__PURE__*/React$1.createElement("div", {
+    className: styles.header,
+    onClick: function onClick() {
+      return setIsExpanded(!isExpanded);
+    }
+  }, title, /*#__PURE__*/React$1.createElement("span", {
+    style: {
+      marginLeft: '5px'
+    }
+  }, isExpanded ? '▲' : '▼')), /*#__PURE__*/React$1.createElement("ul", {
+    className: styles.list + " " + (isExpanded ? styles.expanded : '')
+  }, headers.map(function (header) {
+    return /*#__PURE__*/React$1.createElement("li", {
+      key: header.id,
+      className: styles.listItem,
+      onClick: function onClick() {
+        return handleClick(header.id, scrollOffset);
+      }
+    }, header.text);
+  })));
 }
 
 /**
@@ -2498,9 +3068,9 @@ function initCloneArray(array) {
 var _initCloneArray = initCloneArray;
 
 /** Built-in value references. */
-var Uint8Array = _root.Uint8Array;
+var Uint8Array$1 = _root.Uint8Array;
 
-var _Uint8Array = Uint8Array;
+var _Uint8Array = Uint8Array$1;
 
 /**
  * Creates a clone of `arrayBuffer`.
@@ -2967,29 +3537,38 @@ function blocksSplitter(data) {
   };
 }
 
-var json2cleanjson;
+var styles$1 = {"title":"_2KezC","textCenter":"_1Y7Sn","contentWrapper":"_tmp4k","content":"_2jwZj","body":"_2mo3X","tableOfContents":"_2nhsx"};
+
+var json2cleanjson$1;
 try {
-  json2cleanjson = require("md-json-converter").json2cleanjson;
+  json2cleanjson$1 = require("md-json-converter").json2cleanjson;
 } catch (e) {
-  json2cleanjson = require("../../md-json-converter/src/json2cleanjson")["default"];
+  json2cleanjson$1 = require("../../md-json-converter/src/json2cleanjson")["default"];
 }
 function Renderer(_ref) {
   var data = _ref.data,
     _ref$scrollOffset = _ref.scrollOffset,
-    scrollOffset = _ref$scrollOffset === void 0 ? 50 : _ref$scrollOffset,
+    scrollOffset = _ref$scrollOffset === void 0 ? 100 : _ref$scrollOffset,
     _ref$tocTitle = _ref.tocTitle,
-    tocTitle = _ref$tocTitle === void 0 ? 'Table of Contents' : _ref$tocTitle;
-  if (!data) {
-    return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("div", {
-      className: "text-center"
-    }, "Article is Empty"));
+    tocTitle = _ref$tocTitle === void 0 ? 'Table of Contents' : _ref$tocTitle,
+    onArticleLoaded = _ref.onArticleLoaded;
+  if (onArticleLoaded === undefined) {
+    onArticleLoaded = function onArticleLoaded() {};
   }
+  if (!data) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: styles$1.textCenter
+    }, "Article is Empty");
+  }
+  useEffect(function () {
+    onArticleLoaded();
+  }, []);
   var titleBlocks;
   var bodyBlocks;
   var res;
   var tocData;
   if (!("time" in data)) {
-    res = json2cleanjson(data);
+    res = json2cleanjson$1(data);
     titleBlocks = res.titleBlocks;
     bodyBlocks = res.bodyBlocks;
     tocData = bodyBlocks;
@@ -3000,19 +3579,27 @@ function Renderer(_ref) {
     tocData = data;
   }
   var edjsParser = edjsHTML();
+  var imageBlock = JSON.parse(JSON.stringify(titleBlocks));
+  imageBlock.blocks = imageBlock.blocks.slice(-1);
+  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
   var title_html = edjsParser.parse(titleBlocks);
+  var image_html = edjsParser.parse(imageBlock);
   var body_html = edjsParser.parse(bodyBlocks);
   return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "text-container"
+    className: styles$1.title
   }, parse(title_html.join(""))), /*#__PURE__*/React.createElement("div", {
-    className: "pt-3 pb-3"
+    className: styles$1.contentWrapper
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "col-md-9 " + styles$1.content
+  }, image_html.length > 0 && parse(image_html.join("")), /*#__PURE__*/React.createElement("div", {
+    className: styles$1.body
+  }, parse(body_html.join("")))), /*#__PURE__*/React.createElement("div", {
+    className: "col-md-3 " + styles$1.tableOfContents
   }, /*#__PURE__*/React.createElement(TableOfContents, {
     data: tocData,
     title: tocTitle,
     scrollOffset: scrollOffset
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "text-container"
-  }, parse(body_html.join(""))));
+  }))));
 }
 
 function Editor(_ref) {

@@ -1,0 +1,90 @@
+._UIau5 {
+  background-color: var(--gray_color-200);
+  padding: 20px;
+  border-radius: 5px;
+}
+
+._V4pKO {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2em;
+  font-weight: 500;
+  padding: 0px 5px;
+  position: relative;
+  cursor: pointer;
+}
+
+._2kud7 {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-out;
+  width: 100%;
+}
+
+._3NyCf {
+  max-height: 1000px; 
+}
+
+._-1Z1a {
+  padding: 5px 10px; 
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+._-1Z1a:hover {
+  background-color: var(--secondary_color-50);
+}
+/* Renderer.module.css */
+._2KezC {
+  margin-bottom: 20px;
+}
+
+._1Y7Sn {
+  text-align: center;
+}
+
+._tmp4k {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-direction: row;
+}
+
+._2jwZj {
+  flex: 1;
+}
+
+._2mo3X {
+  margin-top: 20px;
+}
+
+._2nhsx {
+  position: sticky;
+  top: 150px; 
+  height: calc(100vh - 20px); 
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  ._tmp4k {
+    flex-direction: column;
+  }
+
+  ._2jwZj {
+    order: 2;
+  }
+
+  ._2nhsx {
+    position: relative; 
+    top: 0;
+    height: auto; 
+    overflow-y: visible; 
+  }
+}
