@@ -19,7 +19,7 @@ export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
   embed: Embed,
-  table: Table,
+  // table: Table, // not in editorjs-renderer transforms
   list: {
     class: List,
     inlineToolbar: true,
@@ -36,7 +36,7 @@ export const createEditorTools = (uploadEndPoint) => ({
     },
   },
   code: Code,
-  linkTool: LinkTool,
+  // linkTool: LinkTool,  // not in editorjs-renderer transforms
   image: {
     class: ImageTool,
     config: {
@@ -45,12 +45,12 @@ export const createEditorTools = (uploadEndPoint) => ({
       },
     },
   },
-  raw: Raw,
+  // raw: Raw,  // not in editorjs-renderer transforms
   header: Header,
-  quote: Quote,
+  // quote: Quote,  // not in editorjs-renderer transforms
   marker: Marker,
-  checklist: CheckList,
-  delimiter: Delimiter,
-  inlineCode: InlineCode,
+  // checklist: CheckList,  // not in editorjs-renderer transforms
+  // delimiter: Delimiter,  // not in editorjs-renderer transforms
+  // inlineCode: InlineCode,  // not in editorjs-renderer transforms
   simpleImage: SimpleImage
 });
