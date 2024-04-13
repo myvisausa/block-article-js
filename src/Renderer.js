@@ -48,14 +48,26 @@ export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Con
   }
 
   const edjsParser =  edjsHTML();
+
+  // Separate image from title
+  let imageBlock = JSON.parse(JSON.stringify(titleBlocks));
+  imageBlock.blocks = imageBlock.blocks.slice(-1);
+  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
+  
   const title_html = edjsParser.parse(titleBlocks)
+  const image_html = edjsParser.parse(imageBlock)
   const body_html = edjsParser.parse(bodyBlocks)
-  // array of html elements
+  
   return ( 
     <>
       <div className="text-container">{parse(title_html.join(""))}</div>
       <div className="pt-3 pb-3">
-        <TableOfContents data={tocData} title={tocTitle} scrollOffset={scrollOffset}/>
+        <div className="d-flex flex-row gap-4 align-items-start">
+          <div className="d-flex flex-column">
+          {image_html.length > 0 && parse(image_html.join(""))}
+          </div>
+          <TableOfContents data={tocData} title={tocTitle} scrollOffset={scrollOffset}/>
+        </div>
       </div>
       <div className="text-container">{parse(body_html.join(""))}</div>
     </>

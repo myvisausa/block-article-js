@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import styles from './tableOfContents.module.css';
 
 function extractHeaders(blocks) {
     return blocks
@@ -6,8 +7,7 @@ function extractHeaders(blocks) {
         .map(block => ({ text: block.data.text, id: block.id }));
 }
 
-const handleClick = (e, id, scrollOffset) => {
-    e.preventDefault();
+const handleClick = (id, scrollOffset) => {
     const headerElement = document.getElementById(id);
     if (headerElement) {
         const offsetPosition = headerElement.offsetTop - scrollOffset;
@@ -19,45 +19,30 @@ const handleClick = (e, id, scrollOffset) => {
 };
 
 export default function TableOfContents({ data, title, scrollOffset, bulletPoints=true }) {
+    const [isExpanded, setIsExpanded] = useState(false);
     const headers = extractHeaders(data.blocks);
+
     if (headers.length === 0) {
-        return (<></>)
+        return null;
     }
-    if (bulletPoints) {
-        return (
-            <div className="table-of-contents">
-                <h2>{title}</h2>
-                <ul>
-                    {headers.map(header => (
-                        <li key={header.id}>
-                            <a 
-                                href={`#${header.id}`} 
-                                className="toc-item"
-                                onClick={(e) => handleClick(e, header.id, scrollOffset)}
-                            >
-                                {header.text}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    } else {
-        return (
-            <div className="table-of-contents">
-                <h2>{title}</h2>
+
+    return (
+        <div className={styles.tableOfContents}>
+            <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
+                {title}
+                <span style={{ marginLeft: '5px' }}>{isExpanded ? '▲' : '▼'}</span>
+            </div> 
+            <ul className={`${styles.list} ${isExpanded ? styles.expanded : ''}`}>
                 {headers.map(header => (
-                    <a 
+                    <li 
                         key={header.id} 
-                        href={`#${header.id}`} 
-                        className="toc-item"
-                        style={{ display: 'block', marginBottom: '10px' }}
-                        onClick={(e) => handleClick(e, header.id)}
+                        className={styles.listItem}
+                        onClick={() => handleClick(header.id, scrollOffset)}
                     >
                         {header.text}
-                    </a>
+                    </li>
                 ))}
-            </div>
-        );
-    }
+            </ul>
+        </div>
+    );
 }
