@@ -1,8 +1,10 @@
+// Renderer.js
 import parse from "html-react-parser";
 import TableOfContents from "./components/toc-renderer/TableOfContents";
 import { blocksSplitter } from "./components/utils/blocksSplitter";
 import edjsHTML from "editorjs-renderer";
 import { useEffect } from "react";
+import styles from './styles.module.css'; // Import the CSS module
 
 // use submodule if md-json-converter not installed
 let json2cleanjson;
@@ -12,17 +14,13 @@ try {
   json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
 }
 
-export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Contents', onArticleLoaded }) {
+export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Contents', onArticleLoaded }) {
   if (onArticleLoaded === undefined) {
     onArticleLoaded = () => {};
   }
   if (!data) {
     return (
-    <>
-    <div className="text-center">
-    Article is Empty
-    </div>
-    </>
+      <div className={styles.textCenter}>Article is Empty</div>
     )
   }
 
@@ -60,16 +58,16 @@ export default function Renderer({ data, scrollOffset=50, tocTitle='Table of Con
   
   return ( 
     <>
-      <div className="text-container">{parse(title_html.join(""))}</div>
-      <div className="pt-3 pb-3">
-        <div className="d-flex flex-row gap-4 align-items-start">
-          <div className="d-flex flex-column">
+      <div className={styles.title}>{parse(title_html.join(""))}</div>
+      <div className={styles.contentWrapper}>
+        <div className={`col-md-9 ${styles.content}`}>
           {image_html.length > 0 && parse(image_html.join(""))}
-          </div>
+          <div className={styles.body}>{parse(body_html.join(""))}</div>
+        </div>
+        <div className={`col-md-3 ${styles.tableOfContents}`}>
           <TableOfContents data={tocData} title={tocTitle} scrollOffset={scrollOffset}/>
         </div>
       </div>
-      <div className="text-container">{parse(body_html.join(""))}</div>
     </>
   )
 };

@@ -30,6 +30,7 @@
 
 .listItem {
   padding: 5px 10px; 
+  font-size: 0.9em;
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: block;
