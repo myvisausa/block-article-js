@@ -14,6 +14,7 @@ import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import ImageTool from '@editorjs/image'
+import RelatedArticle from "../../../../related-article/src";
 
 // import NestedList from "./NestedList";
 
@@ -62,6 +63,13 @@ export const createEditorTools = (uploadEndPoint) => ({
   // delimiter: Delimiter,  // not in editorjs-renderer transforms
   // inlineCode: InlineCode,  // not in editorjs-renderer transforms
   simpleImage: SimpleImage,
-
+  relatedArticle: {
+    class: RelatedArticle,
+    inlineToolbar: true,
+    config: {
+      textPlaceholder: 'Text',
+      hrefPlaceholder: 'Hyperlink',
+    },
+  }
   
 });
