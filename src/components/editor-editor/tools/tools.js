@@ -63,10 +63,11 @@ export const createEditorTools = (uploadEndPoint) => ({
   // delimiter: Delimiter,  // not in editorjs-renderer transforms
   // inlineCode: InlineCode,  // not in editorjs-renderer transforms
   simpleImage: SimpleImage,
-  relatedArticle: {
+  article: {
     class: RelatedArticle,
     inlineToolbar: true,
     config: {
+      titlePlaceholder: 'Title',
       textPlaceholder: 'Text',
       hrefPlaceholder: 'Hyperlink',
     },

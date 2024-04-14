@@ -48,6 +48,13 @@ const convertFromJSON = (jsonData) => {
                 withHeadings: block.data.withHeadings,
                 content: block.data.content
             });
+        } else if (block.type === "article") {
+            blocks.push({
+                type: "article",
+                title: block.data.title,
+                text: block.data.text,
+                href: block.data.href
+            });
         }
     }
 

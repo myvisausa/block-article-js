@@ -30,6 +30,8 @@ This is a warning:
 
 |TABLE withHeadings=true content=[["Kine","Pigs","Chicken"],["1 pcs","3 pcs","12 pcs"],["100$","200$","150$"]] TABLE|
 
+|ARTICLE title=RELATED ARTICLE text=Proxy Marriages: A Guide href=www.google.com ARTICLE|
+
 ## Frequently Asked Questions
 <question>What is the first question</question>
 

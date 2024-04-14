@@ -15,6 +15,8 @@ let markdown;
 const markdownContent = fs.readFileSync(new URL('../test/markdown_text.md', import.meta.url), 'utf-8');
 let result = md2cleanjson(markdownContent);
 result = JSON.parse(result);
+console.log(JSON.stringify(result))
+console.log(result.blocks.length);
 console.assert(result.blocks.length === 23, 'ERROR! MD to clean JSON failed!!!!!!!');
 
 
@@ -38,4 +40,6 @@ console.assert(cleanJSON.bodyBlocks.blocks.length === 30, 'ERROR! bodyBlocks len
 // Test Clean JSON to MD
 // ------------------------------------------------------------------------------------------------------
 markdown = cleanjson2md(cleanData);
-console.assert(markdown.length === 3589, 'ERROR! Clean JSON to MD failed!!!!!!!');
+// console.log(markdown);
+// console.log(markdown.length);
+console.assert(markdown.length === 3688, 'ERROR! Clean JSON to MD failed!!!!!!!');

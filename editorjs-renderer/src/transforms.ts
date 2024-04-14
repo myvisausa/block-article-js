@@ -128,13 +128,13 @@ const transforms: transforms = {
 
   warning: ({ data, id }) => {
     return `<div style="background-color: #F0F2F6; border-left: 4px solid red; padding: 10px 10px; margin: 10px 0;">
-    <div style="display: flex; align-items: center;">
-      <span style="color: red;">⚠️</span> <!-- Apply red color to the warning icon -->    
-      <p style="margin-left: 10px; font-weight: 600">${data.title}</p>
-    </div>
-    <p>${data.message}</p>
-</div>`;
-  },
+              <div style="display: flex; align-items: center;">
+                <span style="color: red;">⚠️</span> <!-- Apply red color to the warning icon -->    
+                <p style="margin-left: 10px; font-weight: 600">${data.title}</p>
+              </div>
+              <p>${data.message}</p>
+            </div>`;
+    },
 
   table: ({ data, id }) => {
     let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #e5e5e5;">`;
@@ -183,7 +183,17 @@ const transforms: transforms = {
     tableHtml += `</table></div>`;
 
     return tableHtml;
-},
+  },
+
+  article: ({ data, id }) => {
+    return `<div style="background-color: #fcfcfc; padding-left: 10px; padding-bottom: 10px; position: relative;">
+              <div style="height: 7px; background-color: black; width: 75px; margin-bottom: 13px;"></div>
+              <div style="display: flex; align-items: center;">
+                <p style="font-weight: 600">${data.title}</p>
+              </div>
+              <a href=${data.href}>${data.text}</a>
+            </div>`;
+  },
 
   embed: ({ data, id }) => {
     switch (data.service) {

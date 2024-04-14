@@ -16,11 +16,13 @@ import './index.css';
  *
  * @typedef {object} RelatedArticleData
  * @description RelatedArticle Tool`s input and output data
+ * @property {string} title - article's title
  * @property {string} text - warning`s text
  * @property {string} href - warning`s href
  *
  * @typedef {object} RelatedArticleConfig
  * @description RelatedArticle Tool`s initial configuration
+ * @property {string} titlePlaceholder - placeholder to show in article's title input
  * @property {string} textPlaceholder - placeholder to show in warning`s text input
  * @property {string} hrefPlaceholder - placeholder to show in warning`s href input
  */
@@ -57,12 +59,23 @@ export default class RelatedArticle {
   }
 
   /**
-   * Default placeholder for warning text
+   * Default placeholder for title
    *
    * @public
    * @returns {string}
    */
   static get DEFAULT_TITLE_PLACEHOLDER() {
+    return 'Title';
+  }
+
+
+  /**
+   * Default placeholder for warning text
+   *
+   * @public
+   * @returns {string}
+   */
+  static get DEFAULT_TEXT_PLACEHOLDER() {
     return 'Text';
   }
 
@@ -73,7 +86,7 @@ export default class RelatedArticle {
    * @returns {string}
    */
   static get DEFAULT_MESSAGE_PLACEHOLDER() {
-    return 'Hypterlink';
+    return 'Hyperlink';
   }
 
   /**
@@ -84,10 +97,11 @@ export default class RelatedArticle {
   get CSS() {
     return {
       baseClass: this.api.styles.block,
-      wrapper: 'cdx-warning',
-      text: 'cdx-warning__text',
+      wrapper: 'cdx-article',
+      title: 'cdx-article__title',
+      text: 'cdx-article__text',
       input: this.api.styles.input,
-      href: 'cdx-warning__href',
+      href: 'cdx-article__href',
     };
   }
 
@@ -102,11 +116,13 @@ export default class RelatedArticle {
   constructor({ data, config, api, readOnly }) {
     this.api = api;
     this.readOnly = readOnly;
-
-    this.textPlaceholder = config.textPlaceholder || RelatedArticle.DEFAULT_TITLE_PLACEHOLDER;
+    
+    this.titlePlaceholder = config.titlePlaceholder || RelatedArticle.DEFAULT_TITLE_PLACEHOLDER;
+    this.textPlaceholder = config.textPlaceholder || RelatedArticle.DEFAULT_TEXT_PLACEHOLDER;
     this.hrefPlaceholder = config.hrefPlaceholder || RelatedArticle.DEFAULT_MESSAGE_PLACEHOLDER;
 
     this.data = {
+      title: data.title || '',
       text: data.text || '',
       href: data.href || '',
     };
@@ -119,6 +135,10 @@ export default class RelatedArticle {
    */
   render() {
     const container = this._make('div', [this.CSS.baseClass, this.CSS.wrapper]);
+    const title = this._make('div', [this.CSS.input, this.CSS.title], {
+      contentEditable: !this.readOnly,
+      innerHTML: this.data.title,
+    });
     const text = this._make('div', [this.CSS.input, this.CSS.text], {
       contentEditable: !this.readOnly,
       innerHTML: this.data.text,
@@ -127,13 +147,15 @@ export default class RelatedArticle {
       contentEditable: !this.readOnly,
       innerHTML: this.data.href,
     });
-
+  
+    title.dataset.placeholder = this.titlePlaceholder;
     text.dataset.placeholder = this.textPlaceholder;
     href.dataset.placeholder = this.hrefPlaceholder;
-
+  
+    container.appendChild(title);
     container.appendChild(text);
     container.appendChild(href);
-
+  
     return container;
   }
 
@@ -144,10 +166,12 @@ export default class RelatedArticle {
    * @returns {RelatedArticleData}
    */
   save(warningElement) {
+    const title = warningElement.querySelector(`.${this.CSS.title}`);
     const text = warningElement.querySelector(`.${this.CSS.text}`);
     const href = warningElement.querySelector(`.${this.CSS.href}`);
-
+  
     return Object.assign(this.data, {
+      title: title.innerHTML,
       text: text.innerHTML,
       href: href.innerHTML,
     });
@@ -184,6 +208,7 @@ export default class RelatedArticle {
    */
   static get sanitize() {
     return {
+      title: {},
       text: {},
       href: {},
     };

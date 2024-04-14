@@ -29,6 +29,15 @@
               "withHeadings": true,
               "content" : [ [ "Kine", "Pigs", "Chicken" ], [ "1 pcs", "3 pcs", "12 pcs" ], [ "100$", "200$", "150$" ] ]
             }
-        }
+        },
+        {   
+            "id" : "g1wj1fnkh6",
+            "type" : "article",
+            "data" : {
+                "title": "Related Article",
+                "text" : "How to Obtain a U.S. Visa Number",
+                "href" : "www.google.com"
+            }
+    }
     ],
         "version":"2.29.1"}
