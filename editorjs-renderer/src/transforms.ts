@@ -53,6 +53,17 @@ export type block = {
   };
 };
 
+
+function processMarkdownLinks(message) {
+  // Regex to find markdown links, optionally ending with a caret (^) for new tab
+  const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)(\^)?\)/g;
+  return message.replace(markdownLinkRegex, (match, text, url, newTabIndicator) => {
+    // If there's a caret (^), open in a new tab, otherwise in the same tab
+    const target = newTabIndicator ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return `<a href="${url}"${target}>${text}</a>`;
+  });
+}
+
 const transforms: transforms = {
   delimiter: () => {
     return `<br/>`;
@@ -127,14 +138,15 @@ const transforms: transforms = {
   },
 
   warning: ({ data, id }) => {
+    const processedMessage = processMarkdownLinks(data.message);
     return `<div style="background-color: #F0F2F6; border-left: 4px solid red; padding: 10px 10px; margin: 10px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
-                <span style="color: red;">⚠️</span> <!-- Apply red color to the warning icon -->    
+                <span style="color: red;">⚠️</span>
                 <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
               </div>
-              <p>${data.message}</p>
+              <p>${processedMessage}</p>
             </div>`;
-    },
+  },
 
   table: ({ data, id }) => {
     let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #e5e5e5;">`;
@@ -196,14 +208,15 @@ const transforms: transforms = {
   },
 
   note: ({ data, id }) => {
+    const processedMessage = processMarkdownLinks(data.message);
     return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 10px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
                 <span style="color: #0078d2;">★</span>
                 <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
               </div>
-              <p>${data.message}</p>
+              <p>${processedMessage}</p>
             </div>`;
-    },
+  },
 
   embed: ({ data, id }) => {
     switch (data.service) {
