@@ -137,7 +137,7 @@ const transforms: transforms = {
   },
 
   table: ({ data, id }) => {
-    let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #ddd;">`;
+    let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #e5e5e5;">`;
 
     // Check if the table should have headings
     if (data.withHeadings) {
@@ -152,17 +152,38 @@ const transforms: transforms = {
     tableHtml += `<tbody>`;
     // Start loop from 1 if there are headings, 0 otherwise
     const startRow = data.withHeadings ? 1 : 0;
-    for (let i = startRow; i < data.content.length; i++) {
+    // Loop through all rows except the last one
+    for (let i = startRow; i < data.content.length - 1; i++) {
         tableHtml += `<tr>`;
         data.content[i].forEach(cell => {
-            tableHtml += `<td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">${cell}</td>`;
+            tableHtml += `<td style="text-align: left; padding: 8px; border-bottom: 1px solid #e5e5e5;">${cell}</td>`;
         });
         tableHtml += `</tr>`;
     }
-    tableHtml += `</tbody></table></div>`;
+
+    // Render the last row without a bottom border
+    if (data.content.length > startRow) { // Ensure there's at least one row
+        const lastRowIndex = data.content.length - 1;
+        tableHtml += `<tr>`;
+        data.content[lastRowIndex].forEach(cell => {
+            tableHtml += `<td style="text-align: left; padding: 8px;">${cell}</td>`;
+        });
+        tableHtml += `</tr>`;
+    }
+
+    tableHtml += `</tbody>`;
+
+    // Assuming the first row defines the number of columns
+    const columnCount = data.content[0].length;
+    // Render the special div after the last row
+    tableHtml += `<tfoot><tr><td colspan="${columnCount}" style="text-align: center; padding: 8px; position: relative;">
+                    <div style="margin-top: 8px; width: 75px; height: 2px; background-color: #e5e5e5; margin-left: auto; margin-right: auto;"></div>
+                  </td></tr></tfoot>`;
+
+    tableHtml += `</table></div>`;
 
     return tableHtml;
-  },
+},
 
   embed: ({ data, id }) => {
     switch (data.service) {
