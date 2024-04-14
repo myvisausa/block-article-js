@@ -1,5 +1,5 @@
 import parseMarkdown from "../md2cleanjson/parseMarkdown.js";
-import parseBlocks from "../../parsers/parseBlocks.js";
+import parseBlocks from "../../parsers/body/parseBlocks.js";
 
 export default function md2cleanjson(markdownContent) {
     const blocks = parseMarkdown(markdownContent);

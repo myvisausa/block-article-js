@@ -1,4 +1,4 @@
-import parseNotFaq from "../../parsers/parseMarkdown.js";
+import parseNotFaq from "../../parsers/body/parseLine.js";
 import parseQuestion from "./parseQuestion.js";
 
 function extractQuestionsAndAnswers(str) {
