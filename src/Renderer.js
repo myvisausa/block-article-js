@@ -8,7 +8,7 @@ import parser from "../editorjs-renderer/src/app.ts";
 import styles from './styles.module.css';
 let json2cleanjson;
 
-json2cleanjson = require("../../md-json-converter/src/json2cleanjson").default;
+json2cleanjson = require("../md-json-converter/src/json2cleanjson").default;
 
 export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Contents', onArticleLoaded }) {
   if (onArticleLoaded === undefined) {

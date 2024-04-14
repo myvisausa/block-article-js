@@ -6,7 +6,7 @@ import { createEditorTools } from "./tools/tools";
 
 // create editor instance
 import { createReactEditorJS } from "react-editor-js";
-import { json2cleanjson, cleanjson2md, md2json} from "../../../../md-json-converter/src/index";
+import { json2cleanjson, cleanjson2md, md2json} from "../../../md-json-converter/src/index";
 
 export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	const [title, setTitle]  = useState(data.metadata.title);
