@@ -5,4 +5,3 @@
 3. Update the convertFromJSON (src/core/cleanjson2md/convertFromJson.js)
 4. Update blocksToMarkdown (src/core/cleanjson2md/blocksToMarkdown.js)
 
-

@@ -1,6 +1,17 @@
 # block-article-js
 > A Block-Based ReactJS Editor and Renderer for Blog Posts and News Articles
 
+
+## Adding new tools
+### In md-json-converter
+1. First add a new item to the test/clean_json.json fixture
+2. Update the BlockFactory (src/parsers/body/parseBlocks.js)
+3. Update the convertFromJSON (src/core/cleanjson2md/convertFromJson.js)
+4. Update blocksToMarkdown (src/core/cleanjson2md/blocksToMarkdown.js)
+
+## In editorjs-renderer
+1. Update src/transforms.ts to include the new type
+
 ## Editor
 #### Main Features
 1. Creates a JSON object that contains page meta data (title, description, createdTime, modifiedTime), as well as all post/article content (see JSON example below)

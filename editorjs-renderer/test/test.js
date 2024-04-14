@@ -1,5 +1,5 @@
-const edjsHTML = require("../build/edjsHTML");
-const data = require("./data.json");
+import edjsHTML from "../src/app.ts";
+import data from "./data.json" assert { type: "json" };
 
 const edjsParser = edjsHTML();
 console.log(edjsParser.parseStrict(data));

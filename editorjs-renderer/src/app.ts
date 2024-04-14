@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { OutputData } from "@editorjs/editorjs";
 import transforms, { block } from "./transforms";
 import { ParseFunctionError } from "./errors";

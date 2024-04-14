@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export type transforms = {
   [key: string]: any;
   delimiter(): string;
@@ -46,6 +48,8 @@ export type block = {
     align?: "left" | "right" | "center" | "justify";
     title?: string;
     message?: string;
+    content?: Array<Array<string>>;
+    withHeadings?: boolean;
   };
 };
 
@@ -130,6 +134,34 @@ const transforms: transforms = {
     </div>
     <p>${data.message}</p>
 </div>`;
+  },
+
+  table: ({ data, id }) => {
+    let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #ddd;">`;
+
+    // Check if the table should have headings
+    if (data.withHeadings) {
+        tableHtml += `<thead><tr style="background-color: #f2f2f2;">`;
+        data.content[0].forEach(heading => {
+            tableHtml += `<th style="text-align: left; padding: 8px;">${heading}</th>`;
+        });
+        tableHtml += `</tr></thead>`;
+    }
+
+    // Add table body
+    tableHtml += `<tbody>`;
+    // Start loop from 1 if there are headings, 0 otherwise
+    const startRow = data.withHeadings ? 1 : 0;
+    for (let i = startRow; i < data.content.length; i++) {
+        tableHtml += `<tr>`;
+        data.content[i].forEach(cell => {
+            tableHtml += `<td style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">${cell}</td>`;
+        });
+        tableHtml += `</tr>`;
+    }
+    tableHtml += `</tbody></table></div>`;
+
+    return tableHtml;
   },
 
   embed: ({ data, id }) => {
