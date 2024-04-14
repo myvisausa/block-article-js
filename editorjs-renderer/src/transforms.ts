@@ -112,11 +112,11 @@ const transforms: transforms = {
   image: ({ data, id }) => {
     let alt = data.caption ? data.caption : "Image";
     if (data.caption === "") {
-      return `<img src="${
+      return `<img loading="eager" src="${
         data.file && data.file.url ? data.file.url : data.url
       }" alt="${alt}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" /></br>`;
     }
-    return `<img src="${
+    return `<img loading="eager" src="${
       data.file && data.file.url ? data.file.url : data.url
     }" alt="${alt}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
     <p class="image-caption">${data.caption}</p>`;
@@ -125,7 +125,7 @@ const transforms: transforms = {
   simpleImage: ({ data, id }) => {
     let url = data.url;
     let caption = data.caption ? data.caption : "Image";
-    return `<img src="${url}" alt="${caption}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
+    return `<img loading="eager" src="${url}" alt="${caption}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
   <p class="image-caption">${caption}</p>`;
   },
 
