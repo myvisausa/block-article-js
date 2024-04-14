@@ -38,6 +38,14 @@
                 "text" : "How to Obtain a U.S. Visa Number",
                 "href" : "www.google.com"
             }
+        },
+        {   
+            "id" : "g1wj1fnkh6",
+            "type" : "note",
+            "data" : {
+                "title": "Note",
+                "message" : "This is the content of the note."
+        }
     }
     ],
         "version":"2.29.1"}

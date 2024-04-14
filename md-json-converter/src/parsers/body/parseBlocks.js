@@ -27,6 +27,8 @@ class BlockFactory {
                 return { ...baseBlock, data: { withHeadings: block.withHeadings, content: block.content } };
             case "article":
                 return { ...baseBlock, data: { title: block.title, text: block.text, href: block.href } };
+            case "note":
+                return { ...baseBlock, data: { title: block.title, message: block.message } };
             default:
                 throw new Error("Unsupported block type");
         }

@@ -8,6 +8,7 @@
 2. Update the BlockFactory (src/parsers/body/parseBlocks.js)
 3. Update the convertFromJSON (src/core/cleanjson2md/convertFromJson.js)
 4. Update blocksToMarkdown (src/core/cleanjson2md/blocksToMarkdown.js)
+5. Create the parser and add it to src/parsers/body/parseLine.js
 
 ## In editorjs-renderer
 1. Update src/transforms.ts to include the new type

@@ -32,6 +32,8 @@ This is a warning:
 
 |ARTICLE title=RELATED ARTICLE text=Proxy Marriages: A Guide href=www.google.com ARTICLE|
 
+|NOTE title=Note: message=If you don't have enough money in the bank, they probably won't accept you. NOTE|
+
 ## Frequently Asked Questions
 <question>What is the first question</question>
 

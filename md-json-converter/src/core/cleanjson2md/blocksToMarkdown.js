@@ -38,6 +38,8 @@ const blocksToMarkdown = (blocks) => {
             mdContent += `|TABLE withHeadings=${block.withHeadings} content=${content} TABLE|\n\n`;
         } else if (block.type === "article") {
             mdContent += `|ARTICLE title=${block.title} text=${block.text} href=${block.href} ARTICLE|\n\n`;
+        } else if (block.type === "note") {
+            mdContent += `|NOTE title=${block.title} message=${block.message} NOTE|\n\n`;
         }
     }
 

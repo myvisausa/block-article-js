@@ -128,9 +128,9 @@ const transforms: transforms = {
 
   warning: ({ data, id }) => {
     return `<div style="background-color: #F0F2F6; border-left: 4px solid red; padding: 10px 10px; margin: 10px 0;">
-              <div style="display: flex; align-items: center;">
+              <div style="display: flex; align-items: center; padding-bottom: 5px">
                 <span style="color: red;">⚠️</span> <!-- Apply red color to the warning icon -->    
-                <p style="margin-left: 10px; font-weight: 600">${data.title}</p>
+                <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
               </div>
               <p>${data.message}</p>
             </div>`;
@@ -186,7 +186,7 @@ const transforms: transforms = {
   },
 
   article: ({ data, id }) => {
-    return `<div style="background-color: #fcfcfc; padding-left: 10px; padding-bottom: 10px; position: relative;">
+    return `<div style="background-color: #fcfcfc; padding-left: 10px; padding-bottom: 10px; margin-bottom: 10px; position: relative;">
               <div style="height: 7px; background-color: black; width: 75px; margin-bottom: 13px;"></div>
               <div style="display: flex; align-items: center;">
                 <p style="font-weight: 600">${data.title}</p>
@@ -194,6 +194,16 @@ const transforms: transforms = {
               <a href=${data.href}>${data.text}</a>
             </div>`;
   },
+
+  note: ({ data, id }) => {
+    return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 10px 0;">
+              <div style="display: flex; align-items: center; padding-bottom: 5px">
+                <span style="color: #0078d2;">★</span>
+                <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
+              </div>
+              <p>${data.message}</p>
+            </div>`;
+    },
 
   embed: ({ data, id }) => {
     switch (data.service) {

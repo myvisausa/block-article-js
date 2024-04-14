@@ -15,6 +15,7 @@ import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import ImageTool from '@editorjs/image'
 import RelatedArticle from "../../../../related-article/src";
+import Note from "../../../../note/src";
 
 // import NestedList from "./NestedList";
 
@@ -71,6 +72,13 @@ export const createEditorTools = (uploadEndPoint) => ({
       textPlaceholder: 'Text',
       hrefPlaceholder: 'Hyperlink',
     },
-  }
-  
+  },
+  note: {
+    class: Note,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+      messagePlaceholder: 'Message',
+    },
+  },
 });

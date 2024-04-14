@@ -55,6 +55,12 @@ const convertFromJSON = (jsonData) => {
                 text: block.data.text,
                 href: block.data.href
             });
+        } else if (block.type === "note") {
+            blocks.push({
+                type: "note",
+                title: block.data.title,
+                message: block.data.message
+            });
         }
     }
 
