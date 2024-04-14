@@ -155,14 +155,6 @@ const parseNotFaq = (mdContent) => {
         }
 
         if (block = parseWarning(line)) {
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
-            console.log("*******")
             blocks.push(block);
             continue;
         }

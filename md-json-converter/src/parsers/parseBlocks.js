@@ -2,7 +2,7 @@ const generateBlockId = () => {
     return Math.random().toString(36).substr(2, 10);
 };
 
-const convertToJSON = (blocks) => {
+export default function parseBlocks(blocks) {
     const data = {
         time: Date.now(),
         blocks: [],
@@ -73,4 +73,3 @@ const convertToJSON = (blocks) => {
     return data;
 };
 
-export default convertToJSON;

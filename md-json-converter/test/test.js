@@ -1,8 +1,8 @@
 import fs from 'fs';
-import md2cleanjson from '../src/md2cleanjson.js';
-import json2md from '../src/json2md.js';
-import json2cleanjson from '../src/json2cleanjson.js';
-import cleanjson2md from '../src/cleanjson2md.js';
+import md2cleanjson from '../src/core/misc/md2cleanjson.js';
+import json2md from '../src/core/misc/json2md.js';
+import json2cleanjson from '../src/core/misc/json2cleanjson.js';
+import cleanjson2md from '../src/core/cleanjson2md/cleanjson2md.js';
 import data from './json.json' assert { type: 'json' };
 import cleanData from './clean_json.json' assert { type: 'json' };
 
