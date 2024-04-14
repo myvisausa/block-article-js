@@ -15,7 +15,6 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	const [altDescription, setAltDescription] = useState(data.metadata.ogImageAlt)
 
 	let initialData = json2cleanjson(data).bodyBlocks;
-	console.log("INITIAL DATA = ", initialData);
 
 	const editorCore = useRef(null);
 	
@@ -36,7 +35,6 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		const savedData = await editorCore.current.save();
 		const markdown = cleanjson2md(savedData);
 		const content = md2json(markdown);
-		console.log("CONTENT = ", content);
 		const newData = {
 			...data,
 			content: content,

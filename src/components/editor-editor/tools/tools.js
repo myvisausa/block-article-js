@@ -15,11 +15,20 @@ import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
 import ImageTool from '@editorjs/image'
 
+// import NestedList from "./NestedList";
+
 export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
   embed: Embed,
-  // table: Table, // not in editorjs-renderer transforms
+  table: {
+    class: Table,
+    inlineToolbar: true,
+    config: {
+      rows: 2,
+      cols: 2,
+    },
+  },
   list: {
     class: List,
     inlineToolbar: true,
@@ -52,5 +61,7 @@ export const createEditorTools = (uploadEndPoint) => ({
   // checklist: CheckList,  // not in editorjs-renderer transforms
   // delimiter: Delimiter,  // not in editorjs-renderer transforms
   // inlineCode: InlineCode,  // not in editorjs-renderer transforms
-  simpleImage: SimpleImage
+  simpleImage: SimpleImage,
+
+  
 });

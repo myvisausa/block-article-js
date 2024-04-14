@@ -28,6 +28,8 @@ python3.9 -m src.app
 This is a warning:
 |WARNING title=Note: message=Avoid using this method just for lulz. It can be very dangerous opposite your daily fun stuff. WARNING|
 
+|TABLE withHeadings=true content=[["Kine","Pigs","Chicken"],["1 pcs","3 pcs","12 pcs"],["100$","200$","150$"]] TABLE|
+
 ## Frequently Asked Questions
 <question>What is the first question</question>
 

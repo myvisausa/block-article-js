@@ -21,6 +21,14 @@
                 "title" : "Note:",
                 "message" : "Avoid using this method just for lulz. It can be very dangerous opposite your daily fun stuff."
             }
+        },
+        {
+            "id" : "g1wj1fnkh6",
+            "type" : "table",
+            "data" : {
+              "withHeadings": true,
+              "content" : [ [ "Kine", "Pigs", "Chicken" ], [ "1 pcs", "3 pcs", "12 pcs" ], [ "100$", "200$", "150$" ] ]
+            }
         }
     ],
         "version":"2.29.1"}

@@ -33,10 +33,13 @@ const blocksToMarkdown = (blocks) => {
             mdContent += "```\n" + block.code + "\n```\n\n";
         } else if (block.type === "warning") {
             mdContent += `|WARNING title=${block.title} message=${block.message} WARNING|\n\n`;
+        } else if (block.type === "table") {
+            const content = JSON.stringify(block.content);
+            mdContent += `|TABLE withHeadings=${block.withHeadings} content=${content} TABLE|\n\n`;
         }
     }
 
-    return mdContent.trim();  // Remove trailing new lines
+    return mdContent.trim();
 };
 
 export default blocksToMarkdown;

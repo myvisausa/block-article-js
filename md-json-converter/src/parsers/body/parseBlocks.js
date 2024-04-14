@@ -23,6 +23,8 @@ class BlockFactory {
                 return { ...baseBlock, data: { code: block.code } };
             case "warning":
                 return { ...baseBlock, data: { title: block.title, message: block.message } };
+            case "table":
+                return { ...baseBlock, data: { withHeadings: block.withHeadings, content: block.content } };
             default:
                 throw new Error("Unsupported block type");
         }
