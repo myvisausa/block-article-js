@@ -47,7 +47,7 @@ export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Co
       <div className={styles.title}>{parse(title_html.join(""))}</div>
       <div className={styles.contentWrapper}>
         <div className={`col-md-9 ${styles.content}`}>
-          {image_html.length > 0 && parse(image_html.join(""))}
+          {parse(image_html.join(""))}
           {isLoaded && <div className={styles.body}>{parse(body_html.join(""))}</div>}
         </div>
         <div className={`col-md-3 ${styles.tableOfContents}`}>
