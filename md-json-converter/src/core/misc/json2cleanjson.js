@@ -10,3 +10,14 @@ function json2cleanjson(data) {
 }
 
 export default json2cleanjson;
+
+export function parseTitle(data) {
+    const titleBlocks = {"time": Date.now(), "blocks": parseMetadata(data.metadata), "version": "2.28.2"}
+    return titleBlocks
+}
+
+export function parseBody(data) {
+    const markdown = json2md(data)
+    const bodyBlocks = JSON.parse(md2cleanjson(markdown))
+    return bodyBlocks
+}

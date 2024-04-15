@@ -21,11 +21,7 @@ const handleClick = (id, scrollOffset) => {
 export default function TableOfContents({ data, title, scrollOffset, bulletPoints=true }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const headers = extractHeaders(data.blocks);
-
-    if (headers.length === 0) {
-        return null;
-    }
-
+    
     return (
         <div className={styles.tableOfContents}>
             <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
