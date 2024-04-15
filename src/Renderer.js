@@ -6,9 +6,9 @@ import { blocksSplitter } from "./components/utils/blocksSplitter";
 import { useEffect } from "react";
 import parser from "../editorjs-renderer/src/app.ts";
 
+const myParser = parser();
+
 import styles from './styles.module.css';
-// let json2cleanjson;
-// json2cleanjson = require("../md-json-converter/src/core/misc/json2cleanjson").default;
 
 import { parseTitle, parseBody } from "../md-json-converter/src/core/misc/json2cleanjson";
 
@@ -34,8 +34,6 @@ export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Co
     setIsLoaded(true);
   }, []);
 
-  const myParser = parser();
-
   let titleBlocks = parseTitle(data);
   const imageBlock = {blocks: titleBlocks.blocks.slice(-1)};
   titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
@@ -57,3 +55,25 @@ export default function Renderer({ data, scrollOffset=100, tocTitle='Table of Co
     </>
   )
 };
+
+
+
+export function renderArticle(data) {
+  if (!data) {
+    return "<div>Article is Empty</div>";
+  }
+
+  let titleBlocks = parseTitle(data);
+  const bodyBlocks = parseBody(data);
+
+  // Assuming the last block of the title is the image
+  const imageBlock = {blocks: titleBlocks.blocks.slice(-1)};
+  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
+
+  const title_html = myParser.parse(titleBlocks);
+  const image_html = myParser.parse(imageBlock);
+  const body_html = myParser.parse(bodyBlocks);
+
+
+  return {titleHtml: title_html.join(""), imageHtml: image_html.join(""), bodyHtml: body_html.join(""), bodyBlocks};
+}
