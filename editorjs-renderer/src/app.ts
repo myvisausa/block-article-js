@@ -4,14 +4,14 @@ import { OutputData } from "@editorjs/editorjs";
 import transforms, { block } from "./transforms";
 import { ParseFunctionError } from "./errors";
 
-type parser = {
+type IParser = {
   parse(OutputData: OutputData): Array<string>;
   parseStrict(OutputData: OutputData): Array<string> | Error;
   parseBlock(block: block): string;
   validate(OutputData: OutputData): Array<string>;
 };
 
-const parser = (plugins = {}): parser => {
+const parser = (plugins = {}): IParser => {
   const parsers = Object.assign({}, transforms, plugins);
 
   return {
