@@ -1,9 +1,47 @@
-/* add css module styles here (optional) */
+/* Renderer.module.css */
+.title {
+  margin-bottom: 20px;
+}
 
-.test {
-  margin: 2em;
-  padding: 0.5em;
-  border: 2px solid #000;
-  font-size: 2em;
+.textCenter {
   text-align: center;
+}
+
+.contentWrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-direction: row;
+}
+
+.content {
+  flex: 2;
+}
+
+.body {
+  margin-top: 20px;
+}
+
+.tableOfContents {
+  position: sticky;
+  top: 150px; 
+  height: calc(100vh - 20px); 
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    flex-direction: column;
+  }
+
+  .content {
+    order: 1;
+  }
+
+  .tableOfContents {
+    position: relative; 
+    top: 0;
+    height: auto; 
+    overflow-y: visible; 
+  }
 }

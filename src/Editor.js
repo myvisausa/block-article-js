@@ -31,7 +31,7 @@ export default function Editor({ onDataChange, data, setData, uploadEndPoint, la
                 {isEditMode ? (
                     <EditorEditor data={data} setData={handleDataChange} uploadEndPoint={uploadEndPoint} lastUploadedEndPoint={lastUploadedEndPoint} />
                 ) : (
-                    <Renderer data={data} />
+                    <Renderer data={data} tocTitle={tocTitle} />
                 )}
             </div>
         </div>

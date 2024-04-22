@@ -19,25 +19,62 @@ export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
   embed: Embed,
-  table: Table,
-  list: List,
-  warning: Warning,
+  table: {
+    class: Table,
+    inlineToolbar: true,
+    config: {
+      rows: 2,
+      cols: 2,
+    },
+  },
+  list: {
+    class: List,
+    inlineToolbar: true,
+    config: {
+      defaultStyle: 'unordered'
+    }
+  },
+  warning: {
+    class: Warning,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+      messagePlaceholder: 'Message',
+    },
+  },
   code: Code,
-  linkTool: LinkTool,
+  // linkTool: LinkTool,  // not in editorjs-renderer transforms
   image: {
     class: ImageTool,
     config: {
       endpoints: {
-        byFile: uploadEndPoint || 'http://localhost:5252/api/uploadImage',
+        byFile: uploadEndPoint || 'http://localhost:5252/api/media/images/upload',
       },
     },
   },
-  raw: Raw,
+  // raw: Raw,  // not in editorjs-renderer transforms
   header: Header,
-  quote: Quote,
+  // quote: Quote,  // not in editorjs-renderer transforms
   marker: Marker,
-  checklist: CheckList,
-  delimiter: Delimiter,
-  inlineCode: InlineCode,
-  simpleImage: SimpleImage
+  // checklist: CheckList,  // not in editorjs-renderer transforms
+  // delimiter: Delimiter,  // not in editorjs-renderer transforms
+  // inlineCode: InlineCode,  // not in editorjs-renderer transforms
+  simpleImage: SimpleImage,
+  article: {
+    class: RelatedArticle,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+      textPlaceholder: 'Text',
+      hrefPlaceholder: 'Hyperlink',
+    },
+  },
+  note: {
+    class: Note,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+      messagePlaceholder: 'Message',
+    },
+  },
 });
