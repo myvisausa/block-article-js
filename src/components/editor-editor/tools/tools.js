@@ -13,11 +13,7 @@ import CheckList from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
-import ImageTool from '@editorjs/image'
-import RelatedArticle from "../../../../related-article/src";
-import Note from "../../../../note/src";
-
-// import NestedList from "./NestedList";
+import ImageTool from '../../../../image/src/index';
 
 export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
