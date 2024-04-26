@@ -228,6 +228,17 @@ const transforms: transforms = {
             </div>`;
   },
 
+  steps: ({ data, id }) => {
+    const itemsList = data.items.map(item => `<li style="list-style-type: none; position: relative; padding-left: 30px; margin-top: 0px; margin-bottom: 10px;"><span style="color: #00C853; margin-right: 5px;">✔</span>${item}</li>`).join('');
+    return `<div style="background-color: #fcfcfc; padding: 10px 0px 10px 10px;">
+              <div style="display: flex; align-items: center; padding-bottom: 0px">
+                <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
+              </div>
+              <ul style="padding-left: 0; margin-top: 0px;">${itemsList}</ul>
+            </div>`;
+  },
+
+
   embed: ({ data, id }) => {
     switch (data.service) {
       case "vimeo":

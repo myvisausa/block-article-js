@@ -42,6 +42,8 @@ const blocksToMarkdown = (blocks) => {
             mdContent += `|NOTE title=${block.title} message=${block.message} NOTE|\n\n`;
         } else if (block.type === "checklist") {
             mdContent += `|CHECKLIST title=${block.title} items=${block.items} CHECKLIST|\n\n`;
+        } else if (block.type === "steps") {
+            mdContent += `|STEPS title=${block.title} items=${block.items} STEPS|\n\n`;
         }
     }
 
