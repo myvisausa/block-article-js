@@ -34,6 +34,8 @@ This is a warning:
 
 |NOTE title=Note: message=If you don't have enough money in the bank, they probably won't accept you. NOTE|
 
+|CHECKLIST title=Documents needed to apply for a B1/B2 visa include: items=A passport valid for six months,A recent digital photograph,Documentation of the past five previous trips CHECKLIST|
+
 ## Frequently Asked Questions
 <question>What is the first question</question>
 

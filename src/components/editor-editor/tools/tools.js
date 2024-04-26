@@ -9,11 +9,16 @@ import Raw from "@editorjs/raw";
 import Header from "@editorjs/header";
 import Quote from "@editorjs/quote";
 import Marker from "@editorjs/marker";
-import CheckList from "@editorjs/checklist";
 import Delimiter from "@editorjs/delimiter";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
-import ImageTool from '../../../../image/src/index';
+import ImageTool from '@editorjs/image'
+import RelatedArticle from "../../../../custom-blocks/related-article/src";
+import Note from "../../../../custom-blocks/note/src";
+import Checklist from "../../../../custom-blocks/checklist/src"
+
+// import NestedList from "./NestedList";
+
 
 export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
@@ -56,7 +61,6 @@ export const createEditorTools = (uploadEndPoint) => ({
   header: Header,
   // quote: Quote,  // not in editorjs-renderer transforms
   marker: Marker,
-  // checklist: CheckList,  // not in editorjs-renderer transforms
   // delimiter: Delimiter,  // not in editorjs-renderer transforms
   // inlineCode: InlineCode,  // not in editorjs-renderer transforms
   simpleImage: SimpleImage,
@@ -75,6 +79,13 @@ export const createEditorTools = (uploadEndPoint) => ({
     config: {
       titlePlaceholder: 'Title',
       messagePlaceholder: 'Message',
+    },
+  },
+  checklist: {
+    class: Checklist,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
     },
   },
 });

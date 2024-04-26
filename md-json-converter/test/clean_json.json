@@ -45,7 +45,15 @@
             "data" : {
                 "title": "Note",
                 "message" : "This is the content of the note."
-        }
-    }
+            }
+        },
+        {   
+            "id" : "glsdhflkh6",
+            "type" : "checklist",
+            "data" : {
+                "title": "Documents needed to apply for a B1/B2 visa include:",
+                "items" : ["A passport valid for six months", "A recent digital photograph", "Documentation of the past five previous trips"]
+            }
+        }   
     ],
         "version":"2.29.1"}

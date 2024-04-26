@@ -40,6 +40,8 @@ const blocksToMarkdown = (blocks) => {
             mdContent += `|ARTICLE title=${block.title} text=${block.text} href=${block.href} ARTICLE|\n\n`;
         } else if (block.type === "note") {
             mdContent += `|NOTE title=${block.title} message=${block.message} NOTE|\n\n`;
+        } else if (block.type === "checklist") {
+            mdContent += `|CHECKLIST title=${block.title} items=${block.items} CHECKLIST|\n\n`;
         }
     }
 
