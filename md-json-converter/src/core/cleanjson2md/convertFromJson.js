@@ -61,7 +61,13 @@ const convertFromJSON = (jsonData) => {
                 title: block.data.title,
                 message: block.data.message
             });
-        }
+        } else if (block.type === "checklist") {
+            blocks.push({
+                type: "checklist",
+                title: block.data.title,
+                items: block.data.items
+            });
+        }  
     }
 
     return blocks;

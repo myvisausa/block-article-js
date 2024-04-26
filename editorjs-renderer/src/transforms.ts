@@ -208,6 +208,7 @@ const transforms: transforms = {
   },
 
   note: ({ data, id }) => {
+    console.log('note data', data)
     const processedMessage = processMarkdownLinks(data.message);
     return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 10px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
@@ -215,6 +216,17 @@ const transforms: transforms = {
                 <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
               </div>
               <p>${processedMessage}</p>
+            </div>`;
+  },
+
+  checklist: ({ data, id }) => {
+    console.log('data', data)
+    const itemsList = data.items.map(item => `<li>${item}</li>`).join('');
+    return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 10px 0;">
+              <div style="display: flex; align-items: center; padding-bottom: 5px">
+                <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
+              </div>
+              <ul>${itemsList}</ul>
             </div>`;
   },
 

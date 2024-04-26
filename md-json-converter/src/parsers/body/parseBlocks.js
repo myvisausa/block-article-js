@@ -29,6 +29,9 @@ class BlockFactory {
                 return { ...baseBlock, data: { title: block.title, text: block.text, href: block.href } };
             case "note":
                 return { ...baseBlock, data: { title: block.title, message: block.message } };
+            case "checklist":
+                console.log('checklist switch')
+                return { ...baseBlock, data: { title: block.title, items: block.items } };
             default:
                 throw new Error("Unsupported block type");
         }
