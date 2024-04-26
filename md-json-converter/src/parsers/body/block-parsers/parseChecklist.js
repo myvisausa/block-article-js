@@ -4,7 +4,7 @@ const parseChecklist = (line) => {
         return {
             type: "checklist",
             title: checklistMatch[1],
-            items: checklistMatch[2]
+            items: checklistMatch[2].split(',').map(item => item.trim())
         };
     }
 };

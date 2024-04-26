@@ -100,8 +100,9 @@ export default class Checklist {
 
   save(container) {
     const title = container.querySelector(`.${this.CSS.title}`);
-    const items = [...container.querySelectorAll(`.${this.CSS.item}`)].map(item => item.textContent);
-
+    const items = [...container.querySelectorAll(`.${this.CSS.item}`)]
+      .map(item => item.textContent)
+      .filter(item => !item.endsWith('Remove')); // Not sure why it is like  "['Item 1Remove', 'Item 1', 'Item 2Remove', 'Item 2']""
     return {
       title: title.innerHTML,
       items,
