@@ -19,6 +19,7 @@ import Checklist from "../../../../custom-blocks/checklist/src"
 
 // import NestedList from "./NestedList";
 
+
 export const createEditorTools = (uploadEndPoint) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
