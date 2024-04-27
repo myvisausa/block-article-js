@@ -1,4 +1,16 @@
-import { v4 as uuidv4 } from 'uuid';
+
+function makeid(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
+}
+
 
 export default function md2json(md_text) {
   const createTime = new Date().toISOString();
@@ -17,7 +29,7 @@ export default function md2json(md_text) {
     const text = sec.substring(headerEndIndex + 1); // Get the text after the header
 
     let contentDict = {
-      "sectionId": uuidv4(),
+      "sectionId": makeid(5),
       "type": "default",
       "header": header,
       "text": text,
