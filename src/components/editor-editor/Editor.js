@@ -20,14 +20,14 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 	
 	const ReactEditorJS = createReactEditorJS();
 
-	const handleInitialize = useCallback((instance) => {
-		// await instance._editorJS.isReady;
-		instance._editorJS.isReady
-			.then(() => {
-				// set reference to editor
-				editorCore.current = instance;
-			})
-			.catch((err) => console.log("An error occured", err));
+	const handleInitialize = useCallback(async (instance) => {
+		try {
+			await instance._editorJS.isReady;
+			// set reference to editor
+			editorCore.current = instance;
+		} catch (err) {
+			console.log("An error occurred", err);
+		}
 	}, []);
 
 	const handleSave = useCallback(async () => {
@@ -58,8 +58,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 		if (JSON.stringify(data) !== JSON.stringify(updateData)) {
 		  setData(updateData);
 		}
-	  }, [title, imageUrl, caption, altDescription]);
-
+	  }, [title, imageUrl, caption, altDescription]); 
 	return (
 		<div className="editor-container">
 			<h4 className="edit-mode-alert">! Edit Mode Enabled</h4>
