@@ -3,6 +3,8 @@
 
 
 ## Adding new tools
+### Steps described below, but essentially just follow the pattern of this PR
+https://github.com/myvisausa/block-article-js/pull/3/files
 ### In md-json-converter
 1. First add a new item to the test/clean_json.json fixture
 2. Update the BlockFactory (src/parsers/body/parseBlocks.js)

@@ -36,6 +36,8 @@ This is a warning:
 
 |CHECKLIST title=Documents needed to apply for a B1/B2 visa include: items=A passport valid for six months,A recent digital photograph,Documentation of the past five previous trips CHECKLIST|
 
+|STEPS title=Steps to visa items=Apply,Pay,Wait STEPS|
+
 ## Frequently Asked Questions
 <question>What is the first question</question>
 

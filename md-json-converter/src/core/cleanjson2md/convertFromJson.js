@@ -67,6 +67,12 @@ const convertFromJSON = (jsonData) => {
                 title: block.data.title,
                 items: block.data.items
             });
+        } else if (block.type === "steps") {
+            blocks.push({
+                type: "steps",
+                title: block.data.title,
+                items: block.data.items
+            });
         }  
     }
 
