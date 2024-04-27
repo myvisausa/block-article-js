@@ -8,6 +8,7 @@ import parseTable from "./block-parsers/parseTable.js";
 import parseArticle from "./block-parsers/parseArticle.js";
 import parseNote from "./block-parsers/parseNote.js";
 import parseChecklist from "./block-parsers/parseChecklist.js";
+import parseSteps from "./block-parsers/parseSteps.js";
 
 import convertMdtoHtml from "./utils/convertMdToHtml.js";
 import processListItems from "./block-parsers/processListItems.js";
@@ -74,6 +75,11 @@ const parseNotFaq = (mdContent) => {
         }
 
         if (block = parseChecklist(line)) {
+            blocks.push(block)
+            continue;
+        }
+
+        if (block = parseSteps(line)) {
             blocks.push(block)
             continue;
         }

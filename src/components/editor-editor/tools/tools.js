@@ -16,6 +16,7 @@ import ImageTool from '@editorjs/image'
 import RelatedArticle from "../../../../custom-blocks/related-article/src";
 import Note from "../../../../custom-blocks/note/src";
 import Checklist from "../../../../custom-blocks/checklist/src"
+import Steps from "../../../../custom-blocks/steps/src";
 
 // import NestedList from "./NestedList";
 
@@ -83,6 +84,13 @@ export const createEditorTools = (uploadEndPoint) => ({
   },
   checklist: {
     class: Checklist,
+    inlineToolbar: true,
+    config: {
+      titlePlaceholder: 'Title',
+    },
+  },
+  steps: {
+    class: Steps,
     inlineToolbar: true,
     config: {
       titlePlaceholder: 'Title',

@@ -1,14 +1,14 @@
 /**
  * Import Tool's icon
  */
-import { IconCheck } from '@codexteam/icons';
+import { IconListNumbered } from '@codexteam/icons';
 
 /**
  * Build styles
  */
 import './index.css';
 
-export default class Checklist {
+export default class Steps {
 
   static get isReadOnlySupported() {
     return true;
@@ -16,8 +16,8 @@ export default class Checklist {
 
   static get toolbox() {
     return {
-      icon: IconCheck,
-      title: 'Checklist',
+      icon: IconListNumbered,
+      title: 'Steps',
     };
   }
 
@@ -44,7 +44,7 @@ export default class Checklist {
     this.api = api;
     this.readOnly = readOnly;
 
-    this.titlePlaceholder = config.titlePlaceholder || Checklist.DEFAULT_TITLE_PLACEHOLDER;
+    this.titlePlaceholder = config.titlePlaceholder || Steps.DEFAULT_TITLE_PLACEHOLDER;
 
     this.data = {
       title: data.title || '',

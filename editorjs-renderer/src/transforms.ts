@@ -209,7 +209,7 @@ const transforms: transforms = {
 
   note: ({ data, id }) => {
     const processedMessage = processMarkdownLinks(data.message);
-    return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 10px 0;">
+    return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 20px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
                 <span style="color: #0078d2;">★</span>
                 <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
@@ -219,12 +219,37 @@ const transforms: transforms = {
   },
 
   checklist: ({ data, id }) => {
-    const itemsList = data.items.map(item => `<li style="list-style-type: none; position: relative; padding-left: 30px; margin-top: 0px; margin-bottom: 10px;"><span style="color: #00C853; margin-right: 5px;">✔</span>${item}</li>`).join('');
-    return `<div style="background-color: #fcfcfc; padding: 10px 0px 10px 10px;">
+    const itemsList = data.items.map(item => `<li style="list-style-type: none; position: relative; padding-left: 3px; margin-top: 5px; margin-bottom: 10px;"><span style="color: #00C853; margin-right: 17px;">✔</span>${item}</li>`).join('');
+    return `<div style="background-color: #fcfcfc; padding: 10px 0px 10px 10px; margin: 20px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 0px">
                 <div style="margin-left: 10px; font-weight: 600">${data.title}</div>
               </div>
               <ul style="padding-left: 0; margin-top: 0px;">${itemsList}</ul>
+            </div>`;
+  },
+
+  steps: ({ data, id }) => {
+    const numbersList = data.items.map((_, index) => `
+      <div style="height: 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <div style="width: 24px; height: 24px; background-color: yellow; color: black; text-align: center; line-height: 24px; font-weight: bold; position: relative; z-index: 2;">${index + 1}</div>
+      </div>`).join('');
+  
+    const itemsList = data.items.map((item) => `
+      <div style="margin-bottom: 20px; display: flex; align-items: center;">
+        ${item}
+      </div>`).join('');
+  
+    return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 20px 0; position: relative; border: 1px solid #eaeaea;">
+              <div style="margin-left: 10px; font-weight: 600; margin-bottom: 20px;">${data.title}</div>
+              <div style="display: flex; padding-left: 30px;">
+                <div style="position: relative; flex-shrink: 0;">
+                  ${numbersList}
+                  <div style="position: absolute; left: 50%; top: 20%; bottom: 20%; width: 0; border-left: 2px dotted #ccc; transform: translateX(-50%); z-index: 1;"></div>
+                </div>
+                <div style="padding-left: 12px;">
+                  ${itemsList}
+                </div>
+              </div>
             </div>`;
   },
 
