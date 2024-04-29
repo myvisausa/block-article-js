@@ -70,6 +70,7 @@ const transforms: transforms = {
   },
 
   header: ({ data, id }) => {
+    if (data.text === 'omit') return '';
     if (!data.level) {
       return ``
     } else if (data.level === 1) {

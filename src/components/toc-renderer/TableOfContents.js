@@ -3,7 +3,7 @@ import styles from './tableOfContents.module.css';
 
 function extractHeaders(blocks) {
     return blocks
-        .filter(block => block.type === 'header' && block.data.level === 2)
+        .filter(block => block.type === 'header' && block.data.level === 2 && block.data.text !== "omit")
         .map(block => ({ text: block.data.text, id: block.id }));
 }
 
