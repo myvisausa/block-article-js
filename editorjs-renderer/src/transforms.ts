@@ -244,7 +244,7 @@ const transforms: transforms = {
               <div style="display: flex; padding-left: 30px;">
                 <div style="position: relative; flex-shrink: 0;">
                   ${numbersList}
-                  <div style="position: absolute; left: 50%; top: 20%; bottom: 20%; width: 0; border-left: 2px dotted #ccc; transform: translateX(-50%); z-index: 1;"></div>
+                  <div style="position: absolute; left: 50%; top: 20px; bottom: 20px; width: 0; border-left: 2px dotted #ccc; transform: translateX(-50%); z-index: 1;"></div>
                 </div>
                 <div style="padding-left: 12px;">
                   ${itemsList}
