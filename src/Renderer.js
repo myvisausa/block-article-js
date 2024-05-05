@@ -53,7 +53,9 @@ export default function Renderer({
       <div className={styles.title}>{parse(title_html.join(''))}</div>
       <div className={styles.contentWrapper}>
         <div className={`col-md-9 ${styles.content}`}>
-          {parse(image_html.join(''))}
+          <div className={`${styles.image}`}>
+            {parse(image_html.join(''))}
+          </div>
           {isLoaded && (
             <div className={styles.body}>{parse(body_html.join(''))}</div>
           )}
