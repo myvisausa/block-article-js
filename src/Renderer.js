@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import parse from 'html-react-parser'
 import TableOfContents from './components/toc-renderer/TableOfContents'
-import { blocksSplitter } from './components/utils/blocksSplitter'
+  // import { blocksSplitter } from './components/utils/blocksSplitter'
 import { useEffect } from 'react'
 import parser from '../editorjs-renderer/src/app.ts'
 
@@ -30,12 +30,17 @@ export default function Renderer({
   const [tocData, setTocData] = useState({ blocks: [] })
 
   useEffect(() => {
-    onArticleLoaded && onArticleLoaded()
     const bodyBlocks = parseBody(data)
     setTocData(bodyBlocks)
     setBodyHtml(myParser.parse(bodyBlocks))
     setIsLoaded(true)
   }, [data])
+
+  useEffect(() => {
+    if (isLoaded) {
+      onArticleLoaded()
+    }
+  }, [isLoaded])
 
   let titleBlocks = parseTitle(data)
   const imageBlock = { blocks: titleBlocks.blocks.slice(-1) }
