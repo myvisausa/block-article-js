@@ -19,7 +19,7 @@ export default function Renderer({
   data,
   scrollOffset = 100,
   tocTitle = 'Table of Contents',
-  onArticleLoaded,
+  onArticleLoaded= () => {},
 }) {
   if (!data) {
     return <div className={styles.textCenter}>Article is Empty</div>
