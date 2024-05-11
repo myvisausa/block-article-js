@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import parse from 'html-react-parser'
 import TableOfContents from './components/toc-renderer/TableOfContents'
-import { blocksSplitter } from './components/utils/blocksSplitter'
+  // import { blocksSplitter } from './components/utils/blocksSplitter'
 import { useEffect } from 'react'
 import parser from '../editorjs-renderer/src/app.ts'
 
@@ -30,12 +30,17 @@ export default function Renderer({
   const [tocData, setTocData] = useState({ blocks: [] })
 
   useEffect(() => {
-    onArticleLoaded && onArticleLoaded()
     const bodyBlocks = parseBody(data)
     setTocData(bodyBlocks)
     setBodyHtml(myParser.parse(bodyBlocks))
     setIsLoaded(true)
   }, [data])
+
+  useEffect(() => {
+    if (isLoaded) {
+      onArticleLoaded()
+    }
+  }, [isLoaded])
 
   let titleBlocks = parseTitle(data)
   const imageBlock = { blocks: titleBlocks.blocks.slice(-1) }
@@ -48,7 +53,9 @@ export default function Renderer({
       <div className={styles.title}>{parse(title_html.join(''))}</div>
       <div className={styles.contentWrapper}>
         <div className={`col-md-9 ${styles.content}`}>
-          {parse(image_html.join(''))}
+          <div className={`${styles.image}`}>
+            {parse(image_html.join(''))}
+          </div>
           {isLoaded && (
             <div className={styles.body}>{parse(body_html.join(''))}</div>
           )}

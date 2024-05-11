@@ -136,7 +136,7 @@ const exampleData = {
       "id": "MfCql0ldGj",
       "type": "paragraph",
       "data": {
-        "text": "In this article, I will present three techniques that I have been using during the development of&nbsp;<a href=\"https://my-visa-usa.com/en/news/my-visa-usa-announces-visa-gpt\" target=\"_blank\">VisaGPT</a>, a tool that&nbsp;<a href=\"https://my-visa-usa.com/\" target=\"_blank\">My-Visa-USA</a>&nbsp;plans to debut later this year. These techniques have been demonstrated to reduce hallucinations in A.I. research, and I’ve used them to great success thus far. In addition, these techniques don’t require that you retrain or fine-tune a model, which means that the capital expenditures you need to reduce hallucinations in your generative A.I. system are pretty low."
+        "text": "In this article, I will present three techniques that I have been using during the development of&nbsp;<a href=\"https://myvisa-usa.com/en/news/my-visa-usa-announces-visa-gpt\" target=\"_blank\">VisaGPT</a>, a tool that&nbsp;<a href=\"https://myvisa-usa.com/\" target=\"_blank\">My-Visa-USA</a>&nbsp;plans to debut later this year. These techniques have been demonstrated to reduce hallucinations in A.I. research, and I’ve used them to great success thus far. In addition, these techniques don’t require that you retrain or fine-tune a model, which means that the capital expenditures you need to reduce hallucinations in your generative A.I. system are pretty low."
       }
     },
     {
