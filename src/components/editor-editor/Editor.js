@@ -8,7 +8,7 @@ import { createEditorTools } from "./tools/tools";
 import { createReactEditorJS } from "react-editor-js";
 import { json2cleanjson, cleanjson2md, md2json} from "../../../md-json-converter/src/index";
 
-export default function EditorEditor({ data, setData, uploadEndPoint }) {
+export default function EditorEditor({ data, setData, uploadEndPoint, textDirection='ltr' }) {
 	const [title, setTitle]  = useState(data.metadata.title);
 	const [imageUrl, setImageUrl] = useState(data.metadata.ogImage)
 	const [caption, setCaption] = useState(data.metadata.ogImageCaption)
@@ -67,6 +67,7 @@ export default function EditorEditor({ data, setData, uploadEndPoint }) {
 			<ReactEditorJS
 				onInitialize={handleInitialize}
 				tools={createEditorTools(uploadEndPoint)}
+				i18n={{direction: textDirection}}
 				onChange={handleSave}
 				defaultValue={initialData}
 			/>
