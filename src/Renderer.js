@@ -1,63 +1,63 @@
 // Renderer.js
-import React, { useState } from 'react'
-import parse from 'html-react-parser'
-import TableOfContents from './components/toc-renderer/TableOfContents'
-  // import { blocksSplitter } from './components/utils/blocksSplitter'
-import { useEffect } from 'react'
-import parser from '../editorjs-renderer/src/app.ts'
-
-const myParser = parser()
-
-import styles from './styles.module.css'
-
+import React, { useState, useEffect } from 'react';
+import parse from 'html-react-parser';
+import TableOfContents from './components/toc-renderer/TableOfContents';
+import parser from '../editorjs-renderer/src/app.ts';
+import styles from './styles.module.css';
 import {
   parseTitle,
   parseBody,
-} from '../md-json-converter/src/core/misc/json2cleanjson'
+} from '../md-json-converter/src/core/misc/json2cleanjson';
+
+const myParser = parser();
 
 export default function Renderer({
   data,
   scrollOffset = 100,
   tocTitle = 'Table of Contents',
-  onArticleLoaded= () => {},
+  onArticleLoaded = () => {},
+  locale = 'en',
 }) {
   if (!data) {
-    return <div className={styles.textCenter}>Article is Empty</div>
+    return <div className={styles.textCenter}>Article is Empty</div>;
   }
 
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [body_html, setBodyHtml] = useState('')
-  const [tocData, setTocData] = useState({ blocks: [] })
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [body_html, setBodyHtml] = useState('');
+  const [tocData, setTocData] = useState({ blocks: [] });
 
   useEffect(() => {
-    const bodyBlocks = parseBody(data)
-    setTocData(bodyBlocks)
-    setBodyHtml(myParser.parse(bodyBlocks))
-    setIsLoaded(true)
-  }, [data])
+    const bodyBlocks = parseBody(data);
+    setTocData(bodyBlocks);
+    setBodyHtml(myParser.parse(bodyBlocks));
+    setIsLoaded(true);
+  }, [data]);
 
   useEffect(() => {
     if (isLoaded) {
-      onArticleLoaded()
+      onArticleLoaded();
     }
-  }, [isLoaded])
+  }, [isLoaded]);
 
-  let titleBlocks = parseTitle(data)
-  const imageBlock = { blocks: titleBlocks.blocks.slice(-1) }
-  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1)
-  const title_html = myParser.parse(titleBlocks)
-  const image_html = myParser.parse(imageBlock)
+  let titleBlocks = parseTitle(data);
+  const imageBlock = { blocks: titleBlocks.blocks.slice(-1) };
+  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
+  const title_html = myParser.parse(titleBlocks);
+  const image_html = myParser.parse(imageBlock);
+
+  // Determine if the locale is Arabic to apply the RTL class
+  const rtlClass = locale === 'ar' ? styles.rtl : '';
 
   return (
     <>
-      <div className={styles.title}>{parse(title_html.join(''))}</div>
-      <div className={styles.contentWrapper}>
+      <div className={`${styles.title} ${rtlClass}`}>{parse(title_html.join(''))}</div>
+      <div className={`${styles.contentWrapper} ${rtlClass}`}>
         <div className={`col-md-9 ${styles.content}`}>
-          <div className={`${styles.image}`}>
+          <div className={`${styles.image} ${rtlClass}`}>
             {parse(image_html.join(''))}
           </div>
           {isLoaded && (
-            <div className={styles.body}>{parse(body_html.join(''))}</div>
+            <div className={`${styles.body} ${rtlClass}`}>{parse(body_html.join(''))}</div>
           )}
         </div>
         <div className={`col-md-3 ${styles.tableOfContents}`}>
@@ -69,7 +69,7 @@ export default function Renderer({
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export function renderArticle(data) {
