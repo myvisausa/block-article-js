@@ -1,17 +1,7 @@
-.tableOfContents {
-  background-color: var(--gray_color-200);
-  padding: 20px;
-  border-radius: 5px;
-}
-
 .header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.2em;
-  font-weight: 500;
-  padding: 0px 5px;
-  position: relative;
-  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .list {
@@ -25,19 +15,28 @@
 }
 
 .expanded {
-  max-height: 1000px; 
+  max-height: 1000px;
 }
 
 .listItem {
-  padding: 5px 10px; 
-  font-size: 0.9em;
+  padding: 10px 0 10px 20px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--slate-700);
   cursor: pointer;
-  transition: background-color 0.3s ease;
   display: block;
   width: 100%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  border-left: 3px solid transparent;
 }
 
-.listItem:hover {
-  background-color: var(--secondary_color-50);
+.selected {
+  border-left: 3px solid var(--congress-blue700);
+  color: var(--congress-blue700);
+}
+
+@media (max-width: 768px) {
+  .listItem {
+    padding: 10px 0 10px 10px;
+  }
 }
