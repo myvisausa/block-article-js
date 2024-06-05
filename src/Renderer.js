@@ -59,7 +59,7 @@ export default function Renderer({
         {parse(image_html.join(''))}
       </div>
       <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
-        <div className={`col-12 col-lg-8 ${styles.content} mt-4 mt-lg-0`}>
+        <div className={`col-12 col-lg-8 ${styles.content} mt-3 mt-lg-0`}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className={styles.blog_post_grp}>
               <p className={styles.immigrants_btn}>Immigrants</p>{' '}
