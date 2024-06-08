@@ -7,7 +7,7 @@ function extractHeaders(blocks) {
         .map(block => ({ text: block.data.text, id: block.id }));
 }
 
-const handleClick = (id, scrollOffset) => {
+const handleClick = (id, scrollOffset, setSelectedHeader) => {
     const headerElement = document.getElementById(id);
     if (headerElement) {
         const offsetPosition = headerElement.offsetTop - scrollOffset;
@@ -15,25 +15,25 @@ const handleClick = (id, scrollOffset) => {
             top: offsetPosition,
             behavior: 'smooth'
         });
+        setSelectedHeader(id);
     }
 };
 
-export default function TableOfContents({ data, title, scrollOffset, bulletPoints=true }) {
-    const [isExpanded, setIsExpanded] = useState(false);
+export default function TableOfContents({ data, title, scrollOffset, bulletPoints = true }) {
     const headers = extractHeaders(data.blocks);
-    
+    const [selectedHeader, setSelectedHeader] = useState(null);
+
     return (
-        <div className={styles.tableOfContents}>
-            <div className={styles.header} onClick={() => setIsExpanded(!isExpanded)}>
+        <div>
+            <div className={styles.header}>
                 {title}
-                <span style={{ marginLeft: '5px' }}>{isExpanded ? '▲' : '▼'}</span>
-            </div> 
-            <ul className={`${styles.list} ${isExpanded ? styles.expanded : ''}`}>
+            </div>
+            <ul className={`${styles.list} ${styles.expanded}`}>
                 {headers.map(header => (
-                    <li 
-                        key={header.id} 
-                        className={styles.listItem}
-                        onClick={() => handleClick(header.id, scrollOffset)}
+                    <li
+                        key={header.id}
+                        className={`${styles.listItem} ${selectedHeader === header.id ? styles.selected : ''}`}
+                        onClick={() => handleClick(header.id, scrollOffset, setSelectedHeader)}
                     >
                         {header.text}
                     </li>

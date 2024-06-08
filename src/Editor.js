@@ -1,7 +1,7 @@
 import EditorEditor from "./components/editor-editor/Editor";
 import Renderer from "./Renderer";
 
-export default function Editor({ onDataChange, data, setData, uploadEndPoint, isEditMode, tocTitle='Table of Contents', textDirection='ltr', locale='en'}) {
+export default function Editor({ onDataChange, data, setData, uploadEndPoint, isEditMode, tocTitle = 'In this article', textDirection = 'ltr', locale = 'en' }) {
     const handleDataChange = (updatedData) => {
         setData(updatedData);
         if (onDataChange) {
@@ -15,14 +15,14 @@ export default function Editor({ onDataChange, data, setData, uploadEndPoint, is
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '0.25rem', 
+        marginTop: '0.25rem',
         margin: '1.5rem',
     };
 
     const innerStyle = {
         marginTop: '0rem',
         maxWidth: '1000px',
-        width: '100%', 
+        width: '100%',
     };
 
     return (
