@@ -22,7 +22,7 @@ const handleClick = (id, scrollOffset, setSelectedHeader) => {
 export default function TableOfContents({ data, title, scrollOffset }) {
     const headers = extractHeaders(data.blocks);
     const [selectedHeader, setSelectedHeader] = useState(null);
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
     return (
         <div className={styles.container}>
