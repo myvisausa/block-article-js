@@ -25,10 +25,6 @@
     flex-direction: column;
   }
 
-  .content {
-    order: 1;
-  }
-
   .tableOfContents {
     position: relative;
     top: 0;
@@ -38,6 +34,13 @@
 
   .body p {
     font-size: 14px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .contentWrapper {
+    display: flex;
+    flex-direction: row-reverse; /* This will place the table of contents on the right side */
   }
 }
 

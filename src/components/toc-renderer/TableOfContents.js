@@ -19,16 +19,20 @@ const handleClick = (id, scrollOffset, setSelectedHeader) => {
     }
 };
 
-export default function TableOfContents({ data, title, scrollOffset, bulletPoints = true }) {
+export default function TableOfContents({ data, title, scrollOffset }) {
     const headers = extractHeaders(data.blocks);
     const [selectedHeader, setSelectedHeader] = useState(null);
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
     return (
-        <div>
-            <div className={styles.header}>
+        <div className={styles.container}>
+            <div className={styles.header} onClick={() => setIsCollapsed(!isCollapsed)}>
                 {title}
+                <span className={styles.toggleButton}>
+                    {isCollapsed ? '▲' : '▼'}
+                </span>
             </div>
-            <ul className={`${styles.list} ${styles.expanded}`}>
+            <ul className={`${styles.list} ${!isCollapsed ? styles.expanded : ''}`}>
                 {headers.map(header => (
                     <li
                         key={header.id}
