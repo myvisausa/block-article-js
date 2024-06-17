@@ -58,7 +58,6 @@ export default function Renderer({
         </div>
         <p className={`${styles.published_date} d-lg-none`}>
           {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
-          {/* replace it with dynamic data */}
         </p>
       </div>
       <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
@@ -75,10 +74,8 @@ export default function Renderer({
         <div className={`col-12 col-lg-8 ${styles.content} mt-3 mt-lg-0`}>
           <div className='d-flex justify-content-between align-items-center'>
             <div className={styles.blog_post_grp}>
-              <p className={styles.immigrants_btn}>Immigrants</p>{' '}
-              {/* replace it with dynamic data */}
-              <p className={styles.finding_btn}>Finding a Sponsor</p>{' '}
-              {/* replace it with dynamic data */}
+              <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '} {/* // ASSUMING ONLY 2 TAGS */}
+              <p className={styles.finding_btn}>{data.metadata?.tags[1]}</p>{' '}
             </div>
             <p className={`${styles.published_date} d-none d-lg-block`}>
               {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
