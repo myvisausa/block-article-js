@@ -20,16 +20,18 @@
   margin-bottom: 24px;
 }
 
-@media (max-width: 768px) {
-  .contentWrapper {
-    flex-direction: column;
-  }
-
+@media (max-width: 991px) {
   .tableOfContents {
     position: relative;
     top: 0;
     height: auto;
     overflow-y: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    flex-direction: column;
   }
 
   .body p {
