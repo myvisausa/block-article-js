@@ -10,6 +10,7 @@ import {
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import CommentSection from './components/Comment/CommentSection';
 
 const myParser = parser();
 
@@ -17,7 +18,7 @@ export default function Renderer({
   data,
   scrollOffset = 100,
   tocTitle = 'In this article',
-  onArticleLoaded = () => {},
+  onArticleLoaded = () => { },
   locale = 'en',
 }) {
   if (!data) {
@@ -65,6 +66,7 @@ export default function Renderer({
       </div>
       <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
         <div className={`col-12 col-lg-4 ${styles.tableOfContents}`}>
+          <SocialComp text="Share with your community!" className={styles.socialCompStyle} />
           <TableOfContents
             data={tocData}
             title={tocTitle}
@@ -89,7 +91,9 @@ export default function Renderer({
             </div>
           )}
 
-          {/* <SocialComp text="Like what you see? Share with a friend." /> */}
+          <SocialComp text="Like what you see? Share with a friend." />
+
+          <CommentSection articleId={data.metadata.id} />
         </div>
       </div>
     </>
