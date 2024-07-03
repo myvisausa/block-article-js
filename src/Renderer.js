@@ -15,14 +15,14 @@ import CommentSection from './components/Comment/CommentSection';
 const myParser = parser();
 
 export default function Renderer({
+  otherText,
   data,
   scrollOffset = 100,
-  tocTitle = 'In this article',
   onArticleLoaded = () => { },
-  locale = 'en',
+  locale = 'en'
 }) {
   if (!data) {
-    return <div className={styles.textCenter}>Article is Empty</div>;
+    return <div className={styles.textCenter}>{otherText.articleNotFound}</div>;
   }
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -66,10 +66,10 @@ export default function Renderer({
       </div>
       <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
         <div className={`col-12 col-lg-4 ${styles.tableOfContents}`}>
-          <SocialComp text="Share with your community!" className={styles.socialCompStyle} />
+          <SocialComp text={otherText.shareCommunity} className={styles.socialCompStyle} />
           <TableOfContents
             data={tocData}
-            title={tocTitle}
+            title={otherText.toc}
             scrollOffset={scrollOffset}
           />
         </div>
@@ -91,9 +91,9 @@ export default function Renderer({
             </div>
           )}
 
-          <SocialComp text="Like what you see? Share with a friend." />
+          <SocialComp text={otherText.socialShare} />
 
-          <CommentSection articleId={data.metadata.id} />
+          <CommentSection articleId={data.metadata.id} otherText={otherText} />
         </div>
       </div>
     </>
@@ -125,19 +125,25 @@ export function renderArticle(data) {
 }
 
 const SocialComp = ({ text, className }) => {
+  const [currentUrl, setCurrentUrl] = useState('');
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
+
   return (
     <div
       className={`${className} ${styles.share_content} d-flex justify-content-between flex-column flex-lg-row gap-2 gap-lg-0 my-4`}
     >
       <p className='text-white m-0'>{text}</p>
       <div className='d-flex gap-3 align-items-center'>
-        <a href='https://www.instagram.com' target='_blank'>
+        <a href={`https://www.instagram.com`} target='_blank' rel='noopener noreferrer'>
           <InstagramIcon className='text-white' />
         </a>
-        <a href='https://www.facebook.com' target='_blank'>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`} target='_blank' rel='noopener noreferrer'>
           <FacebookRoundedIcon className='text-white' />
         </a>
-        <a href='https://www.whatsapp.com' target='_blank'>
+        <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(currentUrl)}`} target='_blank' rel='noopener noreferrer'>
           <WhatsAppIcon className='text-white' />
         </a>
       </div>

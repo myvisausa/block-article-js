@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { Modal, Button, Form } from 'react-bootstrap'
 import Link from 'next/link'
 
-const CommentSection = ({ articleId }) => {
+const CommentSection = ({ articleId, otherText }) => {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [editIndex, setEditIndex] = useState(null)
@@ -65,14 +65,14 @@ const CommentSection = ({ articleId }) => {
 
   return (
     <>
-      <h3 className='mb-0'>Comments</h3>
+      <h3 className='mb-0'>{otherText.commentsHeader}</h3>
       <div className={styles.commentSection}>
         <div className={`${styles.overlay}`}>
           <h2 className={styles.overlayText}>
-            Log in to see and post comments.
+            {otherText.overlayText}
           </h2>
           <Link href='/auth/sign-up' className={styles.startBtn}>
-            Start Here
+            {otherText.startHere}
           </Link>
         </div>
         <div className={styles.commentsList}>
@@ -101,15 +101,15 @@ const CommentSection = ({ articleId }) => {
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder='Add a comment...'
+            placeholder={otherText.addCommentPlaceholder}
           />
           <button className={styles.submitBtn} onClick={handleAddComment}>
-            Submit
+            {otherText.submitButton}
           </button>
         </div>
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Comment</Modal.Title>
+            <Modal.Title>{otherText.editCommentTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -125,10 +125,10 @@ const CommentSection = ({ articleId }) => {
           </Modal.Body>
           <Modal.Footer>
             <button className={styles.cancelBtn} onClick={handleCloseModal}>
-              Cancel
+              {otherText.cancelButton}
             </button>
             <button className={styles.saveChanges} onClick={handleEditComment}>
-              Save Changes
+              {otherText.saveChangesButton}
             </button>
           </Modal.Footer>
         </Modal>
