@@ -1,0 +1,129 @@
+.commentSection {
+  margin: 32px 0;
+  position: relative;
+}
+
+.comment {
+  padding: 0.5rem 0;
+}
+
+.commentText {
+  display: flex;
+  flex-direction: column;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  text-align: center;
+  flex-direction: column;
+}
+
+.overlayText {
+  color: var(--slate-600) !important;
+  font-weight: 600;
+  flex-direction: column;
+}
+
+.editComment {
+  display: flex;
+  flex-direction: column;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.addComment {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.addComment textarea,
+.editComment textarea {
+  width: 100%;
+  height: 100px;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 12px;
+}
+
+.saveChanges,
+.submitBtn {
+  display: block;
+  padding: 10px 22px;
+  border: 0;
+  background: linear-gradient(180deg, #2c6bc9 0%, #2957a4 100%);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+}
+
+.startBtn {
+  text-decoration: none;
+  padding: 10px 22px;
+  background: linear-gradient(180deg, #2c6bc9 0%, #2957a4 100%);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+}
+
+.startBtn:hover {
+  text-decoration: none !important;
+}
+
+.titleSection {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+}
+
+.textTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--slate-600);
+  margin-bottom: 0.5rem;
+}
+
+.cancelBtn {
+  display: block;
+  padding: 10px 35px;
+  border: 0;
+  background: linear-gradient(180deg, #ff4d4f 0%, #cc3838 100%);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.commentHeader img {
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.commentHeader .name {
+  font-weight: bold;
+}
+
+.commentHeader .time {
+  margin-left: auto;
+  font-size: 0.875rem;
+  color: #777;
+}
