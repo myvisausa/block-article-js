@@ -1,6 +1,5 @@
 
 const simpleImage = ({ block }) => {
-    console.log('block', block)
     const { url, caption, withBorder, withBackground, stretched } = block;
 
     // Style based on the image properties
