@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import TableOfContents from './components/toc-renderer/TableOfContents';
 import parser from '../editorjs-renderer/src/app.ts';
@@ -25,74 +25,104 @@ export default function Renderer({
     return <div className={styles.textCenter}>{otherText.articleNotFound}</div>;
   }
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [body_html, setBodyHtml] = useState('');
-  const [tocData, setTocData] = useState({ blocks: [] });
-
-  useEffect(() => {
-    const bodyBlocks = parseBody(data);
-    setTocData(bodyBlocks);
-    setBodyHtml(myParser.parse(bodyBlocks));
-    setIsLoaded(true);
+  // Synchronously parse title, image, and TOC using useMemo
+  const { titleHtml, imageHtml, tocData } = useMemo(() => {
+    // Parse title blocks
+    let parsedTitle = parseTitle(data);
+    const imageBlock = { blocks: parsedTitle.blocks.slice(-1) };
+    const titleBlocks = { blocks: parsedTitle.blocks.slice(0, -1) };
+    
+    // Convert parsed blocks to HTML
+    const title_html = myParser.parse(titleBlocks).join('');
+    const image_html = myParser.parse(imageBlock).join('');
+    
+    // Parse TOC data
+    const toc_blocks = parseBody(data); // Assuming parseBody returns TOC-related blocks
+    return {
+      titleHtml: title_html,
+      imageHtml: image_html,
+      tocData: toc_blocks
+    };
   }, [data]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      onArticleLoaded();
-    }
-  }, [isLoaded]);
+  // State for body content
+  const [bodyHtml, setBodyHtml] = useState('');
+  const [isBodyLoaded, setIsBodyLoaded] = useState(false);
 
-  let titleBlocks = parseTitle(data);
-  const imageBlock = { blocks: titleBlocks.blocks.slice(-1) };
-  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
-  const title_html = myParser.parse(titleBlocks);
-  const image_html = myParser.parse(imageBlock);
+  // Asynchronously parse body content
+  useEffect(() => {
+    const parseBodyContent = async () => {
+      const parsedBody = parseBody(data); // Assuming parseBody returns body blocks
+      const body_html = myParser.parse(parsedBody).join('');
+      setBodyHtml(body_html);
+      setIsBodyLoaded(true);
+      onArticleLoaded();
+    };
+
+    parseBodyContent();
+  }, [data, onArticleLoaded]);
 
   // Determine if the locale is Arabic to apply the RTL class
   const rtlClass = locale === 'ar' ? styles.rtl : '';
 
   return (
     <>
+      {/* Title and Metadata */}
       <div className='mb-2 mb-lg-5'>
         <div className={`${styles.title} ${rtlClass}`}>
-          {parse(title_html.join(''))}
+          {parse(titleHtml)}
         </div>
         <p className={`${styles.published_date} d-lg-none`}>
           {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
         </p>
       </div>
+
+      {/* Image */}
       <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
-        {parse(image_html.join(''))}
+        <div className={styles.imageWrapper}>
+          {parse(imageHtml)}
+        </div>
       </div>
+
+      {/* Content Wrapper */}
       <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
+        {/* Table of Contents */}
         <div className={`col-12 col-lg-4 ${styles.tableOfContents}`}>
-          {/* <SocialComp text={otherText.shareCommunity} className={styles.socialCompStyle} /> */}
           <TableOfContents
             data={tocData}
             title={otherText.toc}
             scrollOffset={scrollOffset}
           />
         </div>
+
+        {/* Main Content */}
         <div className={`col-12 col-lg-8 ${styles.content} mt-3 mt-lg-0`}>
+          {/* Tags and Metadata */}
           <div className='d-flex justify-content-between align-items-center'>
             <div className={styles.blog_post_grp}>
-              <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '} {/* // ASSUMING ONLY 2 TAGS */}
+              <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '}
+              {/* Assuming only 2 tags */}
               <p className={styles.finding_btn}>{data.metadata?.tags[1]}</p>{' '}
             </div>
             <p className={`${styles.published_date} d-none d-lg-block`}>
               {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
-              {/* replace it with dynamic data */}
             </p>
           </div>
 
-          {isLoaded && (
+          {/* Body Content */}
+          {isBodyLoaded ? (
             <div className={`${styles.body} ${rtlClass}`}>
-              {parse(body_html.join(''))}
+              {parse(bodyHtml)}
             </div>
+          ) : (
+            // Optional: Add a loading placeholder for the body
+            <div className={styles.bodyPlaceholder}>Loading content...</div>
           )}
 
+          {/* Social Sharing */}
           <SocialComp text={otherText.socialShare} />
 
+          {/* Comment Section */}
           <CommentSection articleId={data.metadata.id} otherText={otherText} />
         </div>
       </div>
@@ -112,14 +142,14 @@ export function renderArticle(data) {
   const imageBlock = { blocks: titleBlocks.blocks.slice(-1) };
   titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
 
-  const title_html = myParser.parse(titleBlocks);
-  const image_html = myParser.parse(imageBlock);
-  const body_html = myParser.parse(bodyBlocks);
+  const title_html = myParser.parse(titleBlocks).join('');
+  const image_html = myParser.parse(imageBlock).join('');
+  const body_html = myParser.parse(bodyBlocks).join('');
 
   return {
-    titleHtml: title_html.join(''),
-    imageHtml: image_html.join(''),
-    bodyHtml: body_html.join(''),
+    titleHtml: title_html,
+    imageHtml: image_html,
+    bodyHtml: body_html,
     bodyBlocks,
   };
 }
