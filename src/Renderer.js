@@ -17,7 +17,7 @@ const myParser = parser();
 export default function Renderer({
   otherText,
   data,
-  scrollOffset = 100,
+  scrollOffset = 15,
   onArticleLoaded = () => { },
   locale = 'en'
 }) {
@@ -66,7 +66,7 @@ export default function Renderer({
       </div>
       <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
         <div className={`col-12 col-lg-4 ${styles.tableOfContents}`}>
-          <SocialComp text={otherText.shareCommunity} className={styles.socialCompStyle} />
+          {/* <SocialComp text={otherText.shareCommunity} className={styles.socialCompStyle} /> */}
           <TableOfContents
             data={tocData}
             title={otherText.toc}

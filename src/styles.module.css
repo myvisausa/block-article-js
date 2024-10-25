@@ -50,6 +50,7 @@
   background-color: #ffffff;
   position: relative;
   width: 100%;
+  max-width: 750px;
   overflow: hidden;
   border-radius: 16px;
   max-height: 500px;

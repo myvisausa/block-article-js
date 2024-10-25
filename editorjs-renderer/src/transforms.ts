@@ -82,7 +82,7 @@ const transforms: transforms = {
     } else if (data.level < 4) {
       return `<div id=${id} style="margin-top: 24px;"><h${data.level} class="head_title">${data.text}</h${data.level}></div>`
     } else {
-      return `<div id=${id} style="padding-top: 10px"><h${data.level}>${data.text}</h${data.level}></div>`
+      return `<div id=${id} style="padding-top: 10px;"><h${data.level} style="color: #131313;">${data.text}</h${data.level}></div>`
     }
   },
 
@@ -133,7 +133,7 @@ const transforms: transforms = {
   simpleImage: ({ data, id }) => {
     let url = data.url
     let caption = data.caption ? data.caption : 'Image'
-    return `<img loading="eager" src="${url}" alt="${caption}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
+    return `<img loading="eager" src="${url}" alt="${caption}" style="display: block; margin: 0 auto; width: 100%; max-width: 750px; height: auto;" />
   <p class="image-caption">${caption}</p>`
   },
 
