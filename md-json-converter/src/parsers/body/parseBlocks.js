@@ -45,6 +45,5 @@ export default function parseBlocks(blocks) {
         blocks: blocks.map(block => BlockFactory.createBlock(block)),
         version: "2.28.2"
     };
-
     return data;
 }

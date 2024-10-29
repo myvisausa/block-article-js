@@ -49,18 +49,17 @@ export default function Renderer({
   const [bodyHtml, setBodyHtml] = useState('');
   const [isBodyLoaded, setIsBodyLoaded] = useState(false);
 
-  // Asynchronously parse body content
+  // Asynchronously parse body content using tocData instead of parsing again
   useEffect(() => {
     const parseBodyContent = async () => {
-      const parsedBody = parseBody(data); // Assuming parseBody returns body blocks
-      const body_html = myParser.parse(parsedBody).join('');
+      const body_html = myParser.parse(tocData).join('');
       setBodyHtml(body_html);
       setIsBodyLoaded(true);
       onArticleLoaded();
     };
 
     parseBodyContent();
-  }, [data, onArticleLoaded]);
+  }, [tocData, onArticleLoaded]); // Updated dependency array to include tocData
 
   // Determine if the locale is Arabic to apply the RTL class
   const rtlClass = locale === 'ar' ? styles.rtl : '';
