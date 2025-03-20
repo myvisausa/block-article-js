@@ -8,6 +8,25 @@ import { IconClipboard } from '@codexteam/icons'
  */
 import './index.css'
 
+interface RelatedArticleData {
+  title: string;
+  text: string;
+  href: string;
+}
+
+interface RelatedArticleConfig {
+  titlePlaceholder?: string;
+  textPlaceholder?: string;
+  hrefPlaceholder?: string;
+}
+
+interface API {
+  styles: {
+    block: string;
+    input: string;
+  };
+}
+
 /**
  * @class RelatedArticle
  * @classdesc RelatedArticle Tool for Editor.js
@@ -27,6 +46,13 @@ import './index.css'
  * @property {string} hrefPlaceholder - placeholder to show in warning`s href input
  */
 export default class RelatedArticle {
+  api: API;
+  readOnly: boolean;
+  titlePlaceholder: string;
+  textPlaceholder: string;
+  hrefPlaceholder: string;
+  data: RelatedArticleData;
+
   /**
    * Notify core that read-only mode is supported
    */
@@ -111,7 +137,7 @@ export default class RelatedArticle {
    * @param {object} api - Editor.js API
    * @param {boolean} readOnly - read-only mode flag
    */
-  constructor({ data, config, api, readOnly }) {
+  constructor({ data, config, api, readOnly }: { data: RelatedArticleData; config: RelatedArticleConfig; api: API; readOnly: boolean }) {
     this.api = api
     this.readOnly = readOnly
 
@@ -163,18 +189,18 @@ export default class RelatedArticle {
   /**
    * Extract RelatedArticle data from RelatedArticle Tool element
    *
-   * @param {HTMLDivElement} warningElement - element to save
+   * @param {HTMLDivElement} articleElement - element to save
    * @returns {RelatedArticleData}
    */
-  save(warningElement) {
-    const title = warningElement.querySelector(`.${this.CSS.title}`)
-    const text = warningElement.querySelector(`.${this.CSS.text}`)
-    const href = warningElement.querySelector(`.${this.CSS.href}`)
+  save(articleElement: HTMLElement) {
+    const title = articleElement.querySelector(`.${this.CSS.title}`)
+    const text = articleElement.querySelector(`.${this.CSS.text}`)
+    const href = articleElement.querySelector(`.${this.CSS.href}`)
 
     return Object.assign(this.data, {
-      title: title.innerHTML,
-      text: text.innerHTML,
-      href: href.innerHTML,
+      title: title?.innerHTML || '',
+      text: text?.innerHTML || '',
+      href: href?.innerHTML || '',
     })
   }
 
@@ -186,7 +212,7 @@ export default class RelatedArticle {
    * @param  {object} attributes        - any attributes
    * @returns {Element}
    */
-  _make(tagName, classNames = null, attributes = {}) {
+  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -196,7 +222,23 @@ export default class RelatedArticle {
     }
 
     for (const attrName in attributes) {
-      el[attrName] = attributes[attrName]
+      if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
+        if (attrName === 'innerHTML') {
+          el.innerHTML = attributes[attrName];
+        } else if (attrName === 'contentEditable') {
+          el.contentEditable = attributes[attrName];
+        } else {
+          try {
+            if (attrName in el) {
+              (el as any)[attrName] = attributes[attrName];
+            } else {
+              el.setAttribute(attrName, attributes[attrName]);
+            }
+          } catch (e) {
+            el.setAttribute(attrName, attributes[attrName]);
+          }
+        }
+      }
     }
 
     return el

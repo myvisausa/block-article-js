@@ -8,23 +8,46 @@ import { IconCopy } from '@codexteam/icons'
  */
 import './index.css'
 
+interface NoteData {
+  title: string;
+  message: string;
+}
+
+interface NoteConfig {
+  titlePlaceholder?: string;
+  messagePlaceholder?: string;
+}
+
+interface API {
+  styles: {
+    block: string;
+    input: string;
+  };
+}
+
 /**
- * @class Warning
- * @classdesc Warning Tool for Editor.js
- * @property {WarningData} data - Warning Tool`s input and output data
+ * @class Note
+ * @classdesc Note Tool for Editor.js
+ * @property {NoteData} data - Note Tool`s input and output data
  * @property {object} api - Editor.js API instance
  *
- * @typedef {object} WarningData
- * @description Warning Tool`s input and output data
- * @property {string} title - warning`s title
- * @property {string} message - warning`s message
+ * @typedef {object} NoteData
+ * @description Note Tool`s input and output data
+ * @property {string} title - note`s title
+ * @property {string} message - note`s message
  *
- * @typedef {object} WarningConfig
- * @description Warning Tool`s initial configuration
- * @property {string} titlePlaceholder - placeholder to show in warning`s title input
- * @property {string} messagePlaceholder - placeholder to show in warning`s message input
+ * @typedef {object} NoteConfig
+ * @description Note Tool`s initial configuration
+ * @property {string} titlePlaceholder - placeholder to show in note`s title input
+ * @property {string} messagePlaceholder - placeholder to show in note`s message input
  */
 export default class Note {
+  api: API;
+  readOnly: boolean;
+  titlePlaceholder: string;
+  messagePlaceholder: string;
+  data: NoteData;
+
   /**
    * Notify core that read-only mode is supported
    */
@@ -93,19 +116,19 @@ export default class Note {
   /**
    * Render plugin`s main Element and fill it with saved data
    *
-   * @param {WarningData} data — previously saved data
-   * @param {WarningConfig} config — user config for Tool
+   * @param {NoteData} data — previously saved data
+   * @param {NoteConfig} config — user config for Tool
    * @param {object} api - Editor.js API
    * @param {boolean} readOnly - read-only mode flag
    */
-  constructor({ data, config, api, readOnly }) {
+  constructor({ data, config, api, readOnly }: { data: NoteData; config: NoteConfig; api: API; readOnly: boolean }) {
     this.api = api
     this.readOnly = readOnly
 
     this.titlePlaceholder =
-      config.titlePlaceholder || Warning.DEFAULT_TITLE_PLACEHOLDER
+      config.titlePlaceholder || Note.DEFAULT_TITLE_PLACEHOLDER
     this.messagePlaceholder =
-      config.messagePlaceholder || Warning.DEFAULT_MESSAGE_PLACEHOLDER
+      config.messagePlaceholder || Note.DEFAULT_MESSAGE_PLACEHOLDER
 
     this.data = {
       title: data.title || '',
@@ -141,16 +164,16 @@ export default class Note {
   /**
    * Extract Warning data from Warning Tool element
    *
-   * @param {HTMLDivElement} warningElement - element to save
-   * @returns {WarningData}
+   * @param {HTMLDivElement} noteElement - element to save
+   * @returns {NoteData}
    */
-  save(warningElement) {
-    const title = warningElement.querySelector(`.${this.CSS.title}`)
-    const message = warningElement.querySelector(`.${this.CSS.message}`)
+  save(noteElement: HTMLElement) {
+    const title = noteElement.querySelector(`.${this.CSS.title}`)
+    const message = noteElement.querySelector(`.${this.CSS.message}`)
 
     return Object.assign(this.data, {
-      title: title.innerHTML,
-      message: message.innerHTML,
+      title: title?.innerHTML || '',
+      message: message?.innerHTML || '',
     })
   }
 
@@ -162,7 +185,7 @@ export default class Note {
    * @param  {object} attributes        - any attributes
    * @returns {Element}
    */
-  _make(tagName, classNames = null, attributes = {}) {
+  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -172,7 +195,23 @@ export default class Note {
     }
 
     for (const attrName in attributes) {
-      el[attrName] = attributes[attrName]
+      if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
+        if (attrName === 'innerHTML') {
+          el.innerHTML = attributes[attrName];
+        } else if (attrName === 'contentEditable') {
+          el.contentEditable = attributes[attrName];
+        } else {
+          try {
+            if (attrName in el) {
+              (el as any)[attrName] = attributes[attrName];
+            } else {
+              el.setAttribute(attrName, attributes[attrName]);
+            }
+          } catch (e) {
+            el.setAttribute(attrName, attributes[attrName]);
+          }
+        }
+      }
     }
 
     return el

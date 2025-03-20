@@ -8,7 +8,28 @@ import { IconListNumbered } from '@codexteam/icons'
  */
 import './index.css'
 
+interface StepsData {
+  title: string;
+  items: string[];
+}
+
+interface StepsConfig {
+  titlePlaceholder?: string;
+}
+
+interface API {
+  styles: {
+    block: string;
+    input: string;
+  };
+}
+
 export default class Steps {
+  api: API;
+  readOnly: boolean;
+  titlePlaceholder: string;
+  data: StepsData;
+
   static get isReadOnlySupported() {
     return true
   }
@@ -39,7 +60,7 @@ export default class Steps {
     }
   }
 
-  constructor({ data, config, api, readOnly }) {
+  constructor({ data, config, api, readOnly }: { data: StepsData; config: StepsConfig; api: API; readOnly: boolean }) {
     this.api = api
     this.readOnly = readOnly
 
@@ -79,7 +100,7 @@ export default class Steps {
     return container
   }
 
-  createItemElement(itemText) {
+  createItemElement(itemText: string) {
     const item = this._make('div', ['cdx-checklist__item'])
 
     const input = this._make(
@@ -106,18 +127,18 @@ export default class Steps {
     return item
   }
 
-  save(container) {
+  save(container: HTMLElement) {
     const title = container.querySelector(`.${this.CSS.title}`)
     const items = [...container.querySelectorAll(`.${this.CSS.item}`)]
       .map((item) => item.textContent)
-      .filter((item) => !item.endsWith('Remove')) // Not sure why it is like  "['Item 1Remove', 'Item 1', 'Item 2Remove', 'Item 2']""
+      .filter((item) => item && !item.endsWith('Remove')) // Not sure why it is like  "['Item 1Remove', 'Item 1', 'Item 2Remove', 'Item 2']""
     return {
-      title: title.innerHTML,
+      title: title?.innerHTML || '',
       items,
     }
   }
 
-  _make(tagName, classNames = null, attributes = {}) {
+  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -127,7 +148,23 @@ export default class Steps {
     }
 
     for (const attrName in attributes) {
-      el[attrName] = attributes[attrName]
+      if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
+        if (attrName === 'innerHTML') {
+          el.innerHTML = attributes[attrName];
+        } else if (attrName === 'contentEditable') {
+          el.contentEditable = attributes[attrName];
+        } else {
+          try {
+            if (attrName in el) {
+              (el as any)[attrName] = attributes[attrName];
+            } else {
+              el.setAttribute(attrName, attributes[attrName]);
+            }
+          } catch (e) {
+            el.setAttribute(attrName, attributes[attrName]);
+          }
+        }
+      }
     }
 
     return el

@@ -1,45 +1,22 @@
 import {
   BlockType,
-  SimpleImageBlock,
-  HeaderBlock,
-  ImageBlock,
-  ParagraphBlock,
-  ListBlock,
-  CodeBlock,
-  WarningBlock,
-  TableBlock,
-  ArticleBlock,
-  NoteBlock,
-  ChecklistBlock,
-  StepsBlock,
+  AnyBlock,
 } from '../../../../types/Block'
 
 const blocksToMarkdown = (
-  blocks:
-    | SimpleImageBlock[]
-    | HeaderBlock[]
-    | ImageBlock[]
-    | ParagraphBlock[]
-    | ListBlock[]
-    | CodeBlock[]
-    | WarningBlock[]
-    | TableBlock[]
-    | ArticleBlock[]
-    | NoteBlock[]
-    | ChecklistBlock[]
-    | StepsBlock[],
+  blocks: AnyBlock[]
 ) => {
   let mdContent = ''
 
   for (const block of blocks) {
     if (block.type === BlockType.SimpleImage) {
-      mdContent += `![${block.caption}](${block.url})\n<${block.caption}\n\n`
+      mdContent += `![${block.data.caption}](${block.data.url})\n<${block.data.caption}\n\n`
     } else if (block.type === BlockType.Header) {
-      mdContent += `${'#'.repeat(block.level)} ${block.text}\n\n`
+      mdContent += `${'#'.repeat(block.data.level)} ${block.data.text}\n\n`
     } else if (block.type === BlockType.Image) {
-      mdContent += `![${block.caption}](${block.url})\n<${block.caption}\n\n`
+      mdContent += `![${block.data.caption}](${block.data.url})\n<${block.data.caption}\n\n`
     } else if (block.type === BlockType.Paragraph) {
-      let text = block.text
+      let text = block.data.text
 
       // Convert <a> tags to markdown links
       text = text.replace(/<a href="([^"]+)">([^<]+)<\/a>/g, '[$2]($1)')
@@ -50,7 +27,7 @@ const blocksToMarkdown = (
 
       mdContent += `${text}\n\n`
     } else if (block.type === BlockType.List) {
-      for (const item of block.items) {
+      for (const item of block.data.items) {
         if (item.match(/^\d\.\s/)) {
           // Check for ordered list
           mdContent += `${item}\n`
@@ -60,20 +37,20 @@ const blocksToMarkdown = (
       }
       mdContent += '\n'
     } else if (block.type === BlockType.Code) {
-      mdContent += '```\n' + block.code + '\n```\n\n'
+      mdContent += '```\n' + block.data.code + '\n```\n\n'
     } else if (block.type === BlockType.Warning) {
-      mdContent += `|WARNING title=${block.title} message=${block.message} WARNING|\n\n`
+      mdContent += `|WARNING title=${block.data.title} message=${block.data.message} WARNING|\n\n`
     } else if (block.type === BlockType.Table) {
-      const content = JSON.stringify(block.content)
-      mdContent += `|TABLE withHeadings=${block.withHeadings} content=${content} TABLE|\n\n`
+      const content = JSON.stringify(block.data.content)
+      mdContent += `|TABLE withHeadings=${block.data.withHeadings} content=${content} TABLE|\n\n`
     } else if (block.type === BlockType.Article) {
-      mdContent += `|ARTICLE title=${block.title} text=${block.text} href=${block.href} ARTICLE|\n\n`
+      mdContent += `|ARTICLE title=${block.data.title} text=${block.data.text} href=${block.data.href} ARTICLE|\n\n`
     } else if (block.type === BlockType.Note) {
-      mdContent += `|NOTE title=${block.title} message=${block.message} NOTE|\n\n`
+      mdContent += `|NOTE title=${block.data.title} message=${block.data.message} NOTE|\n\n`
     } else if (block.type === BlockType.Checklist) {
-      mdContent += `|CHECKLIST title=${block.title} items=${block.items} CHECKLIST|\n\n`
+      mdContent += `|CHECKLIST title=${block.data.title} items=${block.data.items} CHECKLIST|\n\n`
     } else if (block.type === BlockType.Steps) {
-      mdContent += `|STEPS title=${block.title} items=${block.items} STEPS|\n\n`
+      mdContent += `|STEPS title=${block.data.title} items=${block.data.items} STEPS|\n\n`
     }
   }
 

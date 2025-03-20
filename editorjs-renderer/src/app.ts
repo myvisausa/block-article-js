@@ -1,13 +1,10 @@
-import { v4 as uuidv4 } from 'uuid'
-import { OutputData } from '@editorjs/editorjs'
+import { OutputData, OutputBlockData } from '@editorjs/editorjs'
 import transforms from './transforms'
-import { ParseFunctionError } from './errors'
-import { AnyBlock } from '../../types/Block'
 
 type IParser = {
   parse(OutputData: OutputData): Array<string>
-  parseStrict(OutputData: OutputData): Array<string> | Error
-  parseBlock(block: AnyBlock): string
+  parseStrict(OutputData: OutputData): Array<string>
+  parseBlock(block: OutputBlockData): string 
   validate(OutputData: OutputData): Array<string>
 }
 
@@ -16,17 +13,15 @@ const parser = (plugins = {}): IParser => {
 
   return {
     parse: ({ blocks }) => {
-      return blocks.map((block) => {
-        return parsers[block.type]
-          ? parsers[block.type]({ data: block, id: uuidv4() })
-          : ParseFunctionError(block.type)
-      })
+      return blocks
+        .filter((block: OutputBlockData) => parsers[block.type])
+        .map((block: OutputBlockData) => parsers[block.type](block))
     },
 
-    parseBlock: (block: AnyBlock) => {
+    parseBlock: (block: OutputBlockData) => {
       return parsers[block.type]
-        ? parsers[block.type]({ data: block, id: uuidv4() })
-        : ParseFunctionError(block.type)
+        ? parsers[block.type](block)
+        : ''
     },
 
     parseStrict: ({ blocks }) => {
@@ -41,7 +36,7 @@ const parser = (plugins = {}): IParser => {
       const parsed = []
 
       for (let i = 0; i < blocks.length; i++) {
-        if (!parsers[blocks[i].type]) throw ParseFunctionError(blocks[i].type)
+        if (!parsers[blocks[i].type]) continue;
 
         parsed.push(parsers[blocks[i].type](blocks[i]))
       }
@@ -51,7 +46,7 @@ const parser = (plugins = {}): IParser => {
 
     validate: ({ blocks }) => {
       const types = blocks
-        .map((item: AnyBlock) => item.type)
+        .map((item: OutputBlockData) => item.type)
         .filter(
           (item: string, index: number, blocksArr: Array<string>) =>
             blocksArr.indexOf(item) === index,
