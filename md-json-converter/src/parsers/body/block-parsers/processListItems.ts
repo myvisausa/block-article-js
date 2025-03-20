@@ -1,4 +1,4 @@
-const processListItems = (listItems) => {
+const processListItems = (listItems: string[]) => {
   if (listItems.length) {
     return {
       type: 'list',

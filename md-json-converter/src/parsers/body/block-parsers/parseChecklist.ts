@@ -1,4 +1,4 @@
-const parseChecklist = (line) => {
+const parseChecklist = (line: string) => {
   const checklistMatch = line.match(
     /\|CHECKLIST title=(.+)\s+items=(.+)\s+CHECKLIST\|/,
   )

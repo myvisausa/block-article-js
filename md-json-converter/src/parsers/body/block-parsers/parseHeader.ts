@@ -1,4 +1,4 @@
-const parseHeader = (line) => {
+const parseHeader = (line: string) => {
   const headerMatch = line.match(/^(#{1,6})\s(.+)$/)
   if (headerMatch) {
     return {

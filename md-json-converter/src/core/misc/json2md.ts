@@ -1,4 +1,4 @@
-export default function json2md(data) {
+export default function json2md(data: any) {
   let markdown = ''
 
   for (const section of data.content) {

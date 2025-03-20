@@ -1,4 +1,4 @@
-const parseTable = (line) => {
+const parseTable = (line: string) => {
   const tableMatch = line.match(
     /\|TABLE withHeadings=(true|false) content=(\[\[.+?\]\]) TABLE\|/,
   )

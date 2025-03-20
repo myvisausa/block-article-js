@@ -1,6 +1,6 @@
-import convertMdtoHtml from '../utils/convertMdToHtml.js'
+import convertMdtoHtml from '../utils/convertMdToHtml'
 
-function containsInvalidTag(str) {
+function containsInvalidTag(str: string) {
   // This regex looks for a string that starts with < and is followed by any character
   // other than a space or > (which could indicate a valid tag), and is not closed by >
   // This is used to detect the markdown caption character '<', and only render the caption specifcally with the image
@@ -9,7 +9,7 @@ function containsInvalidTag(str) {
   return invalidTagRegex.test(str)
 }
 
-const parseParagraph = (line) => {
+const parseParagraph = (line: string) => {
   if (containsInvalidTag(line)) {
     return null
   }

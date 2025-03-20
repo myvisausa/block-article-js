@@ -1,4 +1,4 @@
-const parseNote = (line) => {
+const parseNote = (line: string) => {
   const noteMatch = line.match(/\|NOTE title=(.+)\s+message=(.+)\s+NOTE\|/)
   if (noteMatch) {
     return {

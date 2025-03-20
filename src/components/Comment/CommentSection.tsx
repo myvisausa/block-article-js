@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './CommentSection.module.css'
-import EditNoteIcon from '@mui/icons-material/EditNote'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Modal, Button, Form } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import Link from 'next/link'
+import EditNoteIcon from '@mui/icons-material/EditNote'
+import Form from 'react-bootstrap/Form'
 
-const CommentSection = ({ articleId, otherText }) => {
-  const [comments, setComments] = useState([])
+const CommentSection = ({ articleId, otherText }: { articleId: string, otherText: any }) => {
+  const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
-  const [editIndex, setEditIndex] = useState(null)
+  const [editIndex, setEditIndex] = useState<number | null>(null)
   const [editText, setEditText] = useState('')
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const storedComments =
-      JSON.parse(localStorage.getItem(`comments-${articleId}`)) || []
+      JSON.parse(localStorage.getItem(`comments-${articleId}`) || '[]')
     setComments(storedComments)
   }, [articleId])
 
@@ -32,17 +33,19 @@ const CommentSection = ({ articleId, otherText }) => {
   }
 
   const handleEditComment = () => {
-    const updatedComments = [...comments]
-    updatedComments[editIndex].text = editText
-    setComments(updatedComments)
-    localStorage.setItem(
+    if (editIndex !== null) {
+      const updatedComments = [...comments]
+      updatedComments[editIndex].text = editText
+      setComments(updatedComments)
+      localStorage.setItem(
       `comments-${articleId}`,
-      JSON.stringify(updatedComments),
-    )
-    handleCloseModal()
+        JSON.stringify(updatedComments),
+      )
+      handleCloseModal()
+    }
   }
 
-  const handleDeleteComment = (index) => {
+  const handleDeleteComment = (index: number) => {
     const updatedComments = comments.filter((_, i) => i !== index)
     setComments(updatedComments)
     localStorage.setItem(
@@ -51,7 +54,7 @@ const CommentSection = ({ articleId, otherText }) => {
     )
   }
 
-  const openEditModal = (index, text) => {
+  const openEditModal = (index: number, text: string) => {
     setEditIndex(index)
     setEditText(text)
     setShowModal(true)

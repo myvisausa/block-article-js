@@ -1,5 +1,5 @@
-const convertFromJSON = (jsonData) => {
-  const blocks = []
+const convertFromJSON = (jsonData: any) => {
+  const blocks: any[] = []
 
   for (const block of jsonData.blocks) {
     if (block.type === 'header') {

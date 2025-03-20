@@ -1,4 +1,4 @@
-const parseWarning = (line) => {
+const parseWarning = (line: string) => {
   const warningMatch = line.match(
     /\|WARNING title=(.+)\s+message=(.+)\s+WARNING\|/,
   )

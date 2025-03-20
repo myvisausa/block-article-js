@@ -1,6 +1,6 @@
-const parseCodeBlock = (lines, currentIndex) => {
+const parseCodeBlock = (lines: string[], currentIndex: number) => {
   if (lines[currentIndex].trim() === '```') {
-    let codeLines = []
+    let codeLines: string[] = []
     currentIndex++ // Move to next line
     while (
       currentIndex < lines.length &&

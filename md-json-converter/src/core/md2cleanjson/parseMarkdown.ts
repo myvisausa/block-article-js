@@ -1,7 +1,7 @@
-import parseNotFaq from '../../parsers/body/parseLine.js'
-import parseQuestion from './parseQuestion.js'
+import parseNotFaq from '../../parsers/body/parseLine'
+import parseQuestion from './parseQuestion'
 
-function extractQuestionsAndAnswers(str) {
+function extractQuestionsAndAnswers(str: string) {
   const startTag = '<question>'
   const endTag = '</answer>'
 
@@ -24,7 +24,7 @@ function extractQuestionsAndAnswers(str) {
   }
 }
 
-function extractQAList(str) {
+function extractQAList(str: string) {
   const questionPattern = /<question>([\s\S]*?)<\/question>/g
   const answerPattern = /<answer>([\s\S]*?)<\/answer>/g
 
@@ -46,7 +46,7 @@ function extractQAList(str) {
   }))
 }
 
-const parseMarkdown = (mdContent) => {
+const parseMarkdown = (mdContent: string) => {
   const { before, after, questionsAndAnswers } =
     extractQuestionsAndAnswers(mdContent)
 

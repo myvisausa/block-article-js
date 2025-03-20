@@ -1,4 +1,4 @@
-const parseImage = (line) => {
+const parseImage = (line: string) => {
   const imageMatch = line.match(/!\[([^\]]+)\]\(([^)]+)\)/)
   if (imageMatch) {
     return {

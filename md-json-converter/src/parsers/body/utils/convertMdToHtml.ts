@@ -1,4 +1,4 @@
-const convertMdtoHtml = (line) => {
+const convertMdtoHtml = (line: string): string => {
   // Replace bold markdown with HTML <b> tags
   line = line.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
   line = line.replace(/__(.*?)__/g, '<b>$1</b>')
@@ -6,7 +6,7 @@ const convertMdtoHtml = (line) => {
   // Replace italic markdown with HTML <i> tags
   // Updated regex pattern for italics, accounting for edge cases and ignoring underscores in words/identifiers
   const italicRegex = /(?<!\w)(?<!\\)_([^\s_](?:.*?[^\s_])?)(?<!\\)_(?!\w)/g
-  line = line.replace(italicRegex, function (match, content) {
+  line = line.replace(italicRegex, function (match: string, content: string) {
     // The "content" captured group contains the text to be italicized
     return `<i>${content}</i>`
   })

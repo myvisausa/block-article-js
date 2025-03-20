@@ -1,4 +1,4 @@
-const parseQuestion = (mdContent) => {
+const parseQuestion = (mdContent: string) => {
   const blocks = []
   blocks.push({
     type: 'header',

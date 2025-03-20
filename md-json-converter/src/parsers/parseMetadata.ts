@@ -2,8 +2,8 @@ const generateBlockId = () => {
   return Math.random().toString(36).substr(2, 10)
 }
 
-export default function parseMetadata(metadata) {
-  let blocks = []
+export default function parseMetadata(metadata: any) {
+  let blocks: any[] = []
   const titleBlock = {
     id: generateBlockId(),
     type: 'header',

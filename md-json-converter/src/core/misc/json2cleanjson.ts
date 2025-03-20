@@ -1,8 +1,8 @@
-import json2md from './json2md.js'
-import md2cleanjson from './md2cleanjson.js'
-import parseMetadata from '../../parsers/parseMetadata.js'
+import json2md from './json2md'
+import md2cleanjson from './md2cleanjson'
+import parseMetadata from '../../parsers/parseMetadata'
 
-function json2cleanjson(data) {
+function json2cleanjson(data: any) {
   const titleBlocks = {
     time: Date.now(),
     blocks: parseMetadata(data.metadata),
@@ -15,7 +15,7 @@ function json2cleanjson(data) {
 
 export default json2cleanjson
 
-export function parseTitle(data) {
+export function parseTitle(data: any) {
   const titleBlocks = {
     time: Date.now(),
     blocks: parseMetadata(data.metadata),
@@ -24,7 +24,7 @@ export function parseTitle(data) {
   return titleBlocks
 }
 
-export function parseBody(data) {
+export function parseBody(data: any) {
   const markdown = json2md(data)
   const bodyBlocks = JSON.parse(md2cleanjson(markdown))
   return bodyBlocks

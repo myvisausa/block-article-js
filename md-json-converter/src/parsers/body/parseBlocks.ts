@@ -1,9 +1,9 @@
-// BlockIdGenerator.js
-export const generateBlockId = () => Math.random().toString(36).substr(2, 10)
+// BlockIdGenerator.ts
+export const generateBlockId = () => Math.random().toString(36).substring(2, 12)
 
 // BlockFactory.js
 class BlockFactory {
-  static createBlock(block) {
+  static createBlock(block: any) {
     const baseBlock = {
       id: generateBlockId(),
       type: block.type,
@@ -66,10 +66,10 @@ class BlockFactory {
   }
 }
 
-export default function parseBlocks(blocks) {
+export default function parseBlocks(blocks: any[]) {
   const data = {
     time: Date.now(),
-    blocks: blocks.map((block) => BlockFactory.createBlock(block)),
+    blocks: blocks.map((block: any) => BlockFactory.createBlock(block)),
     version: '2.28.2',
   }
   return data

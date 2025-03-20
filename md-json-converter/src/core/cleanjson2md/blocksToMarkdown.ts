@@ -1,4 +1,10 @@
-const blocksToMarkdown = (blocks) => {
+import { Block, SimpleImageBlock, ImageBlock, ParagraphBlock, ListBlock, CodeBlock, WarningBlock, TableBlock, ArticleBlock, NoteBlock, ChecklistBlock, StepsBlock } from '../../types/Block'
+
+interface BlocksToMarkdownInput {
+  blocks: Block[] | SimpleImageBlock[] | ImageBlock[] | ParagraphBlock[] | ListBlock[] | CodeBlock[] | WarningBlock[] | TableBlock[] | ArticleBlock[] | NoteBlock[] | ChecklistBlock[] | StepsBlock[]
+}
+
+const blocksToMarkdown = (blocks: BlocksToMarkdownInput) => {
   let mdContent = ''
 
   for (const block of blocks) {

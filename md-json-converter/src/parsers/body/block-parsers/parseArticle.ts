@@ -1,4 +1,4 @@
-const parseArticle = (line) => {
+const parseArticle = (line: string) => {
   const articleMatch = line.match(
     /\|ARTICLE title=(.+)\s+text=(.+)\s+href=(.+)\s+ARTICLE\|/,
   )
