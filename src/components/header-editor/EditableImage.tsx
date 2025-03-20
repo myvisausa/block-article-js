@@ -5,6 +5,16 @@ import Box from '@mui/material/Box'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 
+interface EditableImageProps {
+  url: string;
+  uploadEndPoint: string;
+  onImageChange: (url: string) => void;
+  caption: string;
+  setCaption: (caption: string) => void;
+  altDescription: string;
+  setAltDescription: (altDescription: string) => void;
+}
+
 const EditableImage = ({
   url,
   uploadEndPoint,
@@ -13,10 +23,10 @@ const EditableImage = ({
   setCaption,
   altDescription,
   setAltDescription,
-}) => {
-  const fileInputRef = useRef(null)
+}: EditableImageProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (file: File) => {
     const formData = new FormData()
     formData.append('image', file)
     try {
@@ -35,14 +45,14 @@ const EditableImage = ({
     }
   }
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
     if (file) {
       uploadImage(file)
     }
   }
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     const file = e.dataTransfer.files[0]
     if (file) {
@@ -51,7 +61,9 @@ const EditableImage = ({
   }
 
   const handleClick = () => {
-    fileInputRef.current.click()
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
   }
 
   return (
@@ -59,6 +71,7 @@ const EditableImage = ({
       {url ? (
         <Box display='flex' justifyContent='center'>
           <ButtonBase
+            component='span'
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
@@ -87,6 +100,7 @@ const EditableImage = ({
       ) : (
         <Box>
           <ButtonBase
+            component='span'
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}

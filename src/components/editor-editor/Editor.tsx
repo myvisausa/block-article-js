@@ -12,12 +12,19 @@ import {
   md2json,
 } from '../../../md-json-converter/src/index'
 
+interface EditorEditorProps {
+  data: any;
+  setData: (data: any) => void;
+  uploadEndPoint: string;
+  textDirection?: 'ltr' | 'rtl';
+}
+
 export default function EditorEditor({
   data,
   setData,
   uploadEndPoint,
   textDirection = 'ltr',
-}) {
+}: EditorEditorProps) {
   const [title, setTitle] = useState(data.metadata.title)
   const [imageUrl, setImageUrl] = useState(data.metadata.ogImage)
   const [caption, setCaption] = useState(data.metadata.ogImageCaption)
@@ -25,23 +32,23 @@ export default function EditorEditor({
 
   let initialData = json2cleanjson(data).bodyBlocks
 
-  const editorCore = useRef(null)
+  const editorCore = useRef<any>(null)
 
   const ReactEditorJS = createReactEditorJS()
 
-  const handleInitialize = useCallback((instance) => {
+  const handleInitialize = useCallback((instance: any) => {
     // await instance._editorJS.isReady;
     instance._editorJS.isReady
       .then(() => {
         // set reference to editor
         editorCore.current = instance
       })
-      .catch((err) => console.log('An error occured', err))
+      .catch((err: any) => console.log('An error occured', err))
   }, [])
 
   const handleSave = useCallback(async () => {
     // retrieve data inserted
-    const savedData = await editorCore.current.save()
+    const savedData = await editorCore.current?.save()
     const markdown = cleanjson2md(savedData)
     const content = md2json(markdown)
     const newData = {

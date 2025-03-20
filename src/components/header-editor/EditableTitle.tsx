@@ -1,10 +1,17 @@
 import React, { useRef, useEffect } from 'react'
 
-const EditableTitle = ({ title, setTitle }) => {
-  const titleRef = useRef(null)
+interface EditableTitleProps {
+  title: string;
+  setTitle: (title: string) => void;
+}
+
+const EditableTitle = ({ title, setTitle }: EditableTitleProps) => {
+  const titleRef = useRef<HTMLHeadingElement>(null)
 
   const handleBlur = () => {
-    setTitle(titleRef.current.innerText)
+    if (titleRef.current) {
+      setTitle(titleRef.current.innerText)
+    }
   }
 
   useEffect(() => {
@@ -14,8 +21,10 @@ const EditableTitle = ({ title, setTitle }) => {
       const sel = window.getSelection()
       range.setStart(el.childNodes[0], title.length)
       range.collapse(true)
-      sel.removeAllRanges()
-      sel.addRange(range)
+      if (sel) {
+        sel.removeAllRanges()
+        sel.addRange(range)
+      }
     }
   }, [title])
 
@@ -32,7 +41,9 @@ const EditableTitle = ({ title, setTitle }) => {
         padding: '4px',
       }}
       onFocus={() => {
-        titleRef.current.style.border = '1px dashed #ccc'
+        if (titleRef.current) {
+          titleRef.current.style.border = '1px dashed #ccc'
+        }
       }}
     >
       {title}

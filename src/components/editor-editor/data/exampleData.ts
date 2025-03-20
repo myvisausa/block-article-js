@@ -1,6 +1,6 @@
 // This is the "Clean JSON" schema from editor.js
 
-const exampleData = {
+export const exampleData = {
   time: 1698383181082,
   blocks: [
     {

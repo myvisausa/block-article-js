@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import parse from 'html-react-parser'
 import TableOfContents from './components/toc-renderer/TableOfContents'
-import parser from '../editorjs-renderer/src/app.ts'
+import parser from '../editorjs-renderer/src/app'
 import styles from './styles.module.css'
 import {
   parseTitle,
@@ -14,13 +14,25 @@ import CommentSection from './components/Comment/CommentSection'
 
 const myParser = parser()
 
+interface RendererProps {
+  otherText: {
+    articleNotFound: string;
+    socialShare: string;
+    toc: string;
+  };
+  data: any;
+  scrollOffset?: number;
+  onArticleLoaded?: () => void;
+  locale?: string;
+}
+
 export default function Renderer({
   otherText,
   data,
   scrollOffset = 15,
   onArticleLoaded = () => {},
   locale = 'en',
-}) {
+}: RendererProps) {
   if (!data) {
     return <div className={styles.textCenter}>{otherText.articleNotFound}</div>
   }
@@ -119,7 +131,7 @@ export default function Renderer({
           )}
 
           {/* Social Sharing */}
-          <SocialComp text={otherText.socialShare} />
+          <SocialComp text={otherText.socialShare} className={styles.share_content} />
 
           {/* Comment Section */}
           <CommentSection articleId={data.metadata.id} otherText={otherText} />
@@ -129,7 +141,7 @@ export default function Renderer({
   )
 }
 
-export function renderArticle(data) {
+export function renderArticle(data: any) {
   if (!data) {
     return '<div>Article is Empty</div>'
   }
@@ -153,7 +165,7 @@ export function renderArticle(data) {
   }
 }
 
-const SocialComp = ({ text, className }) => {
+const SocialComp = ({ text, className }: { text: string, className: string }) => {
   const [currentUrl, setCurrentUrl] = useState('')
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep'
+import { AnyBlock } from '../../../types/Block'
 
-export function blocksSplitter(data) {
+export function blocksSplitter(data: { blocks: AnyBlock[] }) {
   let blocks = data.blocks
   // Clone the original array to avoid mutating the input
   let clonedBlocks = [...blocks]
@@ -12,10 +13,10 @@ export function blocksSplitter(data) {
   }
 
   let title = cloneDeep(data)
-  title.blocks = titleBlocks
+  title.blocks = titleBlocks as AnyBlock[]
 
   let body = cloneDeep(data)
-  body.blocks = clonedBlocks
+  body.blocks = clonedBlocks as AnyBlock[]
 
   return {
     titleBlocks: title,

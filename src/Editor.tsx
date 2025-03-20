@@ -1,17 +1,27 @@
 import EditorEditor from './components/editor-editor/Editor'
 import Renderer from './Renderer'
 
+interface EditorProps {
+  onDataChange: (updatedData: any) => void;
+  data: any;
+  setData: (updatedData: any) => void;
+  uploadEndPoint: string;
+  isEditMode: boolean;
+  tocTitle?: string;
+  textDirection?: 'ltr' | 'rtl';
+  locale?: string;
+}
+
 export default function Editor({
   onDataChange,
   data,
   setData,
   uploadEndPoint,
   isEditMode,
-  tocTitle = 'In this article',
   textDirection = 'ltr',
   locale = 'en',
-}) {
-  const handleDataChange = (updatedData) => {
+}: EditorProps) {
+  const handleDataChange = (updatedData: any) => {
     setData(updatedData)
     if (onDataChange) {
       onDataChange(updatedData)
@@ -21,7 +31,7 @@ export default function Editor({
   // Define the inline styles
   const outerStyle = {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: '0.25rem',
@@ -32,6 +42,12 @@ export default function Editor({
     marginTop: '0rem',
     maxWidth: '1000px',
     width: '100%',
+  }
+
+  const otherText = {
+    articleNotFound: 'Article not found',
+    socialShare: 'Share this article',
+    toc: 'In this article',
   }
 
   return (
@@ -45,7 +61,7 @@ export default function Editor({
             textDirection={textDirection}
           />
         ) : (
-          <Renderer data={data} tocTitle={tocTitle} locale={locale} />
+          <Renderer data={data} locale={locale} otherText={otherText} />
         )}
       </div>
     </div>

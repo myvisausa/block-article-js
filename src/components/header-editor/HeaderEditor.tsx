@@ -2,6 +2,18 @@ import React from 'react'
 import EditableTitle from './EditableTitle'
 import EditableImage from './EditableImage' // import the new component
 
+interface HeaderEditorProps {
+  uploadEndPoint: string;
+  title: string;
+  setTitle: (title: string) => void;
+  imageUrl: string;
+  setImageUrl: (imageUrl: string) => void;
+  caption: string;
+  setCaption: (caption: string) => void;
+  altDescription: string;
+  setAltDescription: (altDescription: string) => void;
+}
+
 const HeaderEditor = ({
   uploadEndPoint,
   title,
@@ -12,7 +24,7 @@ const HeaderEditor = ({
   setCaption,
   altDescription,
   setAltDescription,
-}) => {
+}: HeaderEditorProps) => {
   return (
     <div
       style={{

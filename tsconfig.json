@@ -31,7 +31,7 @@
     "**/*.js",
     "**/*.jsx",
     ".next/types/**/*.ts"
-  ],
+, "src/components/editor-editor/data/exampleData.ts"  ],
   "exclude": ["node_modules", "tests"],
   "types": ["jest"]
 }

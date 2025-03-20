@@ -1,4 +1,4 @@
-import edjsHTML from '../src/app.ts'
+import edjsHTML from '../src/app'
 import data from './data.json' assert { type: 'json' }
 
 const edjsParser = edjsHTML()
@@ -8,10 +8,10 @@ console.log(edjsParser.validate(data))
 
 // test for custom parser
 const customParser = edjsHTML({
-  custom: function ({ data }) {
+  custom: function ({ data }: { data: any }) {
     return `<custom>success</custom>`
   },
-  paragraph: function ({ data }) {
+  paragraph: function ({ data }: { data: any }) {
     return `<p>override test</p>`
   },
 })

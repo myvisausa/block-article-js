@@ -1,8 +1,14 @@
 import React from 'react'
 import { Grid, TextField } from '@mui/material'
 
-const EditableDiv = ({ label, content, setContent }) => {
-  const handleChange = (event) => {
+interface EditableDivProps {
+  label: string;
+  content: string;
+  setContent: (content: string) => void;
+}
+
+const EditableDiv = ({ label, content, setContent }: EditableDivProps) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContent(event.target.value)
   }
 

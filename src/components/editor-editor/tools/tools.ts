@@ -20,10 +20,16 @@ import Steps from '../../../../custom-blocks/steps/src'
 
 // import NestedList from "./NestedList";
 
+// Add a type import for the type assertion
+import type { ToolConstructable } from '@editorjs/editorjs';
+
 export const createEditorTools = (uploadEndPoint?: string) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.
   // paragraph: Paragraph,
-  embed: Embed,
+  embed: {
+    class: Embed,
+    inlineToolbar: true,
+  } as unknown as ToolConstructable,
   table: {
     class: Table,
     inlineToolbar: true,
@@ -31,14 +37,14 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
       rows: 2,
       cols: 2,
     },
-  },
+  } as unknown as ToolConstructable,
   list: {
     class: List,
     inlineToolbar: true,
     config: {
       defaultStyle: 'unordered',
     },
-  },
+  } as unknown as ToolConstructable,
   warning: {
     class: Warning,
     inlineToolbar: true,
@@ -46,7 +52,7 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
       titlePlaceholder: 'Title',
       messagePlaceholder: 'Message',
     },
-  },
+  } as unknown as ToolConstructable,
   code: Code,
   // linkTool: LinkTool,  // not in editorjs-renderer transforms
   image: {
@@ -57,7 +63,7 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
           uploadEndPoint || 'http://localhost:5252/api/media/images/upload',
       },
     },
-  },
+  } as unknown as ToolConstructable,
   // raw: Raw,  // not in editorjs-renderer transforms
   header: Header,
   // quote: Quote,  // not in editorjs-renderer transforms
@@ -73,7 +79,7 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
       textPlaceholder: 'Text',
       hrefPlaceholder: 'Hyperlink',
     },
-  },
+  } as unknown as ToolConstructable,
   note: {
     class: Note,
     inlineToolbar: true,
@@ -81,19 +87,19 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
       titlePlaceholder: 'Title',
       messagePlaceholder: 'Message',
     },
-  },
+  } as unknown as ToolConstructable,
   checklist: {
     class: Checklist,
     inlineToolbar: true,
     config: {
       titlePlaceholder: 'Title',
     },
-  },
+  } as unknown as ToolConstructable,
   steps: {
     class: Steps,
     inlineToolbar: true,
     config: {
       titlePlaceholder: 'Title',
     },
-  },
+  } as unknown as ToolConstructable,
 })

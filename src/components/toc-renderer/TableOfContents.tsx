@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import styles from './tableOfContents.module.css'
 
-function extractHeaders(blocks) {
+import { HeaderBlock } from '../../../types/Block'
+
+function extractHeaders(blocks: HeaderBlock[]) {
   return blocks
     .filter(
       (block) =>
@@ -12,7 +14,7 @@ function extractHeaders(blocks) {
     .map((block) => ({ text: block.data.text, id: block.id }))
 }
 
-const handleClick = (id, scrollOffset, setSelectedHeader) => {
+const handleClick = (id: string, scrollOffset: number, setSelectedHeader: (id: string) => void) => {
   const headerElement = document.getElementById(id)
   if (headerElement) {
     const offsetPosition = headerElement.offsetTop - scrollOffset
@@ -24,9 +26,9 @@ const handleClick = (id, scrollOffset, setSelectedHeader) => {
   }
 }
 
-export default function TableOfContents({ data, title, scrollOffset }) {
+export default function TableOfContents({ data, title, scrollOffset }: { data: { blocks: HeaderBlock[] }, title: string, scrollOffset: number }) {
   const headers = extractHeaders(data.blocks)
-  const [selectedHeader, setSelectedHeader] = useState(null)
+  const [selectedHeader, setSelectedHeader] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
