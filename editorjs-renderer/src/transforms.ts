@@ -1,59 +1,45 @@
-// @ts-nocheck
+import {
+  BlockType,
+  HeaderBlock,
+  ParagraphBlock,
+  ListBlock,
+  ImageBlock,
+  SimpleImageBlock,
+  QuoteBlock,
+  CodeBlock,
+  EmbedBlock,
+  FaqBlock,
+  WarningBlock,
+  TableBlock,
+  ArticleBlock,
+  NoteBlock,
+  ChecklistBlock,
+  StepsBlock,
+} from '../../types/Block';
 
 export type transforms = {
   [key: string]: any
   delimiter(): string
-  header(block: block): string
-  paragraph(block: block): string
-  list(block: block): string
-  image(block: block): string
-  simpleImage(block: block): string
-  quote(block: block): string
-  code(block: block): string
-  embed(block: block): string
-  faq(block: block): string
-  warning(block: block): string
-}
-
-type ListItem = {
-  content: string
-  items: Array<ListItem>
+  header({data, id}: {data: HeaderBlock, id: string}): string
+  paragraph({data, id}: {data: ParagraphBlock, id: string}): string
+  list({data, id}: {data: ListBlock, id: string}): string
+  image({data, id}: {data: ImageBlock, id: string}): string
+  simpleImage({data, id}: {data: SimpleImageBlock, id: string}): string
+  quote({data, id}: {data: QuoteBlock, id: string}): string
+  code({data, id}: {data: CodeBlock, id: string}): string
+  embed({data, id}: {data: EmbedBlock, id: string}): string
+  faq({data, id}: {data: FaqBlock, id: string}): string
+  warning({data, id}: {data: WarningBlock, id: string}): string
+  table({data, id}: {data: TableBlock, id: string}): string
+  article({data, id}: {data: ArticleBlock, id: string}): string
+  note({data, id}: {data: NoteBlock, id: string}): string
+  checklist({data, id}: {data: ChecklistBlock, id: string}): string
+  steps({data, id}: {data: StepsBlock, id: string}): string
 }
 
 const alignType = ['left', 'right', 'center', 'justify']
 
-export type block = {
-  id: string
-  type: string
-  data: {
-    text?: string
-    level?: number
-    caption?: string
-    url?: string
-    file?: {
-      url?: string
-    }
-    stretched?: boolean
-    withBackground?: boolean
-    withBorder?: boolean
-    items?: Array<string> | Array<ListItem>
-    style?: string
-    code?: string
-    service?: 'vimeo' | 'youtube'
-    source?: string
-    embed?: string
-    width?: number
-    height?: number
-    alignment?: 'left' | 'right' | 'center' | 'justify'
-    align?: 'left' | 'right' | 'center' | 'justify'
-    title?: string
-    message?: string
-    content?: Array<Array<string>>
-    withHeadings?: boolean
-  }
-}
-
-function processMarkdownLinks(message) {
+function processMarkdownLinks(message: string) {
   // Regex to find markdown links, optionally ending with a caret (^) for new tab
   const markdownLinkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s\)]+)(\^)?\)/g
   return message.replace(
@@ -86,7 +72,7 @@ const transforms: transforms = {
     }
   },
 
-  paragraph: ({ data, id }) => {
+  paragraph: ({ data, id }: { data: ParagraphBlock; id: string }) => {
     const paragraphAlign = data.alignment || data.align
 
     if (
@@ -99,7 +85,7 @@ const transforms: transforms = {
     }
   },
 
-  list: ({ data, id }) => {
+  list: ({ data, id }: { data: ListBlock; id: string }) => {
     const listStyle = data.style === 'unordered' ? 'ul' : 'ol'
 
     const recursor = (items: any, listStyle: string) => {
@@ -117,7 +103,7 @@ const transforms: transforms = {
     return recursor(data.items, listStyle)
   },
 
-  image: ({ data, id }) => {
+  image: ({ data, id }: { data: ImageBlock; id: string }) => {
     let alt = data.caption ? data.caption : 'Image'
     if (data.caption === '') {
       return `<img loading="eager" src="${
@@ -130,22 +116,22 @@ const transforms: transforms = {
     <p class="image-caption">${data.caption}</p>`
   },
 
-  simpleImage: ({ data, id }) => {
+  simpleImage: ({ data, id }: { data: SimpleImageBlock; id: string }) => {
     let url = data.url
     let caption = data.caption ? data.caption : 'Image'
     return `<img loading="eager" src="${url}" alt="${caption}" style="display: block; margin: 0 auto; width: 100%; max-width: 750px; height: auto;" />
   <p class="image-caption">${caption}</p>`
   },
 
-  quote: ({ data, id }) => {
+  quote: ({ data, id }: { data: QuoteBlock; id: string }) => {
     return `<blockquote>${data.text}</blockquote> - ${data.caption}`
   },
 
-  code: ({ data, id }) => {
+  code: ({ data, id }: { data: CodeBlock; id: string }) => {
     return `<pre><code>${data.code}</code></pre>`
   },
 
-  warning: ({ data, id }) => {
+  warning: ({ data, id }: { data: WarningBlock; id: string }) => {
     const processedMessage = processMarkdownLinks(data.message)
     return `<div style="background-color: #F0F2F6; border-left: 4px solid red; padding: 10px 10px; margin: 10px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
@@ -156,7 +142,7 @@ const transforms: transforms = {
             </div>`
   },
 
-  table: ({ data, id }) => {
+  table: ({ data, id }: { data: TableBlock; id: string }) => {
     let tableHtml = `<div style="overflow-x:auto; padding-top: 10px; padding-bottom: 15px"><table style="width:100%; border-collapse: collapse; border-top: 1px solid #e5e5e5;">`
 
     // Check if the table should have headings
@@ -206,7 +192,7 @@ const transforms: transforms = {
     return tableHtml
   },
 
-  article: ({ data, id }) => {
+  article: ({ data, id }: { data: ArticleBlock; id: string }) => {
     return `<div style="background-color: #fcfcfc; padding-left: 10px; padding-bottom: 10px; margin-bottom: 10px; position: relative;">
               <div style="height: 7px; background-color: black; width: 75px; margin-bottom: 13px;"></div>
               <div style="display: flex; align-items: center;">
@@ -216,7 +202,7 @@ const transforms: transforms = {
             </div>`
   },
 
-  note: ({ data, id }) => {
+  note: ({ data, id }: { data: NoteBlock; id: string }) => {
     const processedMessage = processMarkdownLinks(data.message)
     return `<div style="background-color: #fcfcfc; padding: 10px 10px; margin: 20px 0;">
               <div style="display: flex; align-items: center; padding-bottom: 5px">
@@ -227,7 +213,7 @@ const transforms: transforms = {
             </div>`
   },
 
-  checklist: ({ data, id }) => {
+  checklist: ({ data, id }: { data: ChecklistBlock; id: string }) => {
     const itemsList = data.items
       .map(
         (item) =>
@@ -242,7 +228,7 @@ const transforms: transforms = {
             </div>`
   },
 
-  steps: ({ data, id }) => {
+  steps: ({ data, id }: { data: StepsBlock; id: string }) => {
     const numbersList = data.items
       .map(
         (_, index) => `
@@ -277,7 +263,7 @@ const transforms: transforms = {
             </div>`
   },
 
-  embed: ({ data, id }) => {
+  embed: ({ data, id }: { data: EmbedBlock; id: string }) => {
     switch (data.service) {
       case 'vimeo':
         return `<iframe src="${data.embed}" height="${data.height}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`
@@ -288,7 +274,7 @@ const transforms: transforms = {
     }
   },
 
-  faq: ({ data, id }) => {
+  faq: ({ data, id }: { data: FaqBlock; id: string } ) => {
     // We will render FAQ blocks as accordions elsewhere
     return ''
   },

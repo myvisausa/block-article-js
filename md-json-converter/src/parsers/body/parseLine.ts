@@ -1,20 +1,63 @@
-import parseListItem from './block-parsers/parseListItem.js'
-import parseWarning from './block-parsers/parseWarning.js'
-import parseImage from './block-parsers/parseImage.js'
-import parseHeader from './block-parsers/parseHeader.js'
-import parseParagraph from './block-parsers/parseParagraph.js'
-import parseCodeBlock from './block-parsers/parseCode.js'
-import parseTable from './block-parsers/parseTable.js'
-import parseArticle from './block-parsers/parseArticle.js'
-import parseNote from './block-parsers/parseNote.js'
-import parseChecklist from './block-parsers/parseChecklist.js'
-import parseSteps from './block-parsers/parseSteps.js'
+import parseListItem from './block-parsers/parseListItem'
+import parseWarning from './block-parsers/parseWarning'
+import parseImage from './block-parsers/parseImage'
+import parseHeader from './block-parsers/parseHeader'
+import parseParagraph from './block-parsers/parseParagraph'
+import parseCodeBlock from './block-parsers/parseCode'
+import parseTable from './block-parsers/parseTable'
+import parseArticle from './block-parsers/parseArticle'
+import parseNote from './block-parsers/parseNote'
+import parseChecklist from './block-parsers/parseChecklist'
+import parseSteps from './block-parsers/parseSteps'
 
-import convertMdtoHtml from './utils/convertMdToHtml.js'
-import processListItems from './block-parsers/processListItems.js'
+import convertMdtoHtml from './utils/convertMdToHtml'
+import processListItems from './block-parsers/processListItems'
+import {
+  SimpleImageBlock,
+  HeaderBlock,
+  ImageBlock,
+  ParagraphBlock,
+  ListBlock,
+  CodeBlock,
+  WarningBlock,
+  TableBlock,
+  ArticleBlock,
+  NoteBlock,
+  ChecklistBlock,
+  StepsBlock,
+} from '../../../../types/Block.js'
 
-const parseNotFaq = (mdContent) => {
-  const blocks = []
+const parseNotFaq = (
+  mdContent: string,
+): (
+  | SimpleImageBlock
+  | HeaderBlock
+  | ImageBlock
+  | ParagraphBlock
+  | ListBlock
+  | CodeBlock
+  | WarningBlock
+  | TableBlock
+  | ArticleBlock
+  | NoteBlock
+  | ChecklistBlock
+  | StepsBlock
+)[] => {
+  const blocks: (
+    | SimpleImageBlock
+    | HeaderBlock
+    | ImageBlock
+    | ParagraphBlock
+    | ListBlock
+    | CodeBlock
+    | WarningBlock
+    | TableBlock
+    | ArticleBlock
+    | NoteBlock
+    | ChecklistBlock
+    | StepsBlock
+  )[] = []
+
   let listItems = []
   const lines = mdContent.split('\n')
 

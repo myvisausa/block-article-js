@@ -1,13 +1,13 @@
-// @ts-nocheck
-
+import { v4 as uuidv4 } from 'uuid'
 import { OutputData } from '@editorjs/editorjs'
-import transforms, { block } from './transforms'
+import transforms from './transforms'
 import { ParseFunctionError } from './errors'
+import { AnyBlock } from '../../types/Block'
 
 type IParser = {
   parse(OutputData: OutputData): Array<string>
   parseStrict(OutputData: OutputData): Array<string> | Error
-  parseBlock(block: block): string
+  parseBlock(block: AnyBlock): string
   validate(OutputData: OutputData): Array<string>
 }
 
@@ -18,14 +18,14 @@ const parser = (plugins = {}): IParser => {
     parse: ({ blocks }) => {
       return blocks.map((block) => {
         return parsers[block.type]
-          ? parsers[block.type](block)
+          ? parsers[block.type]({ data: block, id: uuidv4() })
           : ParseFunctionError(block.type)
       })
     },
 
-    parseBlock: (block) => {
+    parseBlock: (block: AnyBlock) => {
       return parsers[block.type]
-        ? parsers[block.type](block)
+        ? parsers[block.type]({ data: block, id: uuidv4() })
         : ParseFunctionError(block.type)
     },
 
@@ -51,7 +51,7 @@ const parser = (plugins = {}): IParser => {
 
     validate: ({ blocks }) => {
       const types = blocks
-        .map((item: block) => item.type)
+        .map((item: AnyBlock) => item.type)
         .filter(
           (item: string, index: number, blocksArr: Array<string>) =>
             blocksArr.indexOf(item) === index,

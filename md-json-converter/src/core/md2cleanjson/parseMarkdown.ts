@@ -1,3 +1,4 @@
+import { BlockType } from '../../../../types/Block'
 import parseNotFaq from '../../parsers/body/parseLine'
 import parseQuestion from './parseQuestion'
 

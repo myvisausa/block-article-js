@@ -6,7 +6,13 @@ import Link from 'next/link'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import Form from 'react-bootstrap/Form'
 
-const CommentSection = ({ articleId, otherText }: { articleId: string, otherText: any }) => {
+const CommentSection = ({
+  articleId,
+  otherText,
+}: {
+  articleId: string
+  otherText: any
+}) => {
   const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
   const [editIndex, setEditIndex] = useState<number | null>(null)
@@ -14,8 +20,9 @@ const CommentSection = ({ articleId, otherText }: { articleId: string, otherText
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    const storedComments =
-      JSON.parse(localStorage.getItem(`comments-${articleId}`) || '[]')
+    const storedComments = JSON.parse(
+      localStorage.getItem(`comments-${articleId}`) || '[]',
+    )
     setComments(storedComments)
   }, [articleId])
 
@@ -38,7 +45,7 @@ const CommentSection = ({ articleId, otherText }: { articleId: string, otherText
       updatedComments[editIndex].text = editText
       setComments(updatedComments)
       localStorage.setItem(
-      `comments-${articleId}`,
+        `comments-${articleId}`,
         JSON.stringify(updatedComments),
       )
       handleCloseModal()

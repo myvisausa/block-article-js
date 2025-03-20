@@ -1,4 +1,14 @@
-const parseCodeBlock = (lines: string[], currentIndex: number) => {
+import { BlockType, CodeBlock } from '../../../../../types/Block'
+
+interface CodeBlockResult {
+  block: CodeBlock
+  newIndex: number
+}
+
+const parseCodeBlock = (
+  lines: string[],
+  currentIndex: number,
+): CodeBlockResult | null => {
   if (lines[currentIndex].trim() === '```') {
     let codeLines: string[] = []
     currentIndex++ // Move to next line
@@ -14,7 +24,7 @@ const parseCodeBlock = (lines: string[], currentIndex: number) => {
     }
     return {
       block: {
-        type: 'code',
+        type: BlockType.Code,
         code: codeLines.join('\n'),
       },
       newIndex: currentIndex, // return the updated index

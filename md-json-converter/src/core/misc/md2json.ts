@@ -12,14 +12,14 @@ function makeid(length: number) {
 }
 
 interface ContentSection {
-  sectionId: string;
-  type: string;
-  header: string;
-  text: string;
-  summary: string;
-  lastEdited: string;
-  questions?: string[];
-  answers?: string[];
+  sectionId: string
+  type: string
+  header: string
+  text: string
+  summary: string
+  lastEdited: string
+  questions?: string[]
+  answers?: string[]
 }
 
 export default function md2json(md_text: string) {
@@ -57,8 +57,8 @@ export default function md2json(md_text: string) {
       const questionRegex = /<question>\n?(.*?)\n?<\/question>/gs
       const answerRegex = /<answer>\n?(.*?)\n?<\/answer>/gs
 
-      contentDict.questions = [...text.matchAll(questionRegex)].map(
-        (match) => match[1].trim(),
+      contentDict.questions = [...text.matchAll(questionRegex)].map((match) =>
+        match[1].trim(),
       )
       contentDict.answers = [...text.matchAll(answerRegex)].map((match) =>
         match[1].trim(),

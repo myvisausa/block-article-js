@@ -1,7 +1,9 @@
-const parseQuestion = (mdContent: string) => {
-  const blocks = []
+import { BlockType, HeaderBlock } from '../../../../types/Block'
+
+const parseQuestion = (mdContent: string): HeaderBlock[] => {
+  const blocks: HeaderBlock[] = []
   blocks.push({
-    type: 'header',
+    type: BlockType.Header,
     level: 5,
     text: mdContent,
   })

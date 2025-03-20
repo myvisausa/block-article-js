@@ -24,6 +24,7 @@
     }
   },
   "include": [
+    "types/Block.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
