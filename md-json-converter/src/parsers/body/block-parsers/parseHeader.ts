@@ -5,8 +5,11 @@ const parseHeader = (line: string): HeaderBlock | null => {
   if (headerMatch) {
     return {
       type: BlockType.Header,
-      level: headerMatch[1].length,
-      text: headerMatch[2],
+      id: '',
+      data: {
+        level: headerMatch[1].length,
+        text: headerMatch[2],
+      },
     }
   }
   return null

@@ -25,7 +25,9 @@ const parseCodeBlock = (
     return {
       block: {
         type: BlockType.Code,
-        code: codeLines.join('\n'),
+        data: {
+          code: codeLines.join('\n'),
+        },
       },
       newIndex: currentIndex, // return the updated index
     }

@@ -1,4 +1,6 @@
-export default function json2md(data: any) {
+import { ArticleData } from '../../../../types/ArticleData'
+
+export default function json2md(data: ArticleData) {
   let markdown = ''
 
   for (const section of data.content) {

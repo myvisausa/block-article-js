@@ -1,6 +1,6 @@
-import { BlockType } from '../../../../types/Block'
 import parseNotFaq from '../../parsers/body/parseLine'
 import parseQuestion from './parseQuestion'
+import { AnyBlock } from '../../../../types/Block'
 
 function extractQuestionsAndAnswers(str: string) {
   const startTag = '<question>'
@@ -47,7 +47,7 @@ function extractQAList(str: string) {
   }))
 }
 
-const parseMarkdown = (mdContent: string) => {
+const parseMarkdown = (mdContent: string): AnyBlock[] => {
   const { before, after, questionsAndAnswers } =
     extractQuestionsAndAnswers(mdContent)
 

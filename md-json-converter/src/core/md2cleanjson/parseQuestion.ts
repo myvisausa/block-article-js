@@ -4,8 +4,11 @@ const parseQuestion = (mdContent: string): HeaderBlock[] => {
   const blocks: HeaderBlock[] = []
   blocks.push({
     type: BlockType.Header,
-    level: 5,
-    text: mdContent,
+    id: '',
+    data: {
+      level: 5,
+      text: mdContent,
+    },
   })
   return blocks
 }

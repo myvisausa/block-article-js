@@ -5,8 +5,13 @@ const parseImage = (line: string): ImageBlock | null => {
   if (imageMatch) {
     return {
       type: BlockType.Image,
-      url: imageMatch[2],
-      caption: imageMatch[1],
+      data: {
+        url: imageMatch[2],
+        caption: imageMatch[1],
+        file: {
+          url: imageMatch[2],
+        },
+      },
     }
   }
   return null

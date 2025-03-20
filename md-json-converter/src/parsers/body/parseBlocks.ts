@@ -1,64 +1,92 @@
+import { BlockType, AnyBlock } from '../../../../types/Block'
+
 // BlockIdGenerator.ts
 export const generateBlockId = () => Math.random().toString(36).substring(2, 12)
 
 // BlockFactory.js
 class BlockFactory {
-  static createBlock(block: any) {
-    const baseBlock = {
-      id: generateBlockId(),
-      type: block.type,
-      data: {},
-    }
+  static createBlock(block: AnyBlock): AnyBlock {
+    const id = generateBlockId()
 
     switch (block.type) {
-      case 'header':
-        return { ...baseBlock, data: { text: block.text, level: block.level } }
-      case 'image':
+      case BlockType.Header:
+        return { 
+          id,
+          type: BlockType.Header, 
+          data: { text: block.data.text, level: block.data.level } 
+        }
+      case BlockType.Image:
         return {
-          ...baseBlock,
+          id,
+          type: BlockType.Image,
           data: {
-            file: { url: block.url },
-            caption: block.caption,
+            url: block.data.file.url,
+            file: { url: block.data.file.url },
+            caption: block.data.caption,
             withBorder: false,
             stretched: false,
             withBackground: false,
           },
         }
-      case 'paragraph':
-        return { ...baseBlock, data: { text: block.text } }
-      case 'list':
-        return { ...baseBlock, data: { style: 'ordered', items: block.items } }
-      case 'code':
-        return { ...baseBlock, data: { code: block.code } }
-      case 'warning':
-        return {
-          ...baseBlock,
-          data: { title: block.title, message: block.message },
+      case BlockType.Paragraph:
+        return { 
+          id,
+          type: BlockType.Paragraph, 
+          data: { text: block.data.text } 
         }
-      case 'table':
-        return {
-          ...baseBlock,
-          data: { withHeadings: block.withHeadings, content: block.content },
+      case BlockType.List:
+        return { 
+          id,
+          type: BlockType.List, 
+          data: { style: 'ordered', items: block.data.items } 
         }
-      case 'article':
-        return {
-          ...baseBlock,
-          data: { title: block.title, text: block.text, href: block.href },
+      case BlockType.Code:
+        return { 
+          id,
+          type: BlockType.Code, 
+          data: { code: block.data.code } 
         }
-      case 'note':
+      case BlockType.Warning:
         return {
-          ...baseBlock,
-          data: { title: block.title, message: block.message },
+          id,
+          type: BlockType.Warning,
+          data: { title: block.data.title, message: block.data.message },
         }
-      case 'checklist':
+      case BlockType.Table:
         return {
-          ...baseBlock,
-          data: { title: block.title, items: block.items },
+          id,
+          type: BlockType.Table,
+          data: { withHeadings: block.data.withHeadings, content: block.data.content },
         }
-      case 'steps':
+      case BlockType.Article:
         return {
-          ...baseBlock,
-          data: { title: block.title, items: block.items },
+          id,
+          type: BlockType.Article,
+          data: { title: block.data.title, text: block.data.text, href: block.data.href },
+        }
+      case BlockType.Note:
+        return {
+          id,
+          type: BlockType.Note,
+          data: { title: block.data.title, message: block.data.message },
+        }
+      case BlockType.Checklist:
+        return {
+          id,
+          type: BlockType.Checklist,
+          data: { title: block.data.title, items: block.data.items },
+        }
+      case BlockType.Steps:
+        return {
+          id,
+          type: BlockType.Steps,
+          data: { title: block.data.title, items: block.data.items },
+        }
+      case BlockType.Quote:
+        return {
+          id,
+          type: BlockType.Quote,
+          data: { text: block.data.text, caption: block.data.caption },
         }
       default:
         throw new Error('Unsupported block type')
@@ -66,10 +94,16 @@ class BlockFactory {
   }
 }
 
-export default function parseBlocks(blocks: any[]) {
+interface BlockData {
+  time: number
+  blocks: AnyBlock[]
+  version: string
+}
+
+export default function parseBlocks(blocks: AnyBlock[]): BlockData {
   const data = {
     time: Date.now(),
-    blocks: blocks.map((block: any) => BlockFactory.createBlock(block)),
+    blocks: blocks.map((block: AnyBlock) => BlockFactory.createBlock(block)),
     version: '2.28.2',
   }
   return data

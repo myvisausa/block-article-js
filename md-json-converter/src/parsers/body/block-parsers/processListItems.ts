@@ -4,7 +4,10 @@ const processListItems = (listItems: string[]): ListBlock | null => {
   if (listItems.length) {
     return {
       type: BlockType.List,
-      items: listItems.slice(),
+      data: {
+        items: listItems.slice(),
+        style: 'bullet',
+      },
     }
   }
   return null

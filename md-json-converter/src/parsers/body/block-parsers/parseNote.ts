@@ -1,12 +1,17 @@
-const parseNote = (line: string) => {
+import { BlockType, NoteBlock } from "../../../../../types/Block"
+
+const parseNote = (line: string): NoteBlock | null => {
   const noteMatch = line.match(/\|NOTE title=(.+)\s+message=(.+)\s+NOTE\|/)
   if (noteMatch) {
     return {
-      type: 'note',
-      title: noteMatch[1],
-      message: noteMatch[2],
+      type: BlockType.Note,
+      data: {
+        title: noteMatch[1],
+        message: noteMatch[2],
+      },
     }
   }
+  return null
 }
 
 export default parseNote

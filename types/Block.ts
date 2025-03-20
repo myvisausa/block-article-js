@@ -18,6 +18,7 @@ export enum BlockType {
 
 export interface SimpleImageBlock {
   type: BlockType.SimpleImage
+  id: string
   data: {
     url: string
     caption: string
@@ -35,9 +36,13 @@ export interface HeaderBlock {
 
 export interface ImageBlock {
   type: BlockType.Image
+  id: string
   data: {
     url: string
     caption: string
+    withBorder: boolean
+    stretched: boolean
+    withBackground: boolean
     file: {
       url: string
     }
@@ -46,15 +51,17 @@ export interface ImageBlock {
 
 export interface ParagraphBlock {
   type: BlockType.Paragraph
+  id: string
   data: {
     text: string
-    alignment: string
-    align: string
+    alignment?: string
+    align?: string
   }
 }
 
 export interface ListBlock {
   type: BlockType.List
+  id: string
   data: {
     items: string[]
     style: string
@@ -63,6 +70,7 @@ export interface ListBlock {
 
 export interface CodeBlock {
   type: BlockType.Code
+  id: string
   data: {
     code: string
   }
@@ -70,6 +78,7 @@ export interface CodeBlock {
 
 export interface TableBlock {
   type: BlockType.Table
+  id: string
   data: {
     content: string[][]
     withHeadings: boolean
@@ -78,6 +87,7 @@ export interface TableBlock {
 
 export interface ArticleBlock {
   type: BlockType.Article
+  id: string
   data: {
     title: string
     text: string
@@ -87,6 +97,7 @@ export interface ArticleBlock {
 
 export interface NoteBlock {
   type: BlockType.Note
+  id: string
   data: {
     title: string
     message: string
@@ -95,6 +106,7 @@ export interface NoteBlock {
 
 export interface ChecklistBlock {
   type: BlockType.Checklist
+  id: string
   data: {
     title: string
     items: string[]
@@ -103,6 +115,7 @@ export interface ChecklistBlock {
 
 export interface StepsBlock {
   type: BlockType.Steps
+  id: string
   data: {
     title: string
     items: string[]
@@ -111,6 +124,7 @@ export interface StepsBlock {
 
 export interface EmbedBlock {
   type: BlockType.Embed
+  id: string
   data: {
     url: string
     caption: string
@@ -123,6 +137,7 @@ export interface EmbedBlock {
 
 export interface FaqBlock {
   type: BlockType.Faq
+  id: string
   data: {
     title: string
     items: string[]
@@ -132,6 +147,7 @@ export interface FaqBlock {
 
 export interface WarningBlock {
   type: BlockType.Warning
+  id: string
   data: {
     title: string
     message: string
@@ -140,6 +156,7 @@ export interface WarningBlock {
 
 export interface QuoteBlock {
   type: BlockType.Quote
+  id: string
   data: {
     text: string
     caption: string

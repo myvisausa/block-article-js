@@ -12,51 +12,12 @@ import parseSteps from './block-parsers/parseSteps'
 
 import convertMdtoHtml from './utils/convertMdToHtml'
 import processListItems from './block-parsers/processListItems'
-import {
-  SimpleImageBlock,
-  HeaderBlock,
-  ImageBlock,
-  ParagraphBlock,
-  ListBlock,
-  CodeBlock,
-  WarningBlock,
-  TableBlock,
-  ArticleBlock,
-  NoteBlock,
-  ChecklistBlock,
-  StepsBlock,
-} from '../../../../types/Block.js'
+import { AnyBlock } from '../../../../types/Block.js'
 
 const parseNotFaq = (
   mdContent: string,
-): (
-  | SimpleImageBlock
-  | HeaderBlock
-  | ImageBlock
-  | ParagraphBlock
-  | ListBlock
-  | CodeBlock
-  | WarningBlock
-  | TableBlock
-  | ArticleBlock
-  | NoteBlock
-  | ChecklistBlock
-  | StepsBlock
-)[] => {
-  const blocks: (
-    | SimpleImageBlock
-    | HeaderBlock
-    | ImageBlock
-    | ParagraphBlock
-    | ListBlock
-    | CodeBlock
-    | WarningBlock
-    | TableBlock
-    | ArticleBlock
-    | NoteBlock
-    | ChecklistBlock
-    | StepsBlock
-  )[] = []
+): AnyBlock[] => {
+  const blocks: AnyBlock[] = []
 
   let listItems = []
   const lines = mdContent.split('\n')
