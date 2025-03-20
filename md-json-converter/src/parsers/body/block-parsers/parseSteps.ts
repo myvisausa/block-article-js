@@ -1,9 +1,11 @@
 import { BlockType, StepsBlock } from "../../../../../types/Block"
+import { generateBlockId } from "../parseBlocks"
 
 const parseSteps = (line: string): StepsBlock | null => {
   const stepsMatch = line.match(/\|STEPS title=(.+)\s+items=(.+)\s+STEPS\|/)
   if (stepsMatch) {
     return {
+      id: generateBlockId(),
       type: BlockType.Steps,
       data: {
         title: stepsMatch[1],

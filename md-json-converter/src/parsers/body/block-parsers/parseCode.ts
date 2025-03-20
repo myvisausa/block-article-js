@@ -1,4 +1,5 @@
 import { BlockType, CodeBlock } from '../../../../../types/Block'
+import { generateBlockId } from '../parseBlocks'
 
 interface CodeBlockResult {
   block: CodeBlock
@@ -24,6 +25,7 @@ const parseCodeBlock = (
     }
     return {
       block: {
+        id: generateBlockId(),
         type: BlockType.Code,
         data: {
           code: codeLines.join('\n'),

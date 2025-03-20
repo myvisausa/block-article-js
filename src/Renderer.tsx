@@ -60,7 +60,6 @@ export default function Renderer({
   // State for body content
   const [bodyHtml, setBodyHtml] = useState('')
   const [isBodyLoaded, setIsBodyLoaded] = useState(false)
-
   // Asynchronously parse body content using tocData instead of parsing again
   useEffect(() => {
     const parseBodyContent = async () => {

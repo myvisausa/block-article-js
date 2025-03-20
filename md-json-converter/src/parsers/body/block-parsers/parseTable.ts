@@ -1,4 +1,5 @@
 import { BlockType, TableBlock } from "../../../../../types/Block"
+import { generateBlockId } from "../parseBlocks"
 
 const parseTable = (line: string): TableBlock | null => {
   const tableMatch = line.match(
@@ -9,6 +10,7 @@ const parseTable = (line: string): TableBlock | null => {
       // Since the content is in a JSON-like format, we can parse it directly after replacing single quotes with double quotes if necessary
       const content = JSON.parse(tableMatch[2].replace(/'/g, '"'))
       return {
+        id: generateBlockId(),
         type: BlockType.Table,
         data: {
           withHeadings: tableMatch[1] === 'true', // Convert string to boolean

@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import styles from './tableOfContents.module.css'
 
-import { HeaderBlock } from '../../../types/Block'
+import { AnyBlock, BlockType, HeaderBlock } from '../../../types/Block'
+import { BlockData } from '../../../types/BlockData'
 
-function extractHeaders(blocks: HeaderBlock[]) {
+function extractHeaders(blocks: AnyBlock[]) {
   return blocks
     .filter(
       (block) =>
-        block.type === 'header' &&
+        block.type === BlockType.Header &&
         block.data.level === 2 &&
         block.data.text !== 'omit',
     )
-    .map((block) => ({ text: block.data.text, id: block.id }))
+    .map((block) => ({ text: (block as HeaderBlock).data.text, id: block.id }))
 }
 
 const handleClick = (id: string, scrollOffset: number, setSelectedHeader: (id: string) => void) => {
@@ -26,7 +27,7 @@ const handleClick = (id: string, scrollOffset: number, setSelectedHeader: (id: s
   }
 }
 
-export default function TableOfContents({ data, title, scrollOffset }: { data: { blocks: HeaderBlock[] }, title: string, scrollOffset: number }) {
+export default function TableOfContents({ data, title, scrollOffset }: { data: BlockData, title: string, scrollOffset: number }) {
   const headers = extractHeaders(data.blocks)
   const [selectedHeader, setSelectedHeader] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(false)

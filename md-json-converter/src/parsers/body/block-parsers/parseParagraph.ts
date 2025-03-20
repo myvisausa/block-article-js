@@ -1,5 +1,6 @@
 import convertMdtoHtml from '../utils/convertMdToHtml'
 import { BlockType, ParagraphBlock } from '../../../../../types/Block'
+import { generateBlockId } from '../parseBlocks'
 
 function containsInvalidTag(str: string) {
   // This regex looks for a string that starts with < and is followed by any character
@@ -18,6 +19,7 @@ const parseParagraph = (line: string): ParagraphBlock | null => {
   if (line.length > 0) {
     line = convertMdtoHtml(line)
     return {
+      id: generateBlockId(),
       type: BlockType.Paragraph,
       data: {
         text: line,

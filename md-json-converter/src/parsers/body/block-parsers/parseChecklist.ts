@@ -1,11 +1,12 @@
 import { BlockType, ChecklistBlock } from "../../../../../types/Block"
-
+import { generateBlockId } from "../parseBlocks"
 const parseChecklist = (line: string): ChecklistBlock | null => {
   const checklistMatch = line.match(
     /\|CHECKLIST title=(.+)\s+items=(.+)\s+CHECKLIST\|/,
   )
   if (checklistMatch) {
     return {
+      id: generateBlockId(),
       type: BlockType.Checklist,
       data: {
         title: checklistMatch[1],
