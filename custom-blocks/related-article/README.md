@@ -17,7 +17,7 @@ yarn add @editorjs/warning
 Include module at your application
 
 ```javascript
-import Warning from '@editorjs/warning';
+import Warning from '@editorjs/warning'
 ```
 
 Optionally, you can load this tool from CDN [JsDelivr CDN](https://cdn.jsdelivr.net/npm/@editorjs/warning@latest)
@@ -29,12 +29,12 @@ Add a new Tool to the `tools` property of the CodeX Editor initial config.
 ```javascript
 var editor = CodexEditor({
   ...
-  
+
   tools: {
     ...
     warning: Warning,
   },
-  
+
   ...
 });
 ```
@@ -44,7 +44,7 @@ Or init Warning Tool with additional settings
 ```javascript
 var editor = CodexEditor({
   ...
-  
+
   tools: {
     ...
     warning: {
@@ -57,31 +57,31 @@ var editor = CodexEditor({
       },
     },
   },
-  
+
   ...
 });
 ```
 
 ## Config Params
 
-| Field              | Type     | Description                       |
-| ------------------ | -------- | ----------------------------------|
-| titlePlaceholder   | `string` | Warning Tool's title placeholder  |
-| messagePlaceholder | `string` | Warning Tool's message placeholder|
+| Field              | Type     | Description                        |
+| ------------------ | -------- | ---------------------------------- |
+| titlePlaceholder   | `string` | Warning Tool's title placeholder   |
+| messagePlaceholder | `string` | Warning Tool's message placeholder |
 
 ## Output data
 
-| Field     | Type     | Description      |
-| --------- | -------- | -----------------|
-| title     | `string` | warning's title  |
-| message   | `string` | warning's message|
+| Field   | Type     | Description       |
+| ------- | -------- | ----------------- |
+| title   | `string` | warning's title   |
+| message | `string` | warning's message |
 
 ```json
 {
-    "type" : "warning",
-    "data" : {
-        "title" : "Note:",
-        "message" : "Avoid using this method just for lulz. It can be very dangerous opposite your daily fun stuff."
-    }
+  "type": "warning",
+  "data": {
+    "title": "Note:",
+    "message": "Avoid using this method just for lulz. It can be very dangerous opposite your daily fun stuff."
+  }
 }
 ```

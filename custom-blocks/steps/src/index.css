@@ -8,7 +8,7 @@
   }
 }
 
-.cdx-steps [contentEditable=true][data-placeholder]::before{
+.cdx-steps [contentEditable='true'][data-placeholder]::before {
   position: absolute;
   content: attr(data-placeholder);
   color: #707684;
@@ -16,11 +16,11 @@
   opacity: 0;
 }
 
-.cdx-steps [contentEditable=true][data-placeholder]:empty::before {
+.cdx-steps [contentEditable='true'][data-placeholder]:empty::before {
   opacity: 1;
 }
 
-.cdx-steps [contentEditable=true][data-placeholder]:empty:focus::before {
+.cdx-steps [contentEditable='true'][data-placeholder]:empty:focus::before {
   opacity: 0;
 }
 

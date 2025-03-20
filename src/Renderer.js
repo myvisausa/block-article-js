@@ -1,86 +1,83 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import parse from 'html-react-parser';
-import TableOfContents from './components/toc-renderer/TableOfContents';
-import parser from '../editorjs-renderer/src/app.ts';
-import styles from './styles.module.css';
+import React, { useState, useEffect, useMemo } from 'react'
+import parse from 'html-react-parser'
+import TableOfContents from './components/toc-renderer/TableOfContents'
+import parser from '../editorjs-renderer/src/app.ts'
+import styles from './styles.module.css'
 import {
   parseTitle,
   parseBody,
-} from '../md-json-converter/src/core/misc/json2cleanjson';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import CommentSection from './components/Comment/CommentSection';
+} from '../md-json-converter/src/core/misc/json2cleanjson'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
+import WhatsAppIcon from '@mui/icons-material/WhatsApp'
+import CommentSection from './components/Comment/CommentSection'
 
-const myParser = parser();
+const myParser = parser()
 
 export default function Renderer({
   otherText,
   data,
   scrollOffset = 15,
-  onArticleLoaded = () => { },
-  locale = 'en'
+  onArticleLoaded = () => {},
+  locale = 'en',
 }) {
   if (!data) {
-    return <div className={styles.textCenter}>{otherText.articleNotFound}</div>;
+    return <div className={styles.textCenter}>{otherText.articleNotFound}</div>
   }
 
   // Synchronously parse title, image, and TOC using useMemo
   const { titleHtml, imageHtml, tocData } = useMemo(() => {
     // Parse title blocks
-    let parsedTitle = parseTitle(data);
-    const imageBlock = { blocks: parsedTitle.blocks.slice(-1) };
-    const titleBlocks = { blocks: parsedTitle.blocks.slice(0, -1) };
-    
+    let parsedTitle = parseTitle(data)
+    const imageBlock = { blocks: parsedTitle.blocks.slice(-1) }
+    const titleBlocks = { blocks: parsedTitle.blocks.slice(0, -1) }
+
     // Convert parsed blocks to HTML
-    const title_html = myParser.parse(titleBlocks).join('');
-    const image_html = myParser.parse(imageBlock).join('');
-    
+    const title_html = myParser.parse(titleBlocks).join('')
+    const image_html = myParser.parse(imageBlock).join('')
+
     // Parse TOC data
-    const toc_blocks = parseBody(data); // Assuming parseBody returns TOC-related blocks
+    const toc_blocks = parseBody(data) // Assuming parseBody returns TOC-related blocks
     return {
       titleHtml: title_html,
       imageHtml: image_html,
-      tocData: toc_blocks
-    };
-  }, [data]);
+      tocData: toc_blocks,
+    }
+  }, [data])
 
   // State for body content
-  const [bodyHtml, setBodyHtml] = useState('');
-  const [isBodyLoaded, setIsBodyLoaded] = useState(false);
+  const [bodyHtml, setBodyHtml] = useState('')
+  const [isBodyLoaded, setIsBodyLoaded] = useState(false)
 
   // Asynchronously parse body content using tocData instead of parsing again
   useEffect(() => {
     const parseBodyContent = async () => {
-      const body_html = myParser.parse(tocData).join('');
-      setBodyHtml(body_html);
-      setIsBodyLoaded(true);
-      onArticleLoaded();
-    };
+      const body_html = myParser.parse(tocData).join('')
+      setBodyHtml(body_html)
+      setIsBodyLoaded(true)
+      onArticleLoaded()
+    }
 
-    parseBodyContent();
-  }, [tocData, onArticleLoaded]); // Updated dependency array to include tocData
+    parseBodyContent()
+  }, [tocData, onArticleLoaded]) // Updated dependency array to include tocData
 
   // Determine if the locale is Arabic to apply the RTL class
-  const rtlClass = locale === 'ar' ? styles.rtl : '';
+  const rtlClass = locale === 'ar' ? styles.rtl : ''
 
   return (
     <>
       {/* Title and Metadata */}
       <div className='mb-2 mb-lg-5'>
-        <div className={`${styles.title} ${rtlClass}`}>
-          {parse(titleHtml)}
-        </div>
+        <div className={`${styles.title} ${rtlClass}`}>{parse(titleHtml)}</div>
         <p className={`${styles.published_date} d-lg-none`}>
-          {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
+          {data.metadata.author} •{' '}
+          {data.metadata.modifiedTime.slice(0, 10)}{' '}
         </p>
       </div>
 
       {/* Image */}
       <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
-        <div className={styles.imageWrapper}>
-          {parse(imageHtml)}
-        </div>
+        <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
       </div>
 
       {/* Content Wrapper */}
@@ -101,10 +98,13 @@ export default function Renderer({
             <div className={styles.blog_post_grp}>
               <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '}
               {/* Assuming only 2 tags */}
-              <p className={styles.finding_btn}>{data.metadata?.tags[1]}</p>{' '}
+              <p className={styles.finding_btn}>
+                {data.metadata?.tags[1]}
+              </p>{' '}
             </div>
             <p className={`${styles.published_date} d-none d-lg-block`}>
-              {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}{' '}
+              {data.metadata.author} •{' '}
+              {data.metadata.modifiedTime.slice(0, 10)}{' '}
             </p>
           </div>
 
@@ -126,39 +126,39 @@ export default function Renderer({
         </div>
       </div>
     </>
-  );
+  )
 }
 
 export function renderArticle(data) {
   if (!data) {
-    return '<div>Article is Empty</div>';
+    return '<div>Article is Empty</div>'
   }
 
-  let titleBlocks = parseTitle(data);
-  const bodyBlocks = parseBody(data);
+  let titleBlocks = parseTitle(data)
+  const bodyBlocks = parseBody(data)
 
   // Assuming the last block of the title is the image
-  const imageBlock = { blocks: titleBlocks.blocks.slice(-1) };
-  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1);
+  const imageBlock = { blocks: titleBlocks.blocks.slice(-1) }
+  titleBlocks.blocks = titleBlocks.blocks.slice(0, -1)
 
-  const title_html = myParser.parse(titleBlocks).join('');
-  const image_html = myParser.parse(imageBlock).join('');
-  const body_html = myParser.parse(bodyBlocks).join('');
+  const title_html = myParser.parse(titleBlocks).join('')
+  const image_html = myParser.parse(imageBlock).join('')
+  const body_html = myParser.parse(bodyBlocks).join('')
 
   return {
     titleHtml: title_html,
     imageHtml: image_html,
     bodyHtml: body_html,
     bodyBlocks,
-  };
+  }
 }
 
 const SocialComp = ({ text, className }) => {
-  const [currentUrl, setCurrentUrl] = useState('');
+  const [currentUrl, setCurrentUrl] = useState('')
 
   useEffect(() => {
-    setCurrentUrl(window.location.href);
-  }, []);
+    setCurrentUrl(window.location.href)
+  }, [])
 
   return (
     <div
@@ -166,16 +166,28 @@ const SocialComp = ({ text, className }) => {
     >
       <p className='text-white m-0'>{text}</p>
       <div className='d-flex gap-3 align-items-center'>
-        <a href={`https://www.instagram.com`} target='_blank' rel='noopener noreferrer'>
+        <a
+          href={`https://www.instagram.com`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <InstagramIcon className='text-white' />
         </a>
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`} target='_blank' rel='noopener noreferrer'>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <FacebookRoundedIcon className='text-white' />
         </a>
-        <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(currentUrl)}`} target='_blank' rel='noopener noreferrer'>
+        <a
+          href={`https://api.whatsapp.com/send?text=${encodeURIComponent(currentUrl)}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <WhatsAppIcon className='text-white' />
         </a>
       </div>
     </div>
-  );
-};
+  )
+}

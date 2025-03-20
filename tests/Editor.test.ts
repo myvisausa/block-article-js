@@ -1,7 +1,7 @@
-import Editor from '../src/Editor';
+import Editor from '../src/Editor'
 
 describe('Editor', () => {
-    it('should be defined', () => {
-        expect(Editor).toBeDefined();
-    });
-});
+  it('should be defined', () => {
+    expect(Editor).toBeDefined()
+  })
+})

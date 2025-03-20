@@ -1,32 +1,31 @@
 /**
  * Import Tool's icon
  */
-import { IconListNumbered } from '@codexteam/icons';
+import { IconListNumbered } from '@codexteam/icons'
 
 /**
  * Build styles
  */
-import './index.css';
+import './index.css'
 
 export default class Steps {
-
   static get isReadOnlySupported() {
-    return true;
+    return true
   }
 
   static get toolbox() {
     return {
       icon: IconListNumbered,
       title: 'Steps',
-    };
+    }
   }
 
   static get enableLineBreaks() {
-    return true;
+    return true
   }
 
   static get DEFAULT_TITLE_PLACEHOLDER() {
-    return 'Title';
+    return 'Title'
   }
 
   get CSS() {
@@ -37,98 +36,107 @@ export default class Steps {
       input: this.api.styles.input,
       item: 'cdx-checklist__item',
       button: 'cdx-button',
-    };
+    }
   }
 
   constructor({ data, config, api, readOnly }) {
-    this.api = api;
-    this.readOnly = readOnly;
+    this.api = api
+    this.readOnly = readOnly
 
-    this.titlePlaceholder = config.titlePlaceholder || Steps.DEFAULT_TITLE_PLACEHOLDER;
+    this.titlePlaceholder =
+      config.titlePlaceholder || Steps.DEFAULT_TITLE_PLACEHOLDER
 
     this.data = {
       title: data.title || '',
       items: data.items || [],
-    };
+    }
   }
 
   render() {
-    const container = this._make('div', [this.CSS.baseClass, this.CSS.wrapper]);
+    const container = this._make('div', [this.CSS.baseClass, this.CSS.wrapper])
     const title = this._make('div', [this.CSS.input, this.CSS.title], {
       contentEditable: !this.readOnly,
       innerHTML: this.data.title,
-    });
+    })
 
-    title.dataset.placeholder = this.titlePlaceholder;
+    title.dataset.placeholder = this.titlePlaceholder
 
-    container.appendChild(title);
+    container.appendChild(title)
 
-    this.data.items.forEach(item => {
-      container.appendChild(this.createItemElement(item));
-    });
+    this.data.items.forEach((item) => {
+      container.appendChild(this.createItemElement(item))
+    })
 
     const addButton = this._make('button', [this.CSS.button], {
       innerHTML: 'Add item',
-    });
+    })
     addButton.onclick = () => {
-      container.insertBefore(this.createItemElement(''), addButton);
-    };
+      container.insertBefore(this.createItemElement(''), addButton)
+    }
 
-    container.appendChild(addButton);
+    container.appendChild(addButton)
 
-    return container;
+    return container
   }
 
   createItemElement(itemText) {
-    const item = this._make('div', ['cdx-checklist__item']);
-  
-    const input = this._make('div', ['cdx-checklist__item-input', this.CSS.input, this.CSS.item], {
-      contentEditable: !this.readOnly,
-      innerHTML: itemText,
-    });
-  
-    const removeButton = this._make('button', ['cdx-checklist__item-button', this.CSS.button], {
-      innerHTML: 'Remove',
-    });
-    removeButton.onclick = () => item.remove();
-  
-    item.appendChild(input);
-    item.appendChild(removeButton);
-  
-    return item;
+    const item = this._make('div', ['cdx-checklist__item'])
+
+    const input = this._make(
+      'div',
+      ['cdx-checklist__item-input', this.CSS.input, this.CSS.item],
+      {
+        contentEditable: !this.readOnly,
+        innerHTML: itemText,
+      },
+    )
+
+    const removeButton = this._make(
+      'button',
+      ['cdx-checklist__item-button', this.CSS.button],
+      {
+        innerHTML: 'Remove',
+      },
+    )
+    removeButton.onclick = () => item.remove()
+
+    item.appendChild(input)
+    item.appendChild(removeButton)
+
+    return item
   }
 
   save(container) {
-    const title = container.querySelector(`.${this.CSS.title}`);
+    const title = container.querySelector(`.${this.CSS.title}`)
     const items = [...container.querySelectorAll(`.${this.CSS.item}`)]
-      .map(item => item.textContent)
-      .filter(item => !item.endsWith('Remove')); // Not sure why it is like  "['Item 1Remove', 'Item 1', 'Item 2Remove', 'Item 2']""
+      .map((item) => item.textContent)
+      .filter((item) => !item.endsWith('Remove')) // Not sure why it is like  "['Item 1Remove', 'Item 1', 'Item 2Remove', 'Item 2']""
     return {
       title: title.innerHTML,
       items,
-    };
+    }
   }
 
   _make(tagName, classNames = null, attributes = {}) {
-    const el = document.createElement(tagName);
+    const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
-      el.classList.add(...classNames);
+      el.classList.add(...classNames)
     } else if (classNames) {
-      el.classList.add(classNames);
+      el.classList.add(classNames)
     }
 
     for (const attrName in attributes) {
-      el[attrName] = attributes[attrName];
+      el[attrName] = attributes[attrName]
     }
 
-    return el;
+    return el
   }
 
   static get sanitize() {
     return {
       title: {},
       items: { br: true },
-    };
+    }
   }
 }

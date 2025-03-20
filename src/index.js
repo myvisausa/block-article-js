@@ -1,4 +1,4 @@
-import Editor from './Editor';
-import Renderer from './Renderer';
+import Editor from './Editor'
+import Renderer from './Renderer'
 
-export { Editor, Renderer };
+export { Editor, Renderer }

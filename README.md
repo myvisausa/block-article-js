@@ -1,11 +1,15 @@
 # block-article-js
+
 > A Block-Based ReactJS Editor and Renderer for Blog Posts and News Articles
 
-
 ## Adding new tools
+
 ### Steps described below, but essentially just follow the pattern of this PR
+
 https://github.com/myvisausa/block-article-js/pull/3/files
+
 ### In md-json-converter
+
 1. First add a new item to the test/clean_json.json fixture
 2. Update the BlockFactory (src/parsers/body/parseBlocks.js)
 3. Update the convertFromJSON (src/core/cleanjson2md/convertFromJson.js)
@@ -13,15 +17,21 @@ https://github.com/myvisausa/block-article-js/pull/3/files
 5. Create the parser and add it to src/parsers/body/parseLine.js
 
 ## In editorjs-renderer
+
 1. Update src/transforms.ts to include the new type
 
 ## Editor
+
 #### Main Features
+
 1. Creates a JSON object that contains page meta data (title, description, createdTime, modifiedTime), as well as all post/article content (see JSON example below)
 2. Supports a dozen primary block types that are common on Medium.com's editor (including image, simpleImage and code)
 3. The Editor requires a REST API endpoint for Image upload if you wish to drag and drop or select images to upload
+
 #### Using the Editor
-The Editor requires the following props: 
+
+The Editor requires the following props:
+
 - onDataChange: Callback from the parent component in your application that should be called when data is changed
 - data: A stateful json object in the block-article-js schema(see example below)
 - setData: Updates data state
@@ -29,6 +39,7 @@ The Editor requires the following props:
 - isEditMode: A boolean. If true, is in edit mode. If false, data is displayed with the Renderer component (so you see exactly what the final rendered version will look like)
 
 Example:
+
 ```
 import React, { useState, useEffect } from 'react';
 import EditorPage from "../../../../block-article-js/src/Editor";
@@ -56,10 +67,10 @@ export default function EditorPage() {
                 ...
             />
             <div className="col-12">
-                <EditorPage 
-                    onDataChange={handleDataChange} 
-                    data={data} 
-                    setData={setData} 
+                <EditorPage
+                    onDataChange={handleDataChange}
+                    data={data}
+                    setData={setData}
                     uploadEndPoint={uploadEndPoint}
                     isEditMode={isEditMode}
                     setIsEditMode={setIsEditMode}
@@ -71,15 +82,20 @@ export default function EditorPage() {
 ```
 
 ## Renderer
+
 #### Main Features
+
 1. Renders the title as an H1 Header at the top of the component
 2. Renders the ogImage below the title with its caption (if given)
 3. Creates a table-of-contents where every H2 section is an item in the table of contents
-    - Clicking the item in the table-of-contents scrolls to that section
+   - Clicking the item in the table-of-contents scrolls to that section
+
 #### Using the Renderer
-1. Just pass in a JSON object 
+
+1. Just pass in a JSON object
 
 Example:
+
 ```
 export default function BlogPage({ data }) {
 	return (
@@ -92,8 +108,10 @@ export default function BlogPage({ data }) {
 ```
 
 ## JSON Schema Example
+
 #### Note: the faq section block has not yet been implemented. Once implemented, the questions and answers lists can be rendered in a collapsable accordion or in a component with columns and rows
-```
+
+````
 {
   "postId": "0503f7ef-48b4-4eeb-aefb-f8d6f0fa01d8",
   "metadata": {
@@ -140,4 +158,4 @@ export default function BlogPage({ data }) {
     }
   ]
 }
-```
+````

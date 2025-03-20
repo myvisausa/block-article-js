@@ -68,9 +68,7 @@ const CommentSection = ({ articleId, otherText }) => {
       <h3 className='mb-0'>{otherText.commentsHeader}</h3>
       <div className={styles.commentSection}>
         <div className={`${styles.overlay}`}>
-          <h2 className={styles.overlayText}>
-            {otherText.overlayText}
-          </h2>
+          <h2 className={styles.overlayText}>{otherText.overlayText}</h2>
           <Link href='/auth/sign-up' className={styles.startBtn}>
             {otherText.startHere}
           </Link>

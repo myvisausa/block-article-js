@@ -1,16 +1,16 @@
 // rollup.config.js
-import babel from '@rollup/plugin-babel';
+import babel from '@rollup/plugin-babel'
 
 export default {
   input: 'src/index.js',
   output: {
     dir: 'dist',
-    format: 'cjs'
+    format: 'cjs',
   },
-  plugins: [babel(
-    {
+  plugins: [
+    babel({
       babelHelpers: 'bundled',
       presets: ['@babel/preset-react'],
-    }
-  )],
-};
+    }),
+  ],
+}

@@ -1,12 +1,12 @@
 /**
  * Import Tool's icon
  */
-import { IconClipboard } from '@codexteam/icons';
+import { IconClipboard } from '@codexteam/icons'
 
 /**
  * Build styles
  */
-import './index.css';
+import './index.css'
 
 /**
  * @class RelatedArticle
@@ -27,12 +27,11 @@ import './index.css';
  * @property {string} hrefPlaceholder - placeholder to show in warning`s href input
  */
 export default class RelatedArticle {
-
   /**
    * Notify core that read-only mode is supported
    */
   static get isReadOnlySupported() {
-    return true;
+    return true
   }
 
   /**
@@ -45,7 +44,7 @@ export default class RelatedArticle {
     return {
       icon: IconClipboard,
       text: 'RelatedArticle',
-    };
+    }
   }
 
   /**
@@ -55,7 +54,7 @@ export default class RelatedArticle {
    * @returns {boolean}
    */
   static get enableLineBreaks() {
-    return true;
+    return true
   }
 
   /**
@@ -65,9 +64,8 @@ export default class RelatedArticle {
    * @returns {string}
    */
   static get DEFAULT_TITLE_PLACEHOLDER() {
-    return 'Title';
+    return 'Title'
   }
-
 
   /**
    * Default placeholder for warning text
@@ -76,7 +74,7 @@ export default class RelatedArticle {
    * @returns {string}
    */
   static get DEFAULT_TEXT_PLACEHOLDER() {
-    return 'Text';
+    return 'Text'
   }
 
   /**
@@ -86,7 +84,7 @@ export default class RelatedArticle {
    * @returns {string}
    */
   static get DEFAULT_MESSAGE_PLACEHOLDER() {
-    return 'Hyperlink';
+    return 'Hyperlink'
   }
 
   /**
@@ -102,7 +100,7 @@ export default class RelatedArticle {
       text: 'cdx-article__text',
       input: this.api.styles.input,
       href: 'cdx-article__href',
-    };
+    }
   }
 
   /**
@@ -114,18 +112,21 @@ export default class RelatedArticle {
    * @param {boolean} readOnly - read-only mode flag
    */
   constructor({ data, config, api, readOnly }) {
-    this.api = api;
-    this.readOnly = readOnly;
-    
-    this.titlePlaceholder = config.titlePlaceholder || RelatedArticle.DEFAULT_TITLE_PLACEHOLDER;
-    this.textPlaceholder = config.textPlaceholder || RelatedArticle.DEFAULT_TEXT_PLACEHOLDER;
-    this.hrefPlaceholder = config.hrefPlaceholder || RelatedArticle.DEFAULT_MESSAGE_PLACEHOLDER;
+    this.api = api
+    this.readOnly = readOnly
+
+    this.titlePlaceholder =
+      config.titlePlaceholder || RelatedArticle.DEFAULT_TITLE_PLACEHOLDER
+    this.textPlaceholder =
+      config.textPlaceholder || RelatedArticle.DEFAULT_TEXT_PLACEHOLDER
+    this.hrefPlaceholder =
+      config.hrefPlaceholder || RelatedArticle.DEFAULT_MESSAGE_PLACEHOLDER
 
     this.data = {
       title: data.title || '',
       text: data.text || '',
       href: data.href || '',
-    };
+    }
   }
 
   /**
@@ -134,29 +135,29 @@ export default class RelatedArticle {
    * @returns {Element}
    */
   render() {
-    const container = this._make('div', [this.CSS.baseClass, this.CSS.wrapper]);
+    const container = this._make('div', [this.CSS.baseClass, this.CSS.wrapper])
     const title = this._make('div', [this.CSS.input, this.CSS.title], {
       contentEditable: !this.readOnly,
       innerHTML: this.data.title,
-    });
+    })
     const text = this._make('div', [this.CSS.input, this.CSS.text], {
       contentEditable: !this.readOnly,
       innerHTML: this.data.text,
-    });
+    })
     const href = this._make('div', [this.CSS.input, this.CSS.href], {
       contentEditable: !this.readOnly,
       innerHTML: this.data.href,
-    });
-  
-    title.dataset.placeholder = this.titlePlaceholder;
-    text.dataset.placeholder = this.textPlaceholder;
-    href.dataset.placeholder = this.hrefPlaceholder;
-  
-    container.appendChild(title);
-    container.appendChild(text);
-    container.appendChild(href);
-  
-    return container;
+    })
+
+    title.dataset.placeholder = this.titlePlaceholder
+    text.dataset.placeholder = this.textPlaceholder
+    href.dataset.placeholder = this.hrefPlaceholder
+
+    container.appendChild(title)
+    container.appendChild(text)
+    container.appendChild(href)
+
+    return container
   }
 
   /**
@@ -166,15 +167,15 @@ export default class RelatedArticle {
    * @returns {RelatedArticleData}
    */
   save(warningElement) {
-    const title = warningElement.querySelector(`.${this.CSS.title}`);
-    const text = warningElement.querySelector(`.${this.CSS.text}`);
-    const href = warningElement.querySelector(`.${this.CSS.href}`);
-  
+    const title = warningElement.querySelector(`.${this.CSS.title}`)
+    const text = warningElement.querySelector(`.${this.CSS.text}`)
+    const href = warningElement.querySelector(`.${this.CSS.href}`)
+
     return Object.assign(this.data, {
       title: title.innerHTML,
       text: text.innerHTML,
       href: href.innerHTML,
-    });
+    })
   }
 
   /**
@@ -186,19 +187,19 @@ export default class RelatedArticle {
    * @returns {Element}
    */
   _make(tagName, classNames = null, attributes = {}) {
-    const el = document.createElement(tagName);
+    const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
-      el.classList.add(...classNames);
+      el.classList.add(...classNames)
     } else if (classNames) {
-      el.classList.add(classNames);
+      el.classList.add(classNames)
     }
 
     for (const attrName in attributes) {
-      el[attrName] = attributes[attrName];
+      el[attrName] = attributes[attrName]
     }
 
-    return el;
+    return el
   }
 
   /**
@@ -211,6 +212,6 @@ export default class RelatedArticle {
       title: {},
       text: {},
       href: {},
-    };
+    }
   }
 }

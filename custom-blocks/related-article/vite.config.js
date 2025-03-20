@@ -1,17 +1,17 @@
-import path from "path";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import * as pkg from "./package.json";
+import path from 'path'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
+import * as pkg from './package.json'
 
-const NODE_ENV = process.argv.mode || "development";
-const VERSION = pkg.version;
+const NODE_ENV = process.argv.mode || 'development'
+const VERSION = pkg.version
 
 export default {
   build: {
     copyPublicDir: false,
     lib: {
-      entry: path.resolve(__dirname, "src", "index.js"),
-      name: "Warning",
-      fileName: "warning",
+      entry: path.resolve(__dirname, 'src', 'index.js'),
+      name: 'Warning',
+      fileName: 'warning',
     },
   },
   define: {
@@ -20,4 +20,4 @@ export default {
   },
 
   plugins: [cssInjectedByJsPlugin()],
-};
+}

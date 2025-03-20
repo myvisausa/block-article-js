@@ -1,57 +1,61 @@
-
 function makeid(length) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  let counter = 0;
+  let result = ''
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  let counter = 0
   while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    counter += 1
   }
-  return result;
+  return result
 }
-
 
 export default function md2json(md_text) {
-  const createTime = new Date().toISOString();
+  const createTime = new Date().toISOString()
 
-  let content = [];
+  let content = []
 
   // Split by headers to extract sections
-  if (!md_text.startsWith("\n")) {
-    md_text = "\n" + md_text;
+  if (!md_text.startsWith('\n')) {
+    md_text = '\n' + md_text
   }
-  const sections = md_text.split('\n## ').slice(1);
+  const sections = md_text.split('\n## ').slice(1)
 
-  sections.forEach(sec => {
-    const headerEndIndex = sec.indexOf('\n'); // Find the end of the header
-    const header = sec.substring(0, headerEndIndex); // Get the header
-    const text = sec.substring(headerEndIndex + 1); // Get the text after the header
+  sections.forEach((sec) => {
+    const headerEndIndex = sec.indexOf('\n') // Find the end of the header
+    const header = sec.substring(0, headerEndIndex) // Get the header
+    const text = sec.substring(headerEndIndex + 1) // Get the text after the header
 
     let contentDict = {
-      "sectionId": makeid(5),
-      "type": "default",
-      "header": header,
-      "text": text,
-      "summary": "",
-      "lastEdited": createTime 
-    };
-
-    // If it's FAQ section
-    if (header.includes("<faq>")) {
-      contentDict["header"] = contentDict["header"].replace("<faq>", "").replace("</faq>", "");
-      contentDict["type"] = "faq";
-
-      const questionRegex = /<question>\n?(.*?)\n?<\/question>/gs;
-      const answerRegex = /<answer>\n?(.*?)\n?<\/answer>/gs;
-      
-      contentDict["questions"] = [...text.matchAll(questionRegex)].map(match => match[1].trim());
-      contentDict["answers"] = [...text.matchAll(answerRegex)].map(match => match[1].trim());
+      sectionId: makeid(5),
+      type: 'default',
+      header: header,
+      text: text,
+      summary: '',
+      lastEdited: createTime,
     }
 
-    content.push(contentDict);
-  });
+    // If it's FAQ section
+    if (header.includes('<faq>')) {
+      contentDict['header'] = contentDict['header']
+        .replace('<faq>', '')
+        .replace('</faq>', '')
+      contentDict['type'] = 'faq'
 
-  return content;
+      const questionRegex = /<question>\n?(.*?)\n?<\/question>/gs
+      const answerRegex = /<answer>\n?(.*?)\n?<\/answer>/gs
+
+      contentDict['questions'] = [...text.matchAll(questionRegex)].map(
+        (match) => match[1].trim(),
+      )
+      contentDict['answers'] = [...text.matchAll(answerRegex)].map((match) =>
+        match[1].trim(),
+      )
+    }
+
+    content.push(contentDict)
+  })
+
+  return content
 }
-
