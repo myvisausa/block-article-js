@@ -1,5 +1,7 @@
+import mapping from '../../../../../content/mapping.json'
+import { Mapping } from '../../../../src/types/Mapping'
+
 import {
-  BlockType,
   HeaderBlock,
   ParagraphBlock,
   ListBlock,
@@ -197,6 +199,35 @@ const transforms: transforms = {
   },
 
   article: (block: ArticleBlock) => {
+    if (
+      block.data.title.includes('ARTICULO') &&
+      block.data.href.includes('/en/')
+    ) {
+      let segments = block.data.href.split('/')
+      // remove empty strings
+      segments = segments.filter((segment) => segment !== '')
+      const dir = segments[1]
+      const fname = segments[2]
+      console.log('dir', dir)
+      console.log('fname', fname)
+      console.log('mapping.dirs', mapping.dirs)
+      const es_dir = mapping.dirs[dir as keyof typeof mapping.dirs]['es']
+      console.log('es_dir', es_dir)
+      if (
+        dir in mapping.names &&
+        fname in
+          (mapping.names[dir as keyof typeof mapping.names] as Record<
+            string,
+            { en: string; es: string }
+          >)
+      ) {
+        const dirMapping = mapping.names[
+          dir as keyof typeof mapping.names
+        ] as Record<string, { en: string; es: string }>
+        const es_name = dirMapping[fname].es
+        block.data.href = `/${es_dir}/${es_name}`
+      }
+    }
     return `<div style="background-color: #fcfcfc; padding-left: 10px; padding-bottom: 10px; margin-bottom: 10px; position: relative;">
               <div style="height: 7px; background-color: black; width: 75px; margin-bottom: 13px;"></div>
               <div style="display: flex; align-items: center;">
