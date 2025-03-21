@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 
 interface EditableTitleProps {
-  title: string;
-  setTitle: (title: string) => void;
+  title: string
+  setTitle: (title: string) => void
 }
 
 const EditableTitle = ({ title, setTitle }: EditableTitleProps) => {

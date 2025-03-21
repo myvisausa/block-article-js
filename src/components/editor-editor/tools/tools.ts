@@ -21,7 +21,7 @@ import Steps from '../../../../custom-blocks/steps/src'
 // import NestedList from "./NestedList";
 
 // Add a type import for the type assertion
-import type { ToolConstructable } from '@editorjs/editorjs';
+import type { ToolConstructable } from '@editorjs/editorjs'
 
 export const createEditorTools = (uploadEndPoint?: string) => ({
   // NOTE: Paragraph is default tool. Declare only when you want to change paragraph option.

@@ -15,7 +15,7 @@ import {
   NoteBlock,
   ChecklistBlock,
   StepsBlock,
-} from '../../types/Block';
+} from '../../types/Block'
 
 export type transforms = {
   [key: string]: any
@@ -107,11 +107,15 @@ const transforms: transforms = {
     let alt = block.data.caption ? block.data.caption : 'Image'
     if (block.data.caption === '') {
       return `<img loading="eager" src="${
-        block.data.file && block.data.file.url ? block.data.file.url : block.data.url
+        block.data.file && block.data.file.url
+          ? block.data.file.url
+          : block.data.url
       }" alt="${alt}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" /></br>`
     }
     return `<img loading="eager" src="${
-      block.data.file && block.data.file.url ? block.data.file.url : block.data.url
+      block.data.file && block.data.file.url
+        ? block.data.file.url
+        : block.data.url
     }" alt="${alt}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" />
     <p class="image-caption">${block.data.caption}</p>`
   },

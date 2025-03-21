@@ -144,7 +144,6 @@ export interface FaqBlock {
   }
 }
 
-
 export interface WarningBlock {
   type: BlockType.Warning
   id: string
@@ -163,4 +162,19 @@ export interface QuoteBlock {
   }
 }
 
-export type AnyBlock = SimpleImageBlock | HeaderBlock | ImageBlock | ParagraphBlock | ListBlock | CodeBlock | TableBlock | ArticleBlock | NoteBlock | ChecklistBlock | StepsBlock | EmbedBlock | FaqBlock | WarningBlock | QuoteBlock
+export type AnyBlock =
+  | SimpleImageBlock
+  | HeaderBlock
+  | ImageBlock
+  | ParagraphBlock
+  | ListBlock
+  | CodeBlock
+  | TableBlock
+  | ArticleBlock
+  | NoteBlock
+  | ChecklistBlock
+  | StepsBlock
+  | EmbedBlock
+  | FaqBlock
+  | WarningBlock
+  | QuoteBlock

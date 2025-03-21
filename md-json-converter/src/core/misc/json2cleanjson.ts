@@ -10,7 +10,6 @@ export default function json2cleanjson(data: ArticleData) {
   return { titleBlocks, bodyBlocks }
 }
 
-
 export function parseTitle(data: ArticleData) {
   const titleBlocks = {
     time: Date.now(),
@@ -23,5 +22,5 @@ export function parseTitle(data: ArticleData) {
 export function parseBody(data: ArticleData) {
   const markdown = json2md(data)
   const bodyBlocks = md2cleanjson(markdown)
-  return bodyBlocks;
+  return bodyBlocks
 }

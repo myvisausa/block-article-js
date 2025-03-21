@@ -1,11 +1,6 @@
-import {
-  BlockType,
-  AnyBlock,
-} from '../../../../types/Block'
+import { BlockType, AnyBlock } from '../../../../types/Block'
 
-const convertFromJSON = (
-  jsonData: any,
-): AnyBlock[] => {
+const convertFromJSON = (jsonData: any): AnyBlock[] => {
   const blocks: any[] = []
 
   for (const block of jsonData.blocks) {

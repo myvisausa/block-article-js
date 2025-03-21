@@ -6,13 +6,13 @@ import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 
 interface EditableImageProps {
-  url: string;
-  uploadEndPoint: string;
-  onImageChange: (url: string) => void;
-  caption: string;
-  setCaption: (caption: string) => void;
-  altDescription: string;
-  setAltDescription: (altDescription: string) => void;
+  url: string
+  uploadEndPoint: string
+  onImageChange: (url: string) => void
+  caption: string
+  setCaption: (caption: string) => void
+  altDescription: string
+  setAltDescription: (altDescription: string) => void
 }
 
 const EditableImage = ({

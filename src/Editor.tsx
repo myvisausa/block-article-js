@@ -2,14 +2,14 @@ import EditorEditor from './components/editor-editor/Editor'
 import Renderer from './Renderer'
 
 interface EditorProps {
-  onDataChange: (updatedData: any) => void;
-  data: any;
-  setData: (updatedData: any) => void;
-  uploadEndPoint: string;
-  isEditMode: boolean;
-  tocTitle?: string;
-  textDirection?: 'ltr' | 'rtl';
-  locale?: string;
+  onDataChange: (updatedData: any) => void
+  data: any
+  setData: (updatedData: any) => void
+  uploadEndPoint: string
+  isEditMode: boolean
+  tocTitle?: string
+  textDirection?: 'ltr' | 'rtl'
+  locale?: string
 }
 
 export default function Editor({

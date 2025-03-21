@@ -14,9 +14,7 @@ import convertMdtoHtml from './utils/convertMdToHtml'
 import processListItems from './block-parsers/processListItems'
 import { AnyBlock } from '../../../../types/Block.js'
 
-const parseNotFaq = (
-  mdContent: string,
-): AnyBlock[] => {
+const parseNotFaq = (mdContent: string): AnyBlock[] => {
   const blocks: AnyBlock[] = []
 
   let listItems = []

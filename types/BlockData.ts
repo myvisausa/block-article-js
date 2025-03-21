@@ -1,7 +1,7 @@
 import { AnyBlock } from './Block'
 
 export interface BlockData {
-    time: number
-    blocks: AnyBlock[]
-    version: string
-  }
+  time: number
+  blocks: AnyBlock[]
+  version: string
+}

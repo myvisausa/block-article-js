@@ -11,10 +11,10 @@ class BlockFactory {
 
     switch (block.type) {
       case BlockType.Header:
-        return { 
+        return {
           id,
-          type: BlockType.Header, 
-          data: { text: block.data.text, level: block.data.level } 
+          type: BlockType.Header,
+          data: { text: block.data.text, level: block.data.level },
         }
       case BlockType.Image:
         return {
@@ -30,22 +30,22 @@ class BlockFactory {
           },
         }
       case BlockType.Paragraph:
-        return { 
+        return {
           id,
-          type: BlockType.Paragraph, 
-          data: { text: block.data.text } 
+          type: BlockType.Paragraph,
+          data: { text: block.data.text },
         }
       case BlockType.List:
-        return { 
+        return {
           id,
-          type: BlockType.List, 
-          data: { style: 'ordered', items: block.data.items } 
+          type: BlockType.List,
+          data: { style: 'ordered', items: block.data.items },
         }
       case BlockType.Code:
-        return { 
+        return {
           id,
-          type: BlockType.Code, 
-          data: { code: block.data.code } 
+          type: BlockType.Code,
+          data: { code: block.data.code },
         }
       case BlockType.Warning:
         return {
@@ -57,13 +57,20 @@ class BlockFactory {
         return {
           id,
           type: BlockType.Table,
-          data: { withHeadings: block.data.withHeadings, content: block.data.content },
+          data: {
+            withHeadings: block.data.withHeadings,
+            content: block.data.content,
+          },
         }
       case BlockType.Article:
         return {
           id,
           type: BlockType.Article,
-          data: { title: block.data.title, text: block.data.text, href: block.data.href },
+          data: {
+            title: block.data.title,
+            text: block.data.text,
+            href: block.data.href,
+          },
         }
       case BlockType.Note:
         return {
@@ -94,7 +101,6 @@ class BlockFactory {
     }
   }
 }
-
 
 export default function parseBlocks(blocks: AnyBlock[]): BlockData {
   const data = {

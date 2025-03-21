@@ -15,7 +15,11 @@ function extractHeaders(blocks: AnyBlock[]) {
     .map((block) => ({ text: (block as HeaderBlock).data.text, id: block.id }))
 }
 
-const handleClick = (id: string, scrollOffset: number, setSelectedHeader: (id: string) => void) => {
+const handleClick = (
+  id: string,
+  scrollOffset: number,
+  setSelectedHeader: (id: string) => void,
+) => {
   const headerElement = document.getElementById(id)
   if (headerElement) {
     const offsetPosition = headerElement.offsetTop - scrollOffset
@@ -27,7 +31,15 @@ const handleClick = (id: string, scrollOffset: number, setSelectedHeader: (id: s
   }
 }
 
-export default function TableOfContents({ data, title, scrollOffset }: { data: BlockData, title: string, scrollOffset: number }) {
+export default function TableOfContents({
+  data,
+  title,
+  scrollOffset,
+}: {
+  data: BlockData
+  title: string
+  scrollOffset: number
+}) {
   const headers = extractHeaders(data.blocks)
   const [selectedHeader, setSelectedHeader] = useState<string | null>(null)
   const [isCollapsed, setIsCollapsed] = useState(false)

@@ -1,11 +1,6 @@
-import {
-  BlockType,
-  AnyBlock,
-} from '../../../../types/Block'
+import { BlockType, AnyBlock } from '../../../../types/Block'
 
-const blocksToMarkdown = (
-  blocks: AnyBlock[]
-) => {
+const blocksToMarkdown = (blocks: AnyBlock[]) => {
   let mdContent = ''
 
   for (const block of blocks) {

@@ -9,22 +9,22 @@ import { IconClipboard } from '@codexteam/icons'
 import './index.css'
 
 interface RelatedArticleData {
-  title: string;
-  text: string;
-  href: string;
+  title: string
+  text: string
+  href: string
 }
 
 interface RelatedArticleConfig {
-  titlePlaceholder?: string;
-  textPlaceholder?: string;
-  hrefPlaceholder?: string;
+  titlePlaceholder?: string
+  textPlaceholder?: string
+  hrefPlaceholder?: string
 }
 
 interface API {
   styles: {
-    block: string;
-    input: string;
-  };
+    block: string
+    input: string
+  }
 }
 
 /**
@@ -46,12 +46,12 @@ interface API {
  * @property {string} hrefPlaceholder - placeholder to show in warning`s href input
  */
 export default class RelatedArticle {
-  api: API;
-  readOnly: boolean;
-  titlePlaceholder: string;
-  textPlaceholder: string;
-  hrefPlaceholder: string;
-  data: RelatedArticleData;
+  api: API
+  readOnly: boolean
+  titlePlaceholder: string
+  textPlaceholder: string
+  hrefPlaceholder: string
+  data: RelatedArticleData
 
   /**
    * Notify core that read-only mode is supported
@@ -137,7 +137,17 @@ export default class RelatedArticle {
    * @param {object} api - Editor.js API
    * @param {boolean} readOnly - read-only mode flag
    */
-  constructor({ data, config, api, readOnly }: { data: RelatedArticleData; config: RelatedArticleConfig; api: API; readOnly: boolean }) {
+  constructor({
+    data,
+    config,
+    api,
+    readOnly,
+  }: {
+    data: RelatedArticleData
+    config: RelatedArticleConfig
+    api: API
+    readOnly: boolean
+  }) {
     this.api = api
     this.readOnly = readOnly
 
@@ -212,7 +222,11 @@ export default class RelatedArticle {
    * @param  {object} attributes        - any attributes
    * @returns {Element}
    */
-  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
+  _make(
+    tagName: string,
+    classNames: string[] | string | null = null,
+    attributes: Record<string, any> = {},
+  ) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -224,18 +238,18 @@ export default class RelatedArticle {
     for (const attrName in attributes) {
       if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
         if (attrName === 'innerHTML') {
-          el.innerHTML = attributes[attrName];
+          el.innerHTML = attributes[attrName]
         } else if (attrName === 'contentEditable') {
-          el.contentEditable = attributes[attrName];
+          el.contentEditable = attributes[attrName]
         } else {
           try {
             if (attrName in el) {
-              (el as any)[attrName] = attributes[attrName];
+              ;(el as any)[attrName] = attributes[attrName]
             } else {
-              el.setAttribute(attrName, attributes[attrName]);
+              el.setAttribute(attrName, attributes[attrName])
             }
           } catch (e) {
-            el.setAttribute(attrName, attributes[attrName]);
+            el.setAttribute(attrName, attributes[attrName])
           }
         }
       }

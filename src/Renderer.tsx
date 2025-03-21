@@ -11,20 +11,20 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import CommentSection from './components/Comment/CommentSection'
-import { ResourceJsonType } from '../../../src/types/resource-types/ResourceJsonType';
+import { ResourceJsonType } from '../../../src/types/resource-types/ResourceJsonType'
 
 const myParser = parser()
 
 interface RendererProps {
   otherText: {
-    articleNotFound: string;
-    socialShare: string;
-    toc: string;
-  };
-  data: ResourceJsonType;
-  scrollOffset?: number;
-  onArticleLoaded?: () => void;
-  locale?: string;
+    articleNotFound: string
+    socialShare: string
+    toc: string
+  }
+  data: ResourceJsonType
+  scrollOffset?: number
+  onArticleLoaded?: () => void
+  locale?: string
 }
 
 export default function Renderer({
@@ -131,7 +131,10 @@ export default function Renderer({
           )}
 
           {/* Social Sharing */}
-          <SocialComp text={otherText.socialShare} className={styles.share_content} />
+          <SocialComp
+            text={otherText.socialShare}
+            className={styles.share_content}
+          />
 
           {/* Comment Section */}
           <CommentSection articleId={data.postId} otherText={otherText} />
@@ -165,7 +168,13 @@ export function renderArticle(data: any) {
   }
 }
 
-const SocialComp = ({ text, className }: { text: string, className: string }) => {
+const SocialComp = ({
+  text,
+  className,
+}: {
+  text: string
+  className: string
+}) => {
   const [currentUrl, setCurrentUrl] = useState('')
 
   useEffect(() => {

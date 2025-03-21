@@ -1,5 +1,5 @@
-import { BlockType, NoteBlock } from "../../../../../types/Block"
-import { generateBlockId } from "../parseBlocks"
+import { BlockType, NoteBlock } from '../../../../../types/Block'
+import { generateBlockId } from '../parseBlocks'
 
 const parseNote = (line: string): NoteBlock | null => {
   const noteMatch = line.match(/\|NOTE title=(.+)\s+message=(.+)\s+NOTE\|/)

@@ -9,20 +9,20 @@ import { IconCopy } from '@codexteam/icons'
 import './index.css'
 
 interface NoteData {
-  title: string;
-  message: string;
+  title: string
+  message: string
 }
 
 interface NoteConfig {
-  titlePlaceholder?: string;
-  messagePlaceholder?: string;
+  titlePlaceholder?: string
+  messagePlaceholder?: string
 }
 
 interface API {
   styles: {
-    block: string;
-    input: string;
-  };
+    block: string
+    input: string
+  }
 }
 
 /**
@@ -42,11 +42,11 @@ interface API {
  * @property {string} messagePlaceholder - placeholder to show in note`s message input
  */
 export default class Note {
-  api: API;
-  readOnly: boolean;
-  titlePlaceholder: string;
-  messagePlaceholder: string;
-  data: NoteData;
+  api: API
+  readOnly: boolean
+  titlePlaceholder: string
+  messagePlaceholder: string
+  data: NoteData
 
   /**
    * Notify core that read-only mode is supported
@@ -121,7 +121,17 @@ export default class Note {
    * @param {object} api - Editor.js API
    * @param {boolean} readOnly - read-only mode flag
    */
-  constructor({ data, config, api, readOnly }: { data: NoteData; config: NoteConfig; api: API; readOnly: boolean }) {
+  constructor({
+    data,
+    config,
+    api,
+    readOnly,
+  }: {
+    data: NoteData
+    config: NoteConfig
+    api: API
+    readOnly: boolean
+  }) {
     this.api = api
     this.readOnly = readOnly
 
@@ -185,7 +195,11 @@ export default class Note {
    * @param  {object} attributes        - any attributes
    * @returns {Element}
    */
-  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
+  _make(
+    tagName: string,
+    classNames: string[] | string | null = null,
+    attributes: Record<string, any> = {},
+  ) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -197,18 +211,18 @@ export default class Note {
     for (const attrName in attributes) {
       if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
         if (attrName === 'innerHTML') {
-          el.innerHTML = attributes[attrName];
+          el.innerHTML = attributes[attrName]
         } else if (attrName === 'contentEditable') {
-          el.contentEditable = attributes[attrName];
+          el.contentEditable = attributes[attrName]
         } else {
           try {
             if (attrName in el) {
-              (el as any)[attrName] = attributes[attrName];
+              ;(el as any)[attrName] = attributes[attrName]
             } else {
-              el.setAttribute(attrName, attributes[attrName]);
+              el.setAttribute(attrName, attributes[attrName])
             }
           } catch (e) {
-            el.setAttribute(attrName, attributes[attrName]);
+            el.setAttribute(attrName, attributes[attrName])
           }
         }
       }

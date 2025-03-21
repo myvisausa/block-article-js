@@ -4,7 +4,7 @@ import transforms from './transforms'
 type IParser = {
   parse(OutputData: OutputData): Array<string>
   parseStrict(OutputData: OutputData): Array<string>
-  parseBlock(block: OutputBlockData): string 
+  parseBlock(block: OutputBlockData): string
   validate(OutputData: OutputData): Array<string>
 }
 
@@ -19,9 +19,7 @@ const parser = (plugins = {}): IParser => {
     },
 
     parseBlock: (block: OutputBlockData) => {
-      return parsers[block.type]
-        ? parsers[block.type](block)
-        : ''
+      return parsers[block.type] ? parsers[block.type](block) : ''
     },
 
     parseStrict: ({ blocks }) => {
@@ -36,7 +34,7 @@ const parser = (plugins = {}): IParser => {
       const parsed = []
 
       for (let i = 0; i < blocks.length; i++) {
-        if (!parsers[blocks[i].type]) continue;
+        if (!parsers[blocks[i].type]) continue
 
         parsed.push(parsers[blocks[i].type](blocks[i]))
       }

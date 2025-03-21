@@ -9,26 +9,26 @@ import { IconCheck } from '@codexteam/icons'
 import './index.css'
 
 interface ChecklistData {
-  title: string;
-  items: string[];
+  title: string
+  items: string[]
 }
 
 interface ChecklistConfig {
-  titlePlaceholder?: string;
+  titlePlaceholder?: string
 }
 
 interface API {
   styles: {
-    block: string;
-    input: string;
-  };
+    block: string
+    input: string
+  }
 }
 
 export default class Checklist {
-  api: API;
-  readOnly: boolean;
-  titlePlaceholder: string;
-  data: ChecklistData;
+  api: API
+  readOnly: boolean
+  titlePlaceholder: string
+  data: ChecklistData
 
   static get isReadOnlySupported() {
     return true
@@ -60,7 +60,17 @@ export default class Checklist {
     }
   }
 
-  constructor({ data, config, api, readOnly }: { data: ChecklistData; config: ChecklistConfig; api: API; readOnly: boolean }) {
+  constructor({
+    data,
+    config,
+    api,
+    readOnly,
+  }: {
+    data: ChecklistData
+    config: ChecklistConfig
+    api: API
+    readOnly: boolean
+  }) {
     this.api = api
     this.readOnly = readOnly
 
@@ -138,7 +148,11 @@ export default class Checklist {
     }
   }
 
-  _make(tagName: string, classNames: string[] | string | null = null, attributes: Record<string, any> = {}) {
+  _make(
+    tagName: string,
+    classNames: string[] | string | null = null,
+    attributes: Record<string, any> = {},
+  ) {
     const el = document.createElement(tagName)
 
     if (Array.isArray(classNames)) {
@@ -150,18 +164,18 @@ export default class Checklist {
     for (const attrName in attributes) {
       if (Object.prototype.hasOwnProperty.call(attributes, attrName)) {
         if (attrName === 'innerHTML') {
-          el.innerHTML = attributes[attrName];
+          el.innerHTML = attributes[attrName]
         } else if (attrName === 'contentEditable') {
-          el.contentEditable = attributes[attrName];
+          el.contentEditable = attributes[attrName]
         } else {
           try {
             if (attrName in el) {
-              (el as any)[attrName] = attributes[attrName];
+              ;(el as any)[attrName] = attributes[attrName]
             } else {
-              el.setAttribute(attrName, attributes[attrName]);
+              el.setAttribute(attrName, attributes[attrName])
             }
           } catch (e) {
-            el.setAttribute(attrName, attributes[attrName]);
+            el.setAttribute(attrName, attributes[attrName])
           }
         }
       }

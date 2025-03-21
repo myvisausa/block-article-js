@@ -1,5 +1,5 @@
-import { BlockType, ChecklistBlock } from "../../../../../types/Block"
-import { generateBlockId } from "../parseBlocks"
+import { BlockType, ChecklistBlock } from '../../../../../types/Block'
+import { generateBlockId } from '../parseBlocks'
 const parseChecklist = (line: string): ChecklistBlock | null => {
   const checklistMatch = line.match(
     /\|CHECKLIST title=(.+)\s+items=(.+)\s+CHECKLIST\|/,

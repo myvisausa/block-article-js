@@ -2,9 +2,9 @@ import React from 'react'
 import { Grid, TextField } from '@mui/material'
 
 interface EditableDivProps {
-  label: string;
-  content: string;
-  setContent: (content: string) => void;
+  label: string
+  content: string
+  setContent: (content: string) => void
 }
 
 const EditableDiv = ({ label, content, setContent }: EditableDivProps) => {

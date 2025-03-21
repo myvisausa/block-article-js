@@ -13,10 +13,10 @@ import {
 } from '../../../md-json-converter/src/index'
 
 interface EditorEditorProps {
-  data: any;
-  setData: (data: any) => void;
-  uploadEndPoint: string;
-  textDirection?: 'ltr' | 'rtl';
+  data: any
+  setData: (data: any) => void
+  uploadEndPoint: string
+  textDirection?: 'ltr' | 'rtl'
 }
 
 export default function EditorEditor({
