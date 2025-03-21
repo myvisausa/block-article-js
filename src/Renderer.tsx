@@ -11,6 +11,7 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import CommentSection from './components/Comment/CommentSection'
+import { ResourceJsonType } from '../../../src/types/resource-types/ResourceJsonType';
 
 const myParser = parser()
 
@@ -20,7 +21,7 @@ interface RendererProps {
     socialShare: string;
     toc: string;
   };
-  data: any;
+  data: ResourceJsonType;
   scrollOffset?: number;
   onArticleLoaded?: () => void;
   locale?: string;
@@ -133,7 +134,7 @@ export default function Renderer({
           <SocialComp text={otherText.socialShare} className={styles.share_content} />
 
           {/* Comment Section */}
-          <CommentSection articleId={data.metadata.id} otherText={otherText} />
+          <CommentSection articleId={data.postId} otherText={otherText} />
         </div>
       </div>
     </>
