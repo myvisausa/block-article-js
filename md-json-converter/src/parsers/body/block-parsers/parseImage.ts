@@ -1,5 +1,5 @@
 import { BlockType, ImageBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const parseImage = (line: string): ImageBlock | null => {
   const imageMatch = line.match(/!\[([^\]]+)\]\(([^)]+)\)/)

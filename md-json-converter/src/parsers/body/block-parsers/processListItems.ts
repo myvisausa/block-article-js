@@ -1,5 +1,5 @@
 import { BlockType, ListBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const processListItems = (listItems: string[]): ListBlock | null => {
   if (listItems.length) {

@@ -1,5 +1,5 @@
 import { BlockType, WarningBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const parseWarning = (line: string): WarningBlock | null => {
   const warningMatch = line.match(

@@ -1,13 +1,11 @@
 import { BlockType, AnyBlock } from '../../../../types/Block'
 import { BlockData } from '../../../../types/BlockData'
-
-// BlockIdGenerator.ts
-export const generateBlockId = () => Math.random().toString(36).substring(2, 12)
+import { generateBlockId } from '../../../../src/generateBlockId'
 
 // BlockFactory.js
 class BlockFactory {
   static createBlock(block: AnyBlock): AnyBlock {
-    const id = generateBlockId()
+    const id = generateBlockId(block)
 
     switch (block.type) {
       case BlockType.Header:

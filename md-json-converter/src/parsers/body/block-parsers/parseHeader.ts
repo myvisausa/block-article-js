@@ -1,5 +1,5 @@
 import { BlockType, HeaderBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const parseHeader = (line: string): HeaderBlock | null => {
   const headerMatch = line.match(/^(#{1,6})\s(.+)$/)

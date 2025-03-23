@@ -1,6 +1,6 @@
 import convertMdtoHtml from '../utils/convertMdToHtml'
 import { BlockType, ParagraphBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 function containsInvalidTag(str: string) {
   // This regex looks for a string that starts with < and is followed by any character

@@ -1,5 +1,5 @@
 import { BlockType, TableBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const parseTable = (line: string): TableBlock | null => {
   const tableMatch = line.match(

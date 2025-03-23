@@ -1,5 +1,5 @@
 import { BlockType, CodeBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 interface CodeBlockResult {
   block: CodeBlock

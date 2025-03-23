@@ -1,14 +1,9 @@
+import { generateBlockId } from '../../../../src/generateBlockId';
+
 function makeid(length: number) {
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  let counter = 0
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    counter += 1
-  }
-  return result
+  // Create a deterministic ID based on the current content count and length
+  // The hash function inside generateBlockId will ensure uniqueness
+  return generateBlockId({ type: 'section', data: { length } });
 }
 
 interface ContentSection {

@@ -1,5 +1,5 @@
 import { BlockType, ArticleBlock } from '../../../../../types/Block'
-import { generateBlockId } from '../parseBlocks'
+import { generateBlockId } from '../../../../../src/generateBlockId'
 
 const parseArticle = (line: string): ArticleBlock | null => {
   const articleMatch = line.match(

@@ -1,11 +1,12 @@
-export const generateBlockId = () => {
-  return Math.random().toString(36).substr(2, 10)
-}
+import { generateBlockId } from '../../../src/generateBlockId'
 
 export default function parseMetadata(metadata: any) {
   let blocks: any[] = []
   const titleBlock = {
-    id: generateBlockId(),
+    id: generateBlockId({
+      type: 'header', 
+      data: { text: metadata.title, level: 1 }
+    }),
     type: 'header',
     data: {
       text: metadata.title,
@@ -16,6 +17,14 @@ export default function parseMetadata(metadata: any) {
 
   if (metadata.ogImage !== '') {
     let ogImageBLock = {
+      id: generateBlockId({
+        type: 'simpleImage',
+        data: {
+          url: metadata.ogImage,
+          alt: metadata.ogImageAlt,
+          caption: metadata.ogImageCaption
+        }
+      }),
       type: 'simpleImage',
       data: {
         url: metadata.ogImage,
