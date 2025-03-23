@@ -208,11 +208,7 @@ const transforms: transforms = {
       segments = segments.filter((segment) => segment !== '')
       const dir = segments[1]
       const fname = segments[2]
-      console.log('dir', dir)
-      console.log('fname', fname)
-      console.log('mapping.dirs', mapping.dirs)
       const es_dir = mapping.dirs[dir as keyof typeof mapping.dirs]['es']
-      console.log('es_dir', es_dir)
       if (
         dir in mapping.names &&
         fname in
