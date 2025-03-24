@@ -4,8 +4,8 @@ export default function parseMetadata(metadata: any) {
   let blocks: any[] = []
   const titleBlock = {
     id: generateBlockId({
-      type: 'header', 
-      data: { text: metadata.title, level: 1 }
+      type: 'header',
+      data: { text: metadata.title, level: 1 },
     }),
     type: 'header',
     data: {
@@ -22,8 +22,8 @@ export default function parseMetadata(metadata: any) {
         data: {
           url: metadata.ogImage,
           alt: metadata.ogImageAlt,
-          caption: metadata.ogImageCaption
-        }
+          caption: metadata.ogImageCaption,
+        },
       }),
       type: 'simpleImage',
       data: {
