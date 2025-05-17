@@ -13,11 +13,11 @@ const EditableDiv = ({ label, content, setContent }: EditableDivProps) => {
   }
 
   return (
-    <Grid container alignItems='center' spacing={1}>
-      <Grid item xs={3}>
+    <Grid container spacing={1} alignItems='center'>
+      <Grid size={3}>
         <label>{label}</label>
       </Grid>
-      <Grid item xs={9}>
+      <Grid size={9}>
         <TextField
           fullWidth
           multiline
