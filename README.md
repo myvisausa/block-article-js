@@ -41,7 +41,7 @@ The Editor requires the following props:
 Example:
 
 ```
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EditorPage from "../../../../block-article-js/src/Editor";
 import EditMenuBar from './EditorBar';
 import saveData from '@/hooks/saveData'; // persist JSON data obj to db

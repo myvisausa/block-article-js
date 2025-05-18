@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import HeaderEditor from '../header-editor/HeaderEditor'
 
 // import tools for editor config
