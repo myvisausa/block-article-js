@@ -1,5 +1,4 @@
-import mapping from '../../../../../content/mapping.json'
-import { Mapping } from '../../../../src/types/Mapping'
+import mapping from '../../../../../../content/mapping.json'
 
 import {
   HeaderBlock,
