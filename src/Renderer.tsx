@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import parse from 'html-react-parser'
 import TableOfContents from './components/toc-renderer/TableOfContents'
 import parser from '../editorjs-renderer/src/app'

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './CommentSection.module.css'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Modal } from 'react-bootstrap'

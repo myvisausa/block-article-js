@@ -1,3 +1,4 @@
+import React from 'react'
 import EditorEditor from './components/editor-editor/Editor'
 import Renderer from './Renderer'
 

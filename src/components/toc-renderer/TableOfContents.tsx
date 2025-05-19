@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styles from './tableOfContents.module.css'
 
 import { AnyBlock, BlockType, HeaderBlock } from '../../../types/Block'
