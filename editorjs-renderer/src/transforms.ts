@@ -1,4 +1,4 @@
-import mapping from '../../../../src/i18n/mapping.json'
+import mapping from '../../../../../../assets/mapping.json'
 
 import {
   HeaderBlock,
