@@ -11,7 +11,7 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import CommentSection from './components/Comment/CommentSection'
-import { ResourceJsonType } from '../../../src/types/resource-types/ResourceJsonType'
+import { ResourceArticle } from '@/i18n/types/page-types/ResourceArticle.type'
 
 const myParser = parser()
 
@@ -21,7 +21,7 @@ interface RendererProps {
     socialShare: string
     toc: string
   }
-  data: ResourceJsonType
+  data: ResourceArticle
   scrollOffset?: number
   onArticleLoaded?: () => void
   locale?: string
