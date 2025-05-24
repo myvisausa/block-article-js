@@ -1,20 +1,10 @@
+import { ContentSection } from '@/i18n/types/page-types/ResourceArticle.type'
 import { generateBlockId } from '../../../../src/generateBlockId'
 
 function makeid(length: number) {
   // Create a deterministic ID based on the current content count and length
   // The hash function inside generateBlockId will ensure uniqueness
   return generateBlockId({ type: 'section', data: { length } })
-}
-
-interface ContentSection {
-  sectionId: string
-  type: string
-  header: string
-  text: string
-  summary: string
-  lastEdited: string
-  questions?: string[]
-  answers?: string[]
 }
 
 export default function md2json(md_text: string) {
