@@ -1,9 +1,3 @@
-import { Metadata } from '../../../src/types/resource-types/Metadata'
-import { Content } from '../../../src/types/resource-types/Content'
+import { ResourceArticle } from '@/i18n/types/ResourceArticle.type'
 
-export interface ArticleData {
-  pageType: string
-  postId: string
-  content: Content[]
-  metadata: Metadata
-}
+export interface ArticleData extends ResourceArticle {}
