@@ -1,4 +1,4 @@
-import { ResourceArticle } from '@/types/ResourceArticle.type'
+import { ResourceArticle } from '../../../../types/ResourceArticle.type'
 
 export default function json2md(data: ResourceArticle) {
   let markdown = ''

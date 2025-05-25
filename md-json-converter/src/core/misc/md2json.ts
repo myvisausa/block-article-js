@@ -1,4 +1,4 @@
-import { ContentSection } from '@/types/ResourceArticle.type'
+import { ContentSection } from '../../../../types/ResourceArticle.type'
 import { generateBlockId } from '../../../../src/generateBlockId'
 
 function makeid(length: number) {
