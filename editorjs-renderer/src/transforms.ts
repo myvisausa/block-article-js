@@ -1,4 +1,4 @@
-import mapping from '../../../../../../assets/mapping.json'
+import mapping from '@assets/mapping.json'
 
 import {
   HeaderBlock,
