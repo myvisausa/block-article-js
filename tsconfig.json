@@ -24,7 +24,7 @@
       "@/i18n/*": ["../../src/i18n/*"],
       "@common/*": ["../../../../common/*"],
       "@assets/*": ["../../../../assets/*"],
-      "@form-renderer/*": ["../../../../form-renderer/*"],
+      "@form-renderer/*": ["../../../../form-renderer/*"]
     }
   },
   "include": [
