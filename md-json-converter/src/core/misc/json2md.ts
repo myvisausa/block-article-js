@@ -1,6 +1,6 @@
-import { ArticleData } from '../../../../types/ArticleData'
+import { ResourceArticle } from '@/types/ResourceArticle.type'
 
-export default function json2md(data: ArticleData) {
+export default function json2md(data: ResourceArticle) {
   let markdown = ''
 
   for (const section of data.content) {

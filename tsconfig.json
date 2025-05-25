@@ -6,7 +6,10 @@
     "noEmit": true,
     "paths": {
       "@common/*": [
-        "../common/*"
+        "../common/*",
+      ],
+      "@/types/*": [
+        "./types/*"
       ]
     }
   },

@@ -11,7 +11,7 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp'
 import CommentSection from './components/Comment/CommentSection'
-import { ResourceArticle } from '@/i18n/types/page-types/ResourceArticle.type'
+import { ResourceArticle } from '@/types/ResourceArticle.type'
 
 const myParser = parser()
 
