@@ -10,6 +10,13 @@ interface EditorProps {
   tocTitle?: string
   textDirection?: 'ltr' | 'rtl'
   locale?: string
+  innerStyle?: React.CSSProperties
+}
+
+const DEFAULT_INNER_STYLE = {
+  marginTop: '0rem',
+  maxWidth: '1000px',
+  width: '100%',
 }
 
 export default function Editor({
@@ -20,6 +27,7 @@ export default function Editor({
   isEditMode,
   textDirection = 'ltr',
   locale = 'en',
+  innerStyle = DEFAULT_INNER_STYLE,
 }: EditorProps) {
   const handleDataChange = (updatedData: any) => {
     setData(updatedData)
@@ -37,13 +45,7 @@ export default function Editor({
     marginTop: '0.25rem',
     margin: '1.5rem',
   }
-
-  const innerStyle = {
-    marginTop: '0rem',
-    maxWidth: '1000px',
-    width: '100%',
-  }
-
+  
   const otherText = {
     articleNotFound: 'Article not found',
     socialShare: 'Share this article',

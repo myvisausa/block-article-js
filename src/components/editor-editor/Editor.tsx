@@ -5,7 +5,7 @@ import HeaderEditor from '../header-editor/HeaderEditor'
 import { createEditorTools } from './tools/tools'
 
 // create editor instance
-import { createReactEditorJS } from 'react-editor-js'
+import EditorJS from '@editorjs/editorjs'
 import {
   json2cleanjson,
   cleanjson2md,
@@ -29,34 +29,67 @@ export default function EditorEditor({
   const [imageUrl, setImageUrl] = useState(data.metadata.ogImage)
   const [caption, setCaption] = useState(data.metadata.ogImageCaption)
   const [altDescription, setAltDescription] = useState(data.metadata.ogImageAlt)
+  const [editorError, setEditorError] = useState<string | null>(null)
 
-  let initialData = json2cleanjson(data).bodyBlocks
-
-  const editorCore = useRef<any>(null)
-
-  const ReactEditorJS = createReactEditorJS()
-
-  const handleInitialize = useCallback((instance: any) => {
-    // await instance._editorJS.isReady;
-    instance._editorJS.isReady
-      .then(() => {
-        // set reference to editor
-        editorCore.current = instance
-      })
-      .catch((err: any) => console.log('An error occured', err))
-  }, [])
-
-  const handleSave = useCallback(async () => {
-    // retrieve data inserted
-    const savedData = await editorCore.current?.save()
-    const markdown = cleanjson2md(savedData)
-    const content = md2json(markdown)
-    const newData = {
-      ...data,
-      content: content,
+  let initialData
+  try {
+    initialData = json2cleanjson(data).bodyBlocks
+  } catch (error) {
+    console.error('Error transforming data:', error)
+    // Fallback to empty editor data
+    initialData = {
+      time: Date.now(),
+      blocks: [],
+      version: '2.28.2'
     }
-    setData(newData)
-  }, [setData])
+    setEditorError(`Data transformation failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+
+  const editorRef = useRef<EditorJS | null>(null)
+  const editorHolderId = useRef(`editor-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`)
+
+  // Initialize native EditorJS
+  useEffect(() => {
+    if (!editorRef.current) {
+      const editorElement = document.getElementById(editorHolderId.current)
+      if (editorElement) {
+        try {
+          editorRef.current = new EditorJS({
+            holder: editorHolderId.current,
+            tools: createEditorTools(uploadEndPoint),
+            data: initialData,
+            placeholder: 'Start writing your content...',
+            onChange: async () => {
+              try {
+                if (editorRef.current) {
+                  const savedData = await editorRef.current.save()
+                  const markdown = cleanjson2md(savedData)
+                  const content = md2json(markdown)
+                  const newData = {
+                    ...data,
+                    content: content,
+                  }
+                  setData(newData)
+                }
+              } catch (error) {
+                console.error('Editor save error:', error)
+              }
+            }
+          })
+        } catch (error) {
+          console.error('EditorJS initialization error:', error)
+          setEditorError(`Editor failed to initialize: ${error instanceof Error ? error.message : String(error)}`)
+        }
+      }
+    }
+
+    return () => {
+      if (editorRef.current && editorRef.current.destroy) {
+        editorRef.current.destroy()
+        editorRef.current = null
+      }
+    }
+  }, [initialData, uploadEndPoint, data, setData])
 
   useEffect(() => {
     const updateData = {
@@ -76,6 +109,26 @@ export default function EditorEditor({
     }
   }, [title, imageUrl, caption, altDescription])
 
+  // Validate initialData format
+  const isValidData = initialData && 
+    typeof initialData === 'object' && 
+    Array.isArray(initialData.blocks) &&
+    typeof initialData.time === 'number'
+
+  if (!isValidData) {
+    console.error('Invalid initialData format:', initialData)
+    return (
+      <div className='editor-container'>
+        <h4 className='edit-mode-alert'>! Edit Mode Enabled</h4>
+        <div style={{ padding: '20px', border: '1px solid red', margin: '10px' }}>
+          <h3>Editor Error</h3>
+          <p>Invalid data format. Expected EditorJS format with blocks array and time.</p>
+          <pre>{JSON.stringify(initialData, null, 2)}</pre>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='editor-container'>
       <h4 className='edit-mode-alert'>! Edit Mode Enabled</h4>
@@ -90,12 +143,22 @@ export default function EditorEditor({
         altDescription={altDescription}
         setAltDescription={setAltDescription}
       />
-      <ReactEditorJS
-        onInitialize={handleInitialize}
-        tools={createEditorTools(uploadEndPoint)}
-        i18n={{ direction: textDirection }}
-        onChange={handleSave}
-        defaultValue={initialData}
+      
+      {editorError && (
+        <div style={{ padding: '10px', backgroundColor: '#ffebee', border: '1px solid #f44336', margin: '10px' }}>
+          <strong>Editor Error:</strong> {editorError}
+        </div>
+      )}
+      
+      <div 
+        id={editorHolderId.current}
+        style={{ 
+          minHeight: '200px', 
+          border: '1px solid #e0e0e0', 
+          borderRadius: '4px',
+          padding: '10px',
+          backgroundColor: '#fff'
+        }}
       />
     </div>
   )

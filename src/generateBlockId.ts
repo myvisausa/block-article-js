@@ -21,12 +21,10 @@ let idCounter = 0
  */
 export const generateBlockId = (block?: any): string => {
   if (!block) {
-    // If no block data is provided, use a counter-based approach
-    const counterStr = (idCounter++).toString().padStart(6, '0')
-    return 'block-' + hashString(counterStr)
+    const counterStr = (idCounter++).toString().padStart(6, '0');
+    return 'block-' + hashString(counterStr);
   }
 
-  // Create a string representation of the block to hash
-  const blockString = block.type + '-' + JSON.stringify(block.data || {})
-  return hashString(blockString)
-}
+  const blockString = block.type + '-' + JSON.stringify(block.data || {});
+  return hashString(blockString) + '-' + (idCounter++).toString(36);
+};

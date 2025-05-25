@@ -53,7 +53,9 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
       messagePlaceholder: 'Message',
     },
   } as unknown as ToolConstructable,
-  code: Code,
+  code: {
+    class: Code,
+  } as unknown as ToolConstructable,
   // linkTool: LinkTool,  // not in editorjs-renderer transforms
   image: {
     class: ImageTool,
@@ -65,12 +67,18 @@ export const createEditorTools = (uploadEndPoint?: string) => ({
     },
   } as unknown as ToolConstructable,
   // raw: Raw,  // not in editorjs-renderer transforms
-  header: Header,
+  header: {
+    class: Header,
+  } as unknown as ToolConstructable,
   // quote: Quote,  // not in editorjs-renderer transforms
-  marker: Marker,
+  marker: {
+    class: Marker,
+  } as unknown as ToolConstructable,
   // delimiter: Delimiter,  // not in editorjs-renderer transforms
   // inlineCode: InlineCode,  // not in editorjs-renderer transforms
-  simpleImage: SimpleImage,
+  simpleImage: {
+    class: SimpleImage,
+  } as unknown as ToolConstructable,
   article: {
     class: RelatedArticle,
     inlineToolbar: true,
