@@ -1,42 +1,14 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "target": "es2018",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "rootDir": "../",
+    "composite": true,          // so editors understand project references
     "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/i18n/*": ["../../src/i18n/*"],
-      "@common/*": ["../../../../common/*"],
-      "@assets/*": ["../../../../assets/*"],
-      "@form-renderer/*": ["../../../../form-renderer/*"]
+      "@common/*": [
+        "../common/*"
+      ]
     }
   },
-  "include": [
-    "types/Block.ts",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    ".next/types/**/*.ts",
-    "src/components/editor-editor/data/exampleData.ts"
-  ],
-  "exclude": ["node_modules", "tests"],
-  "types": ["jest"]
+  "include": ["./**/*"]
 }
