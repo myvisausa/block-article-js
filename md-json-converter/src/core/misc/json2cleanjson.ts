@@ -1,7 +1,7 @@
 import json2md from './json2md'
 import md2cleanjson from './md2cleanjson'
 import parseMetadata from '../../parsers/parseMetadata'
-import { ResourceArticle } from '@/types/ResourceArticle.type'
+import { ResourceArticle } from '../../../../types/ResourceArticle.type'
 
 export default function json2cleanjson(data: ResourceArticle) {
   const titleBlocks = parseTitle(data)
