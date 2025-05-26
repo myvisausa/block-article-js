@@ -25,6 +25,7 @@ interface RendererProps {
   scrollOffset?: number
   onArticleLoaded?: () => void
   locale?: string
+  alignRow?: boolean
 }
 
 export default function Renderer({
@@ -33,6 +34,7 @@ export default function Renderer({
   scrollOffset = 15,
   onArticleLoaded = () => {},
   locale = 'en',
+  alignRow = true,
 }: RendererProps) {
   if (!data) {
     return <div className={styles.textCenter}>{otherText.articleNotFound}</div>
@@ -87,58 +89,131 @@ export default function Renderer({
         </p>
       </div>
 
-      {/* Image */}
-      <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
-        <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
-      </div>
-
       {/* Content Wrapper */}
-      <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
-        {/* Table of Contents */}
-        <div className={`col-12 col-lg-4 ${styles.tableOfContents}`}>
-          <TableOfContents
-            data={tocData}
-            title={otherText.toc}
-            scrollOffset={scrollOffset}
-          />
-        </div>
-
-        {/* Main Content */}
-        <div className={`col-12 col-lg-8 ${styles.content} mt-3 mt-lg-0`}>
-          {/* Tags and Metadata */}
-          <div className='d-flex justify-content-between align-items-center'>
-            <div className={styles.blog_post_grp}>
-              <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '}
-              {/* Assuming only 2 tags */}
-              <p className={styles.finding_btn}>
-                {data.metadata?.tags[1]}
-              </p>{' '}
+      <div className={styles.outerContainer}>
+        {alignRow ? (
+          /* Aligned Row Layout */
+          <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
+            {/* Table of Contents */}
+            <div className={`col-12 col-lg-3 ${styles.tableOfContents}`}>
+              <TableOfContents
+                data={tocData}
+                title={otherText.toc}
+                scrollOffset={scrollOffset}
+              />
             </div>
-            <p className={`${styles.published_date} d-none d-lg-block`}>
-              {data.metadata.author} •{' '}
-              {data.metadata.modifiedTime.slice(0, 10)}{' '}
-            </p>
+
+            {/* Image, Metadata, and Body Column */}
+            <div className={`col-12 col-lg-9 ${styles.content} mt-0 mt-lg-0`}>
+              {/* Image and Metadata Row */}
+              <div className={`row mb-4`}>
+                {/* Image Column */}
+                <div className={`col-12 col-lg-auto d-flex justify-content-center`}>
+                  <div className={`${styles.imageAligned} ${rtlClass}`}>
+                    <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
+                  </div>
+                </div>
+                
+                {/* Metadata Column */}
+                <div className={`col-12 col-lg ${styles.metadataColumn}`}>
+                  {/* Article Description Placeholder */}
+                  <p className={styles.articleDescription}>
+                    {data?.content?.[0]?.text?.slice(0, 350) ?? data.metadata.description}... {/*... // TODO: fix this */}
+                  </p>
+                  
+                  {/* Tags and Author in single row */}
+                  <div className={styles.tagsRow}>
+                    <div className={styles.blog_post_grp}>
+                      <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>
+                      <p className={styles.finding_btn}>
+                        {data.metadata?.tags[1]}
+                      </p>
+                    </div>
+                    <p className={`${styles.published_date}`}>
+                      {data.metadata.author} •{' '}
+                      {data.metadata.modifiedTime.slice(0, 10)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body Content */}
+              {isBodyLoaded ? (
+                <div className={`${styles.body} ${rtlClass}`}>
+                  {parse(bodyHtml)}
+                </div>
+              ) : (
+                <div className={styles.bodyPlaceholder}>Loading content...</div>
+              )}
+
+              {/* Social Sharing */}
+              <SocialComp
+                text={otherText.socialShare}
+                className={styles.share_content}
+              />
+
+              {/* Comment Section */}
+              <CommentSection articleId={data.postId} otherText={otherText} />
+            </div>
           </div>
-
-          {/* Body Content */}
-          {isBodyLoaded ? (
-            <div className={`${styles.body} ${rtlClass}`}>
-              {parse(bodyHtml)}
+        ) : (
+          /* Original Layout */
+          <>
+            {/* Image */}
+            <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
+              <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
             </div>
-          ) : (
-            // Optional: Add a loading placeholder for the body
-            <div className={styles.bodyPlaceholder}>Loading content...</div>
-          )}
+            
+            <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
+              {/* Table of Contents */}
+              <div className={`col-12 col-lg-3 ${styles.tableOfContents}`}>
+                <TableOfContents
+                  data={tocData}
+                  title={otherText.toc}
+                  scrollOffset={scrollOffset}
+                />
+              </div>
 
-          {/* Social Sharing */}
-          <SocialComp
-            text={otherText.socialShare}
-            className={styles.share_content}
-          />
+              {/* Main Content */}
+              <div className={`col-12 col-lg-9 ${styles.content} mt-3 mt-lg-0`}>
+                {!alignRow && (
+                  /* Tags and Metadata for original layout */
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <div className={styles.blog_post_grp}>
+                      <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>{' '}
+                      {/* Assuming only 2 tags */}
+                      <p className={styles.finding_btn}>
+                        {data.metadata?.tags[1]}
+                      </p>{' '}
+                    </div>
+                    <p className={`${styles.published_date} d-none d-lg-block`}>
+                      {data.metadata.author} •{' '}
+                      {data.metadata.modifiedTime.slice(0, 10)}{' '}
+                    </p>
+                  </div>
+                )}
 
-          {/* Comment Section */}
-          <CommentSection articleId={data.postId} otherText={otherText} />
-        </div>
+                {/* Body Content */}
+                {isBodyLoaded ? (
+                  <div className={`${styles.body} ${rtlClass}`}>
+                    {parse(bodyHtml)}
+                  </div>
+                ) : (
+                  <div className={styles.bodyPlaceholder}>Loading content...</div>
+                )}
+
+                {/* Social Sharing */}
+                <SocialComp
+                  text={otherText.socialShare}
+                  className={styles.share_content}
+                />
+
+                {/* Comment Section */}
+                <CommentSection articleId={data.postId} otherText={otherText} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   )
