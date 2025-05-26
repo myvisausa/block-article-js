@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styles from './CommentSection.module.css'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Modal } from 'react-bootstrap'
-import Link from 'next/link'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import Form from 'react-bootstrap/Form'
 
@@ -79,9 +78,9 @@ const CommentSection = ({
       <div className={styles.commentSection}>
         <div className={`${styles.overlay}`}>
           <h2 className={styles.overlayText}>{otherText.overlayText}</h2>
-          <Link href='/auth/sign-up' className={styles.startBtn}>
+          <a href='/auth/sign-up' className={styles.startBtn}>
             {otherText.startHere}
-          </Link>
+          </a>
         </div>
         <div className={styles.commentsList}>
           {comments.map((comment, index) => (
