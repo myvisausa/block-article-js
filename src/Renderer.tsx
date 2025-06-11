@@ -78,6 +78,29 @@ export default function Renderer({
   // Determine if the locale is Arabic to apply the RTL class
   const rtlClass = locale === 'ar' ? styles.rtl : ''
 
+  const formattedDescription = () => {
+    if (data.metadata.description) {
+      return data.metadata.description
+    }
+
+    let description = data.content?.[0]?.text?.slice(0, 350) ?? ''
+    // Remove HTML tags
+    description = description.replace(/<[^>]*>?/g, '')
+    // Remove newlines
+    description = description.replace(/\n/g, '')
+    // Remove extra spaces
+    description = description.replace(/\s+/g, ' ')
+    // Replace '&nbsp;' with ' '
+    description = description.replace(/&nbsp;/g, ' ')
+    // Remove (url) from MD links
+    description = description.replace(/\(.*?\)/g, '')
+    // Remove brackets
+    description = description.replace('[', '').replace(']', '')
+    // Remove asterisks
+    description = description.replace(/\*/g, '')
+    return description
+  }
+
   return (
     <>
       {/* Title and Metadata */}
@@ -118,7 +141,7 @@ export default function Renderer({
                 <div className={`col-12 col-lg ${styles.metadataColumn}`}>
                   {/* Article Description Placeholder */}
                   <p className={styles.articleDescription}>
-                    {data?.content?.[0]?.text?.slice(0, 350) ?? data.metadata.description}... {/*... // TODO: fix this */}
+                    {formattedDescription()}... {/*... // TODO: fix this */}
                   </p>
                   
                   {/* Tags and Author in single row */}
