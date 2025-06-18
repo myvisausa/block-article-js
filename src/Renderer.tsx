@@ -162,21 +162,27 @@ export default function Renderer({
 
               {/* Body Content */}
               {isBodyLoaded ? (
-                <div className={`${styles.body} ${rtlClass}`}>
-                  {parse(bodyHtml)}
-                </div>
+                <>
+                  <div className={`${styles.body} ${rtlClass}`}>
+                    {parse(bodyHtml)}
+                  </div>
+
+                  {/* Social Sharing */}
+                  <div className={styles.socialComponentStaggered}>
+                    <SocialComp
+                      text={otherText.socialShare}
+                      className={styles.share_content}
+                    />
+                  </div>
+
+                  {/* Comment Section */}
+                  <div className={styles.commentSectionStaggered}>
+                    <CommentSection articleId={data.postId} otherText={otherText} />
+                  </div>
+                </>
               ) : (
                 <div className={styles.bodyPlaceholder}>Loading content...</div>
               )}
-
-              {/* Social Sharing */}
-              <SocialComp
-                text={otherText.socialShare}
-                className={styles.share_content}
-              />
-
-              {/* Comment Section */}
-              <CommentSection articleId={data.postId} otherText={otherText} />
             </div>
           </div>
         ) : (
@@ -218,21 +224,27 @@ export default function Renderer({
 
                 {/* Body Content */}
                 {isBodyLoaded ? (
-                  <div className={`${styles.body} ${rtlClass}`}>
-                    {parse(bodyHtml)}
-                  </div>
+                  <>
+                    <div className={`${styles.body} ${rtlClass}`}>
+                      {parse(bodyHtml)}
+                    </div>
+
+                    {/* Social Sharing */}
+                    <div className={styles.socialComponentStaggered}>
+                      <SocialComp
+                        text={otherText.socialShare}
+                        className={styles.share_content}
+                      />
+                    </div>
+
+                    {/* Comment Section */}
+                    <div className={styles.commentSectionStaggered}>
+                      <CommentSection articleId={data.postId} otherText={otherText} />
+                    </div>
+                  </>
                 ) : (
                   <div className={styles.bodyPlaceholder}>Loading content...</div>
                 )}
-
-                {/* Social Sharing */}
-                <SocialComp
-                  text={otherText.socialShare}
-                  className={styles.share_content}
-                />
-
-                {/* Comment Section */}
-                <CommentSection articleId={data.postId} otherText={otherText} />
               </div>
             </div>
           </>
