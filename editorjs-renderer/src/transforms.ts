@@ -107,13 +107,13 @@ const transforms: transforms = {
   image: (block: ImageBlock) => {
     let alt = block.data.caption ? block.data.caption : 'Image'
     if (block.data.caption === '') {
-      return `<img loading="eager" src="${
+      return `<img loading="eager" fetchpriority="high" src="${
         block.data.file && block.data.file.url
           ? block.data.file.url
           : block.data.url
       }" alt="${alt}" style="display: block; margin: 0 auto; max-width: 100%; height: auto;" /></br>`
     }
-    return `<img loading="eager" src="${
+    return `<img loading="eager" fetchpriority="high" src="${
       block.data.file && block.data.file.url
         ? block.data.file.url
         : block.data.url

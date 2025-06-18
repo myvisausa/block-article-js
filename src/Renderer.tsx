@@ -41,7 +41,7 @@ export default function Renderer({
   }
 
   // Synchronously parse title, image, and TOC using useMemo
-  const { titleHtml, imageHtml, tocData } = useMemo(() => {
+  const { titleHtml, imageHtml, tocData, imageUrl } = useMemo(() => {
     // Parse title blocks
     let parsedTitle = parseTitle(data)
     const imageBlock = { blocks: parsedTitle.blocks.slice(-1) }
@@ -51,14 +51,46 @@ export default function Renderer({
     const title_html = myParser.parse(titleBlocks).join('')
     const image_html = myParser.parse(imageBlock).join('')
 
+    // Extract image URL for preloading (LCP optimization)
+    let extracted_image_url = ''
+    const srcMatch = image_html.match(/src="([^"]+)"/)
+    if (srcMatch) {
+      extracted_image_url = srcMatch[1]
+    }
+
     // Parse TOC data
     const toc_blocks = parseBody(data) // Assuming parseBody returns TOC-related blocks
     return {
       titleHtml: title_html,
       imageHtml: image_html,
       tocData: toc_blocks,
+      imageUrl: extracted_image_url,
     }
   }, [data])
+
+  // Add preload link for LCP image optimization
+  useEffect(() => {
+    if (imageUrl) {
+      // Check if preload link already exists
+      const existingPreload = document.querySelector(`link[href="${imageUrl}"]`)
+      if (!existingPreload) {
+        const preloadLink = document.createElement('link')
+        preloadLink.rel = 'preload'
+        preloadLink.as = 'image'
+        preloadLink.href = imageUrl
+        preloadLink.setAttribute('fetchpriority', 'high')
+        document.head.appendChild(preloadLink)
+
+        // Cleanup function to remove preload link when component unmounts
+        return () => {
+          const linkToRemove = document.querySelector(`link[href="${imageUrl}"]`)
+          if (linkToRemove) {
+            document.head.removeChild(linkToRemove)
+          }
+        }
+      }
+    }
+  }, [imageUrl])
 
   // State for body content
   const [bodyHtml, setBodyHtml] = useState('')
