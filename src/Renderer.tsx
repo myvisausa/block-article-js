@@ -42,6 +42,10 @@ interface RendererProps {
   scrollOffset?: number
   onArticleLoaded?: () => void
   locale?: string
+  /**
+   * If true, show the LCP hero image and metadata as an *aligned* two‑column
+   * layout on ≥ lg break‑points. Falls back to a stacked layout below lg.
+   */
   alignRow?: boolean
 }
 
@@ -53,6 +57,7 @@ export default function Renderer({
   locale = 'en',
   alignRow = true,
 }: RendererProps) {
+  /* ───── Guard: missing data ───── */
   if (!data) {
     return <div className={styles.textCenter}>{otherText.articleNotFound}</div>
   }
@@ -82,7 +87,7 @@ export default function Renderer({
   }, [data])
 
   /* ──────────────────────────────────────────────────────────
-     2. Preload the LCP image (one-off)
+     2. Preload the LCP image (one‑off)
      ────────────────────────────────────────────────────────── */
   useEffect(() => {
     if (!imageUrl) return
@@ -104,7 +109,7 @@ export default function Renderer({
   }, [imageUrl])
 
   /* ──────────────────────────────────────────────────────────
-     3. Stage-by-stage render control
+     3. Stage‑by‑stage render control
      ────────────────────────────────────────────────────────── */
   const [bodyHtml, setBodyHtml] = useState('')
   const [isBodyLoaded, setIsBodyLoaded] = useState(false)
@@ -129,7 +134,7 @@ export default function Renderer({
     return () => cancelAnimationFrame(id)
   }, [isBodyLoaded])
 
-  // final finish-line callback
+  // final finish‑line callback
   const firedRef = useRef(false)
   useEffect(() => {
     if (socialMounted && commentMounted && !firedRef.current) {
@@ -174,7 +179,7 @@ export default function Renderer({
       {/* Content wrapper */}
       <div className={styles.outerContainer}>
         {alignRow ? (
-          /* ───── Aligned Row Layout ───── */
+          /* ───── Responsive Aligned Row Layout ───── */
           <div className={`row ${styles.contentWrapper} ${rtlClass}`}>
             {/* TOC */}
             <div className={`col-12 col-lg-3 ${styles.tableOfContents}`}>
@@ -188,29 +193,25 @@ export default function Renderer({
             {/* Image / Metadata / Body */}
             <div className={`col-12 col-lg-9 ${styles.content} mt-0 mt-lg-0`}>
               {/* Image + metadata */}
-              <div className='row mb-4'>
-                <div className='col-12 col-lg-auto d-flex justify-content-center'>
+              <div className="d-flex flex-column flex-lg-row mb-4 gap-3 align-items-start">
+                {/* Image */}
+                <div className="flex-shrink-0 col-12 col-lg-5">
                   <div className={`${styles.imageAligned} ${rtlClass}`}>
                     <div>{parse(imageHtml)}</div>
                   </div>
                 </div>
 
-                <div className={`col-12 col-lg ${styles.metadataColumn}`}>
-                  <p className={styles.articleDescription}>
-                    {formattedDescription()}…
-                  </p>
+                {/* Metadata / caption */}
+                <div className={`col-12 col-lg-7 ${styles.metadataColumn}`}>
+                  <p className={styles.articleDescription}>{formattedDescription()}…</p>
+
                   <div className={styles.tagsRow}>
                     <div className={styles.blog_post_grp}>
-                      <p className={styles.immigrants_btn}>
-                        {data.metadata?.tags[0]}
-                      </p>
-                      <p className={styles.finding_btn}>
-                        {data.metadata?.tags[1]}
-                      </p>
+                      <p className={styles.immigrants_btn}>{data.metadata?.tags[0]}</p>
+                      <p className={styles.finding_btn}>{data.metadata?.tags[1]}</p>
                     </div>
                     <p className={styles.published_date}>
-                      {data.metadata.author} •{' '}
-                      {data.metadata.modifiedTime.slice(0, 10)}
+                      {data.metadata.author} • {data.metadata.modifiedTime.slice(0, 10)}
                     </p>
                   </div>
                 </div>
@@ -247,7 +248,7 @@ export default function Renderer({
             </div>
           </div>
         ) : (
-          /* ───── Original Stacked Layout ───── */
+          /* ───── Original Stacked Layout (alignRow=false) ───── */
           <>
             {/* Hero image */}
             <div className={`${rtlClass} mb-lg-4`}>
@@ -318,7 +319,7 @@ export default function Renderer({
 }
 
 /* ──────────────────────────────────────────────────────────
-   Utility: SSR renderer
+   Utility: SSR renderer (server‑side only)
    ────────────────────────────────────────────────────────── */
 export function renderArticle(data: any) {
   if (!data) return '<div>Article is Empty</div>'

@@ -164,11 +164,11 @@
   margin: 0;
 }
 
-/* Intermediate screen sizes - prevent layout shift */
-@media (min-width: 968px) and (max-width: 1226px) {
+/* Prevent caption from floating beside the image on md screens */
+@media (min-width: 768px) and (max-width: 991px) {
   .imageAligned {
-    width: 625px;
-    min-width: 625px;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
