@@ -165,7 +165,7 @@ export default function Renderer({
                 {/* Image Column */}
                 <div className={`col-12 col-lg-auto d-flex justify-content-center`}>
                   <div className={`${styles.imageAligned} ${rtlClass}`}>
-                    <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
+                    <div>{parse(imageHtml)}</div>
                   </div>
                 </div>
                 
@@ -221,8 +221,8 @@ export default function Renderer({
           /* Original Layout */
           <>
             {/* Image */}
-            <div className={`${styles.image} ${rtlClass} mb-lg-4`}>
-              <div className={styles.imageWrapper}>{parse(imageHtml)}</div>
+            <div className={`${rtlClass} mb-lg-4`}>
+              <div>{parse(imageHtml)}</div>
             </div>
             
             <div className={`row ${styles.contentWrapper} ${rtlClass}`}>

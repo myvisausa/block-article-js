@@ -46,28 +46,7 @@
   }
 }
 
-.image {
-  background-color: #ffffff;
-  position: relative;
-  width: 100%;
-  max-width: 750px;
-  overflow: hidden;
-  border-radius: 16px;
-  max-height: 500px;
-}
 
-.image p {
-  display: none;
-}
-
-.image img {
-  overflow: hidden;
-  border-radius: 16px;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  aspect-ratio: 16/9;
-}
 
 .rtl {
   direction: rtl;
@@ -183,6 +162,14 @@
   font-size: 14px;
   line-height: 1.4;
   margin: 0;
+}
+
+/* Intermediate screen sizes - prevent layout shift */
+@media (min-width: 968px) and (max-width: 1226px) {
+  .imageAligned {
+    width: 625px;
+    min-width: 625px;
+  }
 }
 
 @media (max-width: 768px) {

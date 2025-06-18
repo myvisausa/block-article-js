@@ -124,7 +124,7 @@ const transforms: transforms = {
   simpleImage: (block: SimpleImageBlock) => {
     let url = block.data.url
     let caption = block.data.caption ? block.data.caption : 'Image'
-    return `<img loading="eager" src="${url}" alt="${caption}" style="display: block; margin: 0 auto; width: 100%; max-width: 750px; height: auto;" />
+    return `<img loading="eager" fetchpriority="high" src="${url}" alt="${caption}" style="display: block; padding-bottom: 10px; width: 100%; max-width: 750px; height: auto;" />
   <p class="image-caption">${caption}</p>`
   },
 
