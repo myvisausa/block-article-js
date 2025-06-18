@@ -147,9 +147,9 @@
   background-color: #ffffff;
   position: relative;
   width: auto;
-  height: 200px;
   overflow: hidden;
   border-radius: 16px;
+  aspect-ratio: 16/9;
 }
 
 .imageAligned p {
@@ -197,6 +197,5 @@
   .imageAligned {
     width: 100%;
     max-width: 70vw;
-    height: auto;
   }
 }
