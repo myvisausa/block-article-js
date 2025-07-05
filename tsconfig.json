@@ -2,8 +2,7 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "../",
-    "composite": true,          // so editors understand project references
-    "noEmit": true,
+    "composite": true,
     "paths": {
       "@common/*": [
         "../common/*",
