@@ -35,6 +35,6 @@
     "vite-plugin-css-injected-by-js": "^3.3.0"
   },
   "dependencies": {
-    "@codexteam/icons": "^0.0.4"
+    "@codexteam/icons": "^0.3.3"
   }
 }
